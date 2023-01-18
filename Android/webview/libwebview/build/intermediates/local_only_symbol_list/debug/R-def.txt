@@ -1,0 +1,6 @@
+R_DEF: Internal format may change without notice
+local
+raw fragment
+raw fragment_oes
+raw vertex
+string app_name
