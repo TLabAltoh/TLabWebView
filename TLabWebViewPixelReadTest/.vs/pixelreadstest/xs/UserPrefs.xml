@@ -1,0 +1,35 @@
+﻿<Properties StartupConfiguration="{0D1AE708-AF3A-94ED-AA20-8F9EF2E5B7C7}|">
+  <MonoDevelop.Ide.ItemProperties.PixelReadsTest PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Sources/WebViewTexture.cs">
+    <Files>
+      <File FileName="Assets/Sources/Main.cs" Line="73" Column="1" />
+      <File FileName="Assets/Sources/WebViewTexture.cs" Line="238" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="pixelreadstest" expanded="True">
+            <Node name="Assets" expanded="True">
+              <Node name="Plugins" expanded="True" />
+              <Node name="Sources" expanded="True">
+                <Node name="WebViewTexture.cs" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.UnitTesting.TestPad">
+        <State name="__root__">
+          <Node name="pixelreadstest" expanded="True" selected="True" />
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="21f55b94-6eb4-4acf-9dbc-66b0c635d5b0" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
