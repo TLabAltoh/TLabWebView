@@ -57,7 +57,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Sources\WebViewTexture.cs" />
-    <Compile Include="Assets\Sources\MicController.cs" />
     <Compile Include="Assets\Sources\Main.cs" />
     <Compile Include="Assets\Sources\TouchEventManager.cs" />
   </ItemGroup>

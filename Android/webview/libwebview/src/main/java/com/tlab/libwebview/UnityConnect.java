@@ -73,10 +73,12 @@ public class UnityConnect  extends Fragment {
     // Web variables.
     //
 
-    private static int mWidth;
-    private static int mHeight;
-    private static int sWidth;
-    private static int sHeight;
+    private static int mWebWidth;
+    private static int mWebHeight;
+    private static int mTextureWidth;
+    private static int mTextureHeight;
+    private static int mScreenWidth;
+    private static int mScreenHeight;
     private boolean canGoBack;
     private boolean canGoForward;
     private static String mLoadUrl;
@@ -88,20 +90,25 @@ public class UnityConnect  extends Fragment {
     // Initialize this class
     //
 
-    public static void initialize(int width, int height, int screenWidth, int screenHeight, String url) {
-        if(width == 0 || height == 0){
+    public static void initialize(int webWidth, int webHeight,
+                                  int TextureWidth, int textureHeight,
+                                  int screenWidth, int screenHeight, String url)
+    {
+        if(webWidth == 0 || webHeight == 0) {
             Log.i("libwebview", "initialize: web resolution unsuitable");
             return;
         }
-        mWidth = width;
-        mHeight = height;
-        sWidth = screenWidth;
-        sHeight = screenHeight;
+        mWebWidth = webWidth;
+        mWebHeight = webHeight;
+        mTextureWidth = TextureWidth;
+        mTextureHeight = textureHeight;
+        mScreenWidth = screenWidth;
+        mScreenHeight = screenHeight;
         mLoadUrl = url;
-        if (m_Instance == null) {
-            m_Instance = new UnityConnect();
-            m_Instance.initWebView();
-        }
+
+        if (m_Instance != null) return;
+        m_Instance = new UnityConnect();
+        m_Instance.initWebView();
     }
 
     public boolean IsInitialized() {
@@ -132,19 +139,22 @@ public class UnityConnect  extends Fragment {
         //                          | mGLSurfaceView
 
         mViewToGlRenderer = new ViewToGLRenderer();
-        mViewToGlRenderer.setTextureWidth(mWidth);
-        mViewToGlRenderer.setTextureHeight(mHeight);
-        mViewToGlRenderer.createTexture();
-        if (mWidth != 0 || mHeight != 0) {
-            mViewToGlRenderer.createTextureCapture(
-                    UnityPlayer.currentActivity,
-                    R.raw.vertex,
-                    R.raw.fragment_oes,
-                    mWidth,
-                    mHeight
-            );
-        }
+        mViewToGlRenderer.SetTextureResolution(mTextureWidth, mTextureHeight);
+        mViewToGlRenderer.SetWebResolution(mWebWidth, mWebHeight);
 
+        Log.i("TlabBrowser", "libwebview---initWebView: texture resolution finished");
+
+        mViewToGlRenderer.createTexture();
+
+        Log.i("TlabBrowser", "libwebview---initWebView: createTexture() finished");
+
+        mViewToGlRenderer.createTextureCapture(
+                UnityPlayer.currentActivity,
+                R.raw.vertex,
+                R.raw.fragment_oes
+        );
+
+        Log.i("TlabBrowser", "libwebview---initWebView: createTextureCapture() finished");
         Log.i("TlabBrowser", "libwebview---initWebView: mViewToGLRenderer created");
 
         UnityPlayer.currentActivity.runOnUiThread(new Runnable() {
@@ -155,8 +165,8 @@ public class UnityConnect  extends Fragment {
                 mLayout = new RelativeLayout(UnityPlayer.currentActivity);
                 mLayout.setGravity(Gravity.TOP);
                 // set view to out of display.
-                mLayout.setX(sWidth);
-                mLayout.setY(sHeight);
+                mLayout.setX(mScreenWidth);
+                mLayout.setY(mScreenHeight);
                 mLayout.setBackgroundColor(0x00000000);
 
                 Log.i("TlabBrowser", "libwebview---initWebView: mLayout created");
@@ -282,7 +292,7 @@ public class UnityConnect  extends Fragment {
                 });
                 mWebView.setWebChromeClient(new WebChromeClient());
                 mWebView.getSettings().setJavaScriptEnabled(true);
-                mWebView.setInitialScale(1);
+                mWebView.setInitialScale(100);
                 mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
                 mWebView.clearCache(true);
                 mWebView.setDrawingCacheEnabled(true);
@@ -290,23 +300,19 @@ public class UnityConnect  extends Fragment {
                 mWebView.setVisibility(View.VISIBLE);
                 mWebView.setVerticalScrollBarEnabled(true);
                 mWebView.setBackgroundColor(0x00000000);
+                mWebView.zoomIn();
                 WebSettings webSettings = mWebView.getSettings();
                 webSettings.setLoadWithOverviewMode(true);
                 webSettings.setUseWideViewPort(true);
                 webSettings.setSupportZoom(true);
-                webSettings.setBuiltInZoomControls(true);
-                webSettings.setDisplayZoomControls(false);
+                webSettings.setBuiltInZoomControls(false);
+                webSettings.setDisplayZoomControls(true);
                 webSettings.setJavaScriptEnabled(true);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    Log.i("TlabBrowser", "libwebview---initWebView: Build.VERSION.SDK_INT = " + Build.VERSION.SDK_INT);
-                    webSettings.setAllowUniversalAccessFromFileURLs(true);
-                }
+                webSettings.setAllowUniversalAccessFromFileURLs(true);
+                webSettings.setMediaPlaybackRequiresUserGesture(false);
                 if (userAgent != null && userAgent.length() > 0){
                     Log.i("TlabBrowser", "libwebview---initWebView: setUserAgentString(" + userAgent.toString() + ")");
                     webSettings.setUserAgentString(userAgent);
-                }
-                if (android.os.Build.VERSION.SDK_INT >= 17) {
-                    webSettings.setMediaPlaybackRequiresUserGesture(false);
                 }
                 webSettings.setDefaultTextEncodingName("utf-8");
                 webSettings.setDatabaseEnabled(true);
@@ -321,8 +327,8 @@ public class UnityConnect  extends Fragment {
                 UnityPlayer.currentActivity.addContentView(
                         mLayout,
                         new RelativeLayout.LayoutParams(
-                                mWidth,
-                                mHeight
+                                mWebWidth,
+                                mWebHeight
                         )
                 );
                 mGlLayout.addView(
@@ -373,13 +379,13 @@ public class UnityConnect  extends Fragment {
 
     public static byte[] getPixel() {
         if (m_Instance == null) {
-            Log.i("getPixel: ", "Texture data does not exists");
+            Log.i("TlabBrowser: ", "libwebview--getPixel: Texture data does not exists");
             return new byte[0];
         }
 
         byte[] data = m_Instance.mViewToGlRenderer.getTexturePixels();
         m_Instance.mGlLayout.postInvalidate();
-        Log.i("getPixel: ", "Texture data exists");
+        Log.i("TlabBrowser: ", "libwebview--getPixel: Texture data exists");
         return data;
     }
 
@@ -398,9 +404,19 @@ public class UnityConnect  extends Fragment {
         m_Instance.LoadURL(url);
     }
 
-    public static void touchEvent(int x, int y){
+    public static void zoomIn(){
         if(m_Instance == null) return;
-        m_Instance.TouchEvent(x, y);
+        m_Instance.ZoomIn();
+    }
+
+    public static void zoomOut(){
+        if(m_Instance == null) return;
+        m_Instance.ZoomOut();
+    }
+
+    public static void touchEvent(int x, int y, int event) {
+        if(m_Instance == null) return;
+        m_Instance.TouchEvent(x, y, event);
     }
 
     public static void goBack() {
@@ -450,6 +466,26 @@ public class UnityConnect  extends Fragment {
         Log.i("TlabBrowser", "libwebview---LoadHTML: html: " + baseURL.toString() + "loaded");
     }
 
+    public void ZoomIn(){
+        final Activity a = UnityPlayer.currentActivity;
+        a.runOnUiThread(new Runnable() {public void run() {
+            if (mWebView == null) {
+                return;
+            }
+            mWebView.zoomIn();
+        }});
+    }
+
+    public void ZoomOut(){
+        final Activity a = UnityPlayer.currentActivity;
+        a.runOnUiThread(new Runnable() {public void run() {
+            if (mWebView == null) {
+                return;
+            }
+            mWebView.zoomOut();
+        }});
+    }
+
     public void EvaluateJS(final String js) {
         final Activity a = UnityPlayer.currentActivity;
         a.runOnUiThread(new Runnable() {public void run() {
@@ -460,7 +496,7 @@ public class UnityConnect  extends Fragment {
         }});
     }
 
-    public void TouchEvent(int x, int y) {
+    public void TouchEvent(int x, int y, int eventNum) {
         UnityPlayer.currentActivity.runOnUiThread(new Runnable() {public void run() {
             if (mWebView == null) return;
 
@@ -475,7 +511,7 @@ public class UnityConnect  extends Fragment {
             MotionEvent event = MotionEvent.obtain(
                     downTime,
                     eventTime,
-                    MotionEvent.ACTION_DOWN,
+                    eventNum,
                     x,
                     y,
                     metaState
@@ -483,17 +519,6 @@ public class UnityConnect  extends Fragment {
             event.setSource(source);
 
             // Dispatch touch event to view
-            mWebView.dispatchTouchEvent(event);
-
-            event = MotionEvent.obtain(
-                    downTime,
-                    eventTime,
-                    MotionEvent.ACTION_UP,
-                    x,
-                    y,
-                    metaState
-            );
-            event.setSource(source);
             mWebView.dispatchTouchEvent(event);
         }});
         Log.i("TlabBrowser", "libwebview---TouchEvent: event dispatched: " + Integer.valueOf(x).toString() + ", " + Integer.valueOf(y).toString());

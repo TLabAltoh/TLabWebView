@@ -41,8 +41,8 @@ public class EglSurfaceBase {
     protected EglCore mEglCore;
 
     private EGLSurface mEGLSurface = EGL14.EGL_NO_SURFACE;
-    private int mWidth = -1;
-    private int mHeight = -1;
+    private int webWidth = -1;
+    private int webHeight = -1;
 
     protected EglSurfaceBase(EglCore eglCore) {
         mEglCore = eglCore;
@@ -61,8 +61,8 @@ public class EglSurfaceBase {
 
         // Don't cache width/height here, because the size of the underlying surface can change
         // out from under us (see e.g. HardwareScalerActivity).
-        //mWidth = mEglCore.querySurface(mEGLSurface, EGL14.EGL_WIDTH);
-        //mHeight = mEglCore.querySurface(mEGLSurface, EGL14.EGL_HEIGHT);
+        //webWidth = mEglCore.querySurface(mEGLSurface, EGL14.EGL_WIDTH);
+        //webHeight = mEglCore.querySurface(mEGLSurface, EGL14.EGL_HEIGHT);
     }
 
     /**
@@ -73,8 +73,8 @@ public class EglSurfaceBase {
             throw new IllegalStateException("surface already created");
         }
         mEGLSurface = mEglCore.createOffscreenSurface(width, height);
-        mWidth = width;
-        mHeight = height;
+        webWidth = width;
+        webHeight = height;
     }
 
     /**
@@ -84,11 +84,11 @@ public class EglSurfaceBase {
      * of changing size, we may not see the new size right away (e.g. in the "surfaceChanged"
      * callback).  The size should match after the next buffer swap.
      */
-    public int getWidth() {
-        if (mWidth < 0) {
+    public int getextureWidth() {
+        if (webWidth < 0) {
             return mEglCore.querySurface(mEGLSurface, EGL14.EGL_WIDTH);
         } else {
-            return mWidth;
+            return webWidth;
         }
     }
 
@@ -96,10 +96,10 @@ public class EglSurfaceBase {
      * Returns the surface's height, in pixels.
      */
     public int getHeight() {
-        if (mHeight < 0) {
+        if (webHeight < 0) {
             return mEglCore.querySurface(mEGLSurface, EGL14.EGL_HEIGHT);
         } else {
-            return mHeight;
+            return webHeight;
         }
     }
 
@@ -109,7 +109,7 @@ public class EglSurfaceBase {
     public void releaseEglSurface() {
         mEglCore.releaseSurface(mEGLSurface);
         mEGLSurface = EGL14.EGL_NO_SURFACE;
-        mWidth = mHeight = -1;
+        webWidth = webHeight = -1;
     }
 
     /**
@@ -173,7 +173,7 @@ public class EglSurfaceBase {
 
         String filename = file.toString();
 
-        int width = getWidth();
+        int width = getextureWidth();
         int height = getHeight();
         ByteBuffer buf = ByteBuffer.allocateDirect(width * height * 4);
         buf.order(ByteOrder.LITTLE_ENDIAN);

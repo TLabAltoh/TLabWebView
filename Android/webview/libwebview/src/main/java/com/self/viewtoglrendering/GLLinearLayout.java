@@ -1,12 +1,8 @@
 package com.self.viewtoglrendering;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.LinearLayout;
 
 public class GLLinearLayout extends LinearLayout implements GLRenderable {
@@ -23,7 +19,6 @@ public class GLLinearLayout extends LinearLayout implements GLRenderable {
         super(context, attrs);
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public GLLinearLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
@@ -31,21 +26,20 @@ public class GLLinearLayout extends LinearLayout implements GLRenderable {
     // drawing magic
     @Override
     public void draw(Canvas canvas) {
-        if (mViewToGLRenderer != null) {
-            Canvas glAttachedCanvas = mViewToGLRenderer.onDrawViewBegin();
-            if (glAttachedCanvas != null) {
-                //prescale canvas to make sure content fits
-                float xScale = 1;
-                glAttachedCanvas.scale(xScale, xScale);
-                //draw the view to provided canvas
-                super.draw(glAttachedCanvas);
-            }
-            // notify the canvas is updated
-            mViewToGLRenderer.onDrawViewEnd();
+        if (mViewToGLRenderer == null) return;
+
+        Canvas glAttachedCanvas = mViewToGLRenderer.onDrawViewBegin();
+        if (glAttachedCanvas != null) {
+            //prescale canvas to make sure content fits
+            glAttachedCanvas.scale(1, 1);
+            //draw the view to provided canvas
+            super.draw(glAttachedCanvas);
         }
+        // notify the canvas is updated
+        mViewToGLRenderer.onDrawViewEnd();
     }
 
-    public void setViewToGLRenderer(ViewToGLRenderer viewToGLRenderer){
+    public void setViewToGLRenderer(ViewToGLRenderer viewToGLRenderer) {
         mViewToGLRenderer = viewToGLRenderer;
     }
 }

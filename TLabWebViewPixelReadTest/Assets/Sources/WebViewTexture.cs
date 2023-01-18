@@ -23,6 +23,8 @@ public class WebViewTexture : MonoBehaviour
 	//
 
 	public string url = "https://youtube.com";
+	public int webWidth = 1024;
+	public int webHeight = 1024;
 	public int texWidth = 512;
 	public int texHeight = 512;
 	private bool m_WebViewEnable;
@@ -43,7 +45,7 @@ public class WebViewTexture : MonoBehaviour
 		m_WebViewEnable = true;
 
 #if UNITY_ANDROID
-		Init(texWidth, texHeight, Screen.width, Screen.height, url);
+		Init(webWidth, webHeight, texWidth, texHeight, Screen.width, Screen.height, url);
 		webImage = new Texture2D(
 			texWidth,
 			texHeight,
@@ -93,13 +95,13 @@ public class WebViewTexture : MonoBehaviour
 	// Unity to Java
 	// 
 
-	public void Init(int width, int height, int sWidth, int sHeight, string url)
+	public void Init(int webWidth, int webHeight, int tWidth, int tHeight, int sWidth, int sHeight, string url)
 	{
 #if UNITY_ANDROID
 		if (Application.isEditor) return;
 
 		m_NativePlugin = new AndroidJavaClass("com.tlab.libwebview.UnityConnect");
-		m_NativePlugin.CallStatic("initialize", width, height, sWidth, sHeight, url);
+		m_NativePlugin.CallStatic("initialize", webWidth, webHeight, tWidth, tHeight, sWidth, sHeight, url);
 #endif
 	}
 
@@ -123,12 +125,48 @@ public class WebViewTexture : MonoBehaviour
 #endif
 	}
 
-	public void TouchEvent(int x, int y)
+	public void ZoomIn()
     {
 #if UNITY_ANDROID
 		if (Application.isEditor) return;
 
-		m_NativePlugin.CallStatic("touchEvent", x, y);
+		m_NativePlugin.CallStatic("zoomIn");
+#endif
+	}
+
+	public void ZoomOut()
+	{
+#if UNITY_ANDROID
+		if (Application.isEditor) return;
+
+		m_NativePlugin.CallStatic("zoomOut");
+#endif
+	}
+
+	public void GoForward()
+    {
+#if UNITY_ANDROID
+		if (Application.isEditor) return;
+
+		m_NativePlugin.CallStatic("goForward");
+#endif
+	}
+
+	public void GoBack()
+	{
+#if UNITY_ANDROID
+		if (Application.isEditor) return;
+
+		m_NativePlugin.CallStatic("goBack");
+#endif
+	}
+
+	public void TouchEvent(int x, int y, int eventNum)
+    {
+#if UNITY_ANDROID
+		if (Application.isEditor) return;
+
+		m_NativePlugin.CallStatic("touchEvent", x, y, eventNum);
 #endif
 	}
 

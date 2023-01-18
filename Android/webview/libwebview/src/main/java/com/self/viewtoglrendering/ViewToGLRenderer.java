@@ -24,8 +24,18 @@ public class ViewToGLRenderer implements GLSurfaceView.Renderer {
     private static final int DEFAULT_TEXTURE_WIDTH = 512;
     private static final int DEFAULT_TEXTURE_HEIGHT = 512;
 
-    private int mTextureWidth = DEFAULT_TEXTURE_WIDTH;
-    private int mTextureHeight = DEFAULT_TEXTURE_HEIGHT;
+    public int mTextureWidth = DEFAULT_TEXTURE_WIDTH;
+    public int mTextureHeight = DEFAULT_TEXTURE_HEIGHT;
+    public int mWebWidth = DEFAULT_TEXTURE_WIDTH;
+    public int mWebHeight = DEFAULT_TEXTURE_HEIGHT;
+
+    // ------------------------------------------------------------------------------------------------
+    // Draw aspect
+    //
+
+    private static final float DEFAULT_SCALE = 1;
+    public float scaleX = DEFAULT_SCALE;
+    public float scaleY = DEFAULT_SCALE;
 
     // ------------------------------------------------------------------------------------------------
     // Surface and surface texture
@@ -48,18 +58,18 @@ public class ViewToGLRenderer implements GLSurfaceView.Renderer {
     // Surface
     //
 
-    public void createSurface(int width, int height) {
+    public void createSurface(int webWidth, int webHeight) {
         releaseSurface();
-        if (mGlSurfaceTexture[0] > 0) {
-            //attach the texture to a surface.
-            //It's a clue class for rendering an android view to gl level
-            mSurfaceTexture = new SurfaceTexture(mGlSurfaceTexture[0]);
-            mSurfaceTexture.setDefaultBufferSize(mTextureWidth, mTextureHeight);
-            mSurface = new Surface(mSurfaceTexture);
-            if (textureCapture != null) {
-                textureCapture.onInputSizeChanged(mTextureWidth, mTextureHeight);
-            }
-        }
+        if (mGlSurfaceTexture[0] <= 0) return;
+
+        //attach the texture to a surface.
+        //It's a clue class for rendering an android view to gl level
+        mSurfaceTexture = new SurfaceTexture(mGlSurfaceTexture[0]);
+        mSurfaceTexture.setDefaultBufferSize(webWidth, webHeight);
+        mSurface = new Surface(mSurfaceTexture);
+
+        if (textureCapture == null) return;
+        textureCapture.onInputSizeChanged(mTextureWidth, mTextureHeight);
     }
 
     @Override
@@ -73,19 +83,15 @@ public class ViewToGLRenderer implements GLSurfaceView.Renderer {
     }
 
     public void releaseSurface() {
-        if(mSurface != null){
-            mSurface.release();
-        }
-        if(mSurfaceTexture != null){
-            mSurfaceTexture.release();
-        }
+        if(mSurface != null) mSurface.release();
+        if(mSurfaceTexture != null) mSurfaceTexture.release();
         mSurface = null;
         mSurfaceTexture = null;
     }
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-        createSurface(mTextureWidth, mTextureHeight);
+        createSurface(width, height);
     }
 
     // ------------------------------------------------------------------------------------------------
@@ -119,12 +125,13 @@ public class ViewToGLRenderer implements GLSurfaceView.Renderer {
             Log.i("libwebview", "libwebview---onDrawFrame: Surface image update start");
             // update texture
             mSurfaceTexture.updateTexImage();
-            if (textureCapture != null) {
-                textureCapture.onDrawFrame(getGLSurfaceTexture(), true);
-                mCaptureData = textureCapture.getGLFboBuffer();
 
-                Log.i("libwebview", "libwebview---onDrawFrame: Surface image updated");
-            }
+            if (textureCapture == null) return;
+
+            textureCapture.onDrawFrame(getGLSurfaceTexture(), true);
+            mCaptureData = textureCapture.getGLFboBuffer();
+
+            Log.i("libwebview", "libwebview---onDrawFrame: Surface image updated");
         }
     }
 
@@ -133,6 +140,7 @@ public class ViewToGLRenderer implements GLSurfaceView.Renderer {
         if (mSurface != null) {
             try {
                 // mSurfaceCanvas = mSurface.lockCanvas(null);
+                // https://learn.microsoft.com/en-us/dotnet/api/android.views.surface.lockhardwarecanvas?view=xamarin-android-sdk-13
                 mSurfaceCanvas = mSurface.lockHardwareCanvas();
             }catch (Exception e){
                 Log.e(TAG, "error while rendering view to gl: " + e);
@@ -142,17 +150,15 @@ public class ViewToGLRenderer implements GLSurfaceView.Renderer {
     }
 
     public void onDrawViewEnd() {
-        if(mSurfaceCanvas != null) {
-            mSurface.unlockCanvasAndPost(mSurfaceCanvas);
-        }
+        if(mSurfaceCanvas != null) mSurface.unlockCanvasAndPost(mSurfaceCanvas);
         mSurfaceCanvas = null;
     }
 
     public void checkGlError(String op) {
         int error;
-        while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
+
+        while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR)
             Log.e(TAG, op + ": glError " + GLUtils.getEGLErrorString(error));
-        }
     }
 
     // ------------------------------------------------------------------------------------------------
@@ -175,27 +181,36 @@ public class ViewToGLRenderer implements GLSurfaceView.Renderer {
     // Texture resolution
     //
 
-    public int getTextureWidth() {
-        return mTextureWidth;
-    }
-
-    public void setTextureWidth(int textureWidth) {
+    public void SetTextureResolution(int textureWidth, int textureHeight) {
         mTextureWidth = textureWidth;
-    }
-
-    public int getTextureHeight() {
-        return mTextureHeight;
-    }
-
-    public void setTextureHeight(int textureHeight) {
         mTextureHeight = textureHeight;
+        ReCalcScale();
+    }
+
+    // ------------------------------------------------------------------------------------------------
+    // Web resolution
+    //
+
+    public void SetWebResolution(int webWidth, int webHeight) {
+        mWebWidth = webWidth;
+        mWebHeight = webHeight;
+        ReCalcScale();
+    }
+
+    // ------------------------------------------------------------------------------------------------
+    // Re calc aspect
+    //
+
+    private void ReCalcScale() {
+        scaleX = (float)mTextureWidth / (float)mWebWidth;
+        scaleY = (float)mTextureHeight / (float)mWebHeight;
     }
 
     // ------------------------------------------------------------------------------------------------
     // Create texture capture
     //
 
-    public void createTextureCapture(Context context, int vs, int fs, int width, int height) {
+    public void createTextureCapture(Context context, int vs, int fs) {
         textureCapture = new TextureCapture();
         textureCapture.flipY();
         textureCapture.loadSamplerShaderProg(context, vs, fs);

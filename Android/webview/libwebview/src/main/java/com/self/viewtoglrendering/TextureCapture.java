@@ -34,8 +34,17 @@ public class TextureCapture
     private int mGLInputImageTextureIndex;
     private int mGLTextureCoordinateIndex;
 
+    // --------------------------------------------------------------------------------------------------------------------------
+    // Texture resolution
+    //
+
     protected int mInputWidth;
     protected int mInputHeight;
+
+    // --------------------------------------------------------------------------------------------------------------------------
+    //
+    //
+
     protected FloatBuffer mGLCubeBuffer;
     protected FloatBuffer mGLTextureBuffer;
     private boolean mFlipY;
@@ -59,7 +68,6 @@ public class TextureCapture
     private int[] mGLFboTexId;
     private Buffer mGLFboBuffer;
 
-
     private int mNowWritePboId;
     private int mNowReadPboId;
 
@@ -82,16 +90,50 @@ public class TextureCapture
     }
 
     // --------------------------------------------------------------------------------------------------------------------------
+    // Shader
+    //
+
+    private void loadSamplerShader() {
+        mGLProgId = GlUtil.createProgram(mVertexShaderProg, mFragmentShaderProg);
+
+        if (mGLProgId == 0) return;
+
+        mGLPositionIndex = GLES20.glGetAttribLocation(mGLProgId, "position");
+        mGLTextureCoordinateIndex = GLES20.glGetAttribLocation(mGLProgId,"inputTextureCoordinate");
+        mGLInputImageTextureIndex = GLES20.glGetUniformLocation(mGLProgId, "inputImageTexture");
+    }
+
+    private String readShaderFromRawResource(Context context, int resourceId) {
+        final InputStream inputStream = context.getResources().openRawResource(resourceId);
+        final InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        final BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+        String nextLine;
+        final StringBuilder body = new StringBuilder();
+
+        try{
+            while ((nextLine = bufferedReader.readLine()) != null){
+                body.append(nextLine);
+                body.append('\n');
+            }
+        }
+        catch (IOException e){
+            return null;
+        }
+        return body.toString();
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------
     // Initialize
     //
 
     public void init() {
-        if (!mIsInitialized) {
-            EGLContext con = EGL14.eglGetCurrentContext();
-            mEglCore = new EglCore(con, EglCore.FLAG_RECORDABLE | EglCore.FLAG_TRY_GLES3);
-            onInit();
-            onInitialized();
-        }
+        if (mIsInitialized) return;
+
+        EGLContext con = EGL14.eglGetCurrentContext();
+        mEglCore = new EglCore(con, EglCore.FLAG_RECORDABLE | EglCore.FLAG_TRY_GLES3);
+        onInit();
+        onInitialized();
     }
 
     public final void destroy() {
@@ -184,14 +226,14 @@ public class TextureCapture
     //
 
     // Re initialize fbo
-    public void onInputSizeChanged(final int width, final int height) {
-        mInputWidth = width;
-        mInputHeight = height;
-        initFboTexture(width, height);
+    public void onInputSizeChanged(final int textureWidth, final int textureHeight) {
+        mInputWidth = textureWidth;
+        mInputHeight = textureHeight;
+        initFboTexture(textureWidth, textureHeight);
     }
 
-    private void initFboTexture(int width, int height) {
-        if (mGLFboId != null && (mInputWidth != width || mInputHeight != height)) destroyFboTexture();
+    private void initFboTexture(int textureWidth, int textureHeight) {
+        if (mGLFboId != null && (mInputWidth != textureWidth || mInputHeight != textureHeight)) destroyFboTexture();
 
         mGLFboId = new int[1];
         mGLFboTexId = new int[1];
@@ -199,7 +241,7 @@ public class TextureCapture
         GLES20.glGenFramebuffers(1, mGLFboId, 0);
         GLES20.glGenTextures(1, mGLFboTexId, 0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mGLFboTexId[0]);
-        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, width, height, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
+        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, textureWidth, textureHeight, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
@@ -223,7 +265,7 @@ public class TextureCapture
                     bError = true;
                     break;
                 }
-                GLES30.glBufferData(GLES30.GL_PIXEL_PACK_BUFFER, width * height * 4, null, GLES30.GL_STREAM_READ);
+                GLES30.glBufferData(GLES30.GL_PIXEL_PACK_BUFFER, textureWidth * textureHeight * 4, null, GLES30.GL_STREAM_READ);
                 mGLPboReady[i] = true;
             }
             if (bError) {
@@ -237,7 +279,7 @@ public class TextureCapture
         }
 
         if (mGLPboId == null) {
-            mGLFboBuffer = ByteBuffer.allocate(width * height * 4);
+            mGLFboBuffer = ByteBuffer.allocate(textureWidth * textureHeight * 4);
         }
     }
 
@@ -257,47 +299,13 @@ public class TextureCapture
     }
 
     // --------------------------------------------------------------------------------------------------------------------------
-    // Shader
-    //
-
-    private void loadSamplerShader() {
-        mGLProgId = GlUtil.createProgram(mVertexShaderProg, mFragmentShaderProg);
-        if (mGLProgId != 0) {
-            mGLPositionIndex = GLES20.glGetAttribLocation(mGLProgId, "position");
-            mGLTextureCoordinateIndex = GLES20.glGetAttribLocation(mGLProgId,"inputTextureCoordinate");
-            mGLInputImageTextureIndex = GLES20.glGetUniformLocation(mGLProgId, "inputImageTexture");
-        }
-    }
-
-    private String readShaderFromRawResource(Context context, int resourceId) {
-        final InputStream inputStream = context.getResources().openRawResource(resourceId);
-        final InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-        final BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-        String nextLine;
-        final StringBuilder body = new StringBuilder();
-
-        try{
-            while ((nextLine = bufferedReader.readLine()) != null){
-                body.append(nextLine);
-                body.append('\n');
-            }
-        }
-        catch (IOException e){
-            return null;
-        }
-        return body.toString();
-    }
-
-    // --------------------------------------------------------------------------------------------------------------------------
     // Call from ViewToGLRenderer.onDrawFrame()
     //
 
     public int onDrawFrame(int textureId, boolean external) {
-        if (!mIsInitialized) return -1;
-        if (mGLFboId == null) return -1;
+        if (!mIsInitialized || mGLFboId == null) return -1;
 
-        Log.i("onDrawFrame", "Frame draw start");
+        Log.i("TlabBrowser", "libwebview---onDrawFrameFrame: draw start");
 
         //Log.d("TextureCapture", "onDrawFrame:" + textureId);
         GLES20.glGetError();
@@ -346,7 +354,7 @@ public class TextureCapture
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 
-        Log.i("onDrawFrame", "Frame draw end");
+        Log.i("TlabBrowser", "libwebview---onDrawFrameFrame: Frame draw end");
 
         return mGLFboTexId[0];
     }

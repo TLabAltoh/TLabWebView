@@ -12,9 +12,11 @@ public class TouchEventManager : MonoBehaviour
     private const int VERTICAL_IDX = 0;
     private const int HORIZONTAL_IDX = 1;
 
-    private WebViewTexture webViewTexture;
+    private const int TOUCH_DOWN = 0;
+    private const int TOUCH_UP = 1;
+    private const int TOUCH_MOVE = 2;
 
-    private bool touching = false;
+    private WebViewTexture webViewTexture;
 
     void Start()
     {
@@ -41,8 +43,8 @@ public class TouchEventManager : MonoBehaviour
         screenEdge = new float[4];
         screenEdge[LEFT_IDX] = screenCorners[0].x;
         screenEdge[RIGHT_IDX] = screenCorners[2].x;
-        screenEdge[BOTTOM_IDX] = screenCorners[3].y;
-        screenEdge[TOP_IDX] = screenCorners[2].y;
+        screenEdge[BOTTOM_IDX] = screenCorners[0].y;
+        screenEdge[TOP_IDX] = screenCorners[1].y;
 
         screenSize = new float[2];
         screenSize[VERTICAL_IDX] = screenEdge[TOP_IDX] - screenEdge[BOTTOM_IDX];
@@ -51,41 +53,34 @@ public class TouchEventManager : MonoBehaviour
         webViewTexture = GameObject.Find("RenderCanvas/WebView").GetComponent<WebViewTexture>();
     }
 
+    private int TouchHorizontal(float x)
+    {
+        return (int)((x - screenEdge[LEFT_IDX]) / screenSize[HORIZONTAL_IDX] * webViewTexture.webWidth);
+    }
+
+    private int TouchVirtical(float y)
+    {
+        return (
+            (int)((screenEdge[TOP_IDX] - (y - screenEdge[BOTTOM_IDX])) /
+            screenSize[VERTICAL_IDX] * webViewTexture.webHeight)
+        );
+    }
+
     void Update()
     {
-        if (webViewTexture == null) return;
+        if (webViewTexture == null || Input.touchCount == 0) return;
 
-        if(Input.touchCount == 0)
+        foreach(Touch t in Input.touches)
         {
-            touching = false;
-            return;
-        }
+            float x = t.position.x;
+            float y = t.position.y;
 
-        Touch t = Input.touches[0];
-        float x, y;
+            int eventNum = (int)TouchPhase.Stationary;
+            if (t.phase == TouchPhase.Ended || t.phase == TouchPhase.Canceled) eventNum = TOUCH_UP;
+            else if (t.phase == TouchPhase.Began) eventNum = TOUCH_DOWN;
+            else if (t.phase == TouchPhase.Moved) eventNum = TOUCH_MOVE;
 
-        if (t.phase == TouchPhase.Ended || t.phase == TouchPhase.Canceled)
-        {
-            touching = false;
-            return;
-        }
-
-        if (touching == true) return;
-
-        touching = true;
-
-        x = t.position.x;
-        y = t.position.y;
-        if (x >= screenEdge[LEFT_IDX] && x <= screenEdge[RIGHT_IDX])
-        {
-            if (y >= screenEdge[BOTTOM_IDX] && y <= screenEdge[TOP_IDX])
-            {
-                webViewTexture.TouchEvent(
-                    (int)((x - screenEdge[LEFT_IDX]) / screenSize[HORIZONTAL_IDX] * webViewTexture.texWidth),
-                    (int)((y - screenEdge[BOTTOM_IDX]) / screenSize[VERTICAL_IDX] * webViewTexture.texHeight)
-                );
-                Debug.Log("hogehoge" + x.ToString() + ", " + y.ToString());
-            }
+            webViewTexture.TouchEvent(TouchHorizontal(x), TouchVirtical(y), eventNum);
         }
     }
 }
