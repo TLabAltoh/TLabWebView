@@ -54,10 +54,10 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 
 3. Open "Assets/Scenes/main"
 4. Change any parameter of TLabWebView attached to TLabWebViewSample/WebView from the hierarchy  
-  - Url: URL to load during WebView initialization
-    - WebWidth, WebHeight: Web page size
-      - TexWidth, TexHeight: Texture2D size
+- Url: URL to load during WebView initialization
+- WebWidth, WebHeight: Web page size
+- TexWidth, TexHeight: Texture2D size
 
-      ## TODO
-      - Make it work in VR.
-      - Sending input (e.g. key codes) to the browser
+## TODO
+- Make it work in VR.
+- Sending input (e.g. key codes) to the browser
