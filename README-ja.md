@@ -44,12 +44,15 @@ UNITYWEBVIEW_ANDROID_ENABLE_CAMERA
 ```
 UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 ```
+- Color Space: Linear
+- Graphics: OpenGLES3
+- Minimux API Level: 23 
 3. Assets/Scenes/mainを開く
 4. ヒエラルキーからTLabWebViewSample/WebView にアタッチされている TLabWebViewのパラメータを任意で変更  
-  - Url: WebViewの初期化時にロードするURL
-    - WebWidth, WebHeight: Webページのサイズ
-      - TexWidth, TexHeight: Texture2Dのサイズ
+- Url: WebViewの初期化時にロードするURL
+- WebWidth, WebHeight: Webページのサイズ
+- TexWidth, TexHeight: Texture2Dのサイズ
 
-      ## TODO
-      - VRで動作するようにする
-      - ブラウザへの入力(キーコードなど)の送信
+## TODO
+- VRで動作するようにする
+- ブラウザへの入力(キーコードなど)の送信
