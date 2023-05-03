@@ -23,7 +23,7 @@ Unity: 2021.23f1
 ## スタートガイド
 ### 必要な要件
 - Unity 2021.3.23f1  
-- - [TLabVKeyborad](https://github.com/TLabAltoh/TLabVKeyborad)  
+- - [TLabVKeyborad](https://github.com/TLabAltoh/TLabVKeyborad)
 ### インストール
 UnityProjectのAssets配下で任意のディレクトリに以下のコマンドからリポジトリをクローン
 ```
