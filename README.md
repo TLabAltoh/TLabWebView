@@ -48,6 +48,10 @@ UNITYWEBVIEW_ANDROID_ENABLE_CAMERA
 ```
 UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 ```
+- Color Space: Linear
+- Graphics: OpenGLES3
+- Minimux API Level: 23 
+
 3. Open "Assets/Scenes/main"
 4. Change any parameter of TLabWebView attached to TLabWebViewSample/WebView from the hierarchy  
   - Url: URL to load during WebView initialization
