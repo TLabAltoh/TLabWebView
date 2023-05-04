@@ -43,6 +43,9 @@ public class TLabWebView : MonoBehaviour
 
 	public void LoadUrl(string url)
 	{
+		if (m_WebViewEnable == false)
+			return;
+
 #if UNITY_ANDROID
 		if (Application.isEditor) return;
 
@@ -52,6 +55,9 @@ public class TLabWebView : MonoBehaviour
 
 	public void ZoomIn()
     {
+		if (m_WebViewEnable == false)
+			return;
+
 #if UNITY_ANDROID
 		if (Application.isEditor) return;
 
@@ -61,6 +67,9 @@ public class TLabWebView : MonoBehaviour
 
 	public void ZoomOut()
 	{
+		if (m_WebViewEnable == false)
+			return;
+
 #if UNITY_ANDROID
 		if (Application.isEditor) return;
 
@@ -70,6 +79,9 @@ public class TLabWebView : MonoBehaviour
 
 	public void GoForward()
     {
+		if (m_WebViewEnable == false)
+			return;
+
 #if UNITY_ANDROID
 		if (Application.isEditor) return;
 
@@ -79,6 +91,9 @@ public class TLabWebView : MonoBehaviour
 
 	public void GoBack()
 	{
+		if (m_WebViewEnable == false)
+			return;
+
 #if UNITY_ANDROID
 		if (Application.isEditor) return;
 
@@ -88,6 +103,9 @@ public class TLabWebView : MonoBehaviour
 
 	public void TouchEvent(int x, int y, int eventNum)
     {
+		if (m_WebViewEnable == false)
+			return;
+
 #if UNITY_ANDROID
 		if (Application.isEditor) return;
 

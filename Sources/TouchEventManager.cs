@@ -58,19 +58,14 @@ public class TouchEventManager : MonoBehaviour
 
     private int TouchVertical(float y)
     {
-        return ((int)((screenEdge[TOP_IDX] - (y - screenEdge[BOTTOM_IDX])) / screenSize[VERTICAL_IDX] * tlabWebView.webHeight));
+        return (int)((1.0f - (y - screenEdge[BOTTOM_IDX]) / screenSize[VERTICAL_IDX]) * tlabWebView.webHeight);
     }
 
     void Update()
     {
         if (tlabWebView == null) return;
 
-#if UNITY_EDITOR
-        float x = Input.mousePosition.x;
-        float y = Input.mousePosition.y;
-
-        Debug.Log("toucheventmanager: mouse pos (" + TouchHorizontal(x).ToString() + ", " + TouchVertical(y).ToString() + ")");
-#else
+#if !UNITY_EDITOR
         foreach(Touch t in Input.touches)
         {
             float x = t.position.x;
@@ -80,6 +75,8 @@ public class TouchEventManager : MonoBehaviour
             if (t.phase == TouchPhase.Ended || t.phase == TouchPhase.Canceled) eventNum = TOUCH_UP;
             else if (t.phase == TouchPhase.Began) eventNum = TOUCH_DOWN;
             else if (t.phase == TouchPhase.Moved) eventNum = TOUCH_MOVE;
+
+            Debug.Log("toucheventmanager: mouse pos (" + TouchHorizontal(x).ToString() + ", " + TouchVertical(y).ToString() + ")");
 
             tlabWebView.TouchEvent(TouchHorizontal(x), TouchVertical(y), eventNum);
         }

@@ -1,20 +1,31 @@
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class Main : MonoBehaviour
 {
 	[SerializeField] private TLabWebView m_webView;
-	[SerializeField] private Text m_FpsText;
+	[SerializeField] private TLabInputField m_inputField;
+	[SerializeField] private TextMeshProUGUI m_FpsText;
 	private float m_FpsTimer;
 	private int m_FpsCounter;
 
-	public void LoadUrl(string url)
+	public void LoadUrl()
     {
+		string url = m_inputField.text;
+
+		if (url == null)
+			return;
+
+		Debug.Log("Load url: " + url);
+
 		//https://www.google.com/search?q=youtube
-		if(url.Substring(0, 7) == "https://" || url.Substring(0, 6) == "http://")
+		if(url.Length > 8)
         {
-			m_webView.LoadUrl(url);
-        }
+			if (url.Substring(0, 7) == "https://" || url.Substring(0, 6) == "http://")
+			{
+				m_webView.LoadUrl(url);
+			}
+		}
 
 		m_webView.LoadUrl("https://www.google.com/search?q=" + url);
     }

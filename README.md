@@ -18,6 +18,8 @@ Screenshot run on Android 13, Adreno 619
 ![capture](https://user-images.githubusercontent.com/121733943/235582195-ba33dafc-5773-48cd-8068-4e3303749870.gif)
 
 
+After the update, the search tab is now supported
+
 
 ## Operating Environment
 OS: Android 10 ~ 13  
