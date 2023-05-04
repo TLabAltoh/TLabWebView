@@ -1,4 +1,4 @@
-bWebView
+#TLabWebView
 Unityで動作するWebViewのプラグイン．WebViewの結果をTexture2Dとして表示できます  
 ハードウェアアクセラレーションによる描画も取得可能  
 
