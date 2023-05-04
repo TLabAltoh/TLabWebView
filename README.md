@@ -63,6 +63,9 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 - WebWidth, WebHeight: Web page size
 - TexWidth, TexHeight: Texture2D size
 
+### Use from prefab
+Just add TLabWebView/TLabWebView.prefab to your scene to run WebView after building (note that the input control is configured for mobile orientation, controlled by TouchEventManager.cs)
+
 ## TODO
 - Make it work in VR.
 - Sending input (e.g. key codes) to the browser

@@ -61,6 +61,9 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 - WebWidth, WebHeight: Webページのサイズ
 - TexWidth, TexHeight: Texture2Dのサイズ
 
+### プレハブから使用
+TLabWebView/TLabWebView.prefabをシーンに追加するだけで，ビルド後WebViewを実行することができます(入力の制御がモバイル向きに構成されていることに注意してください TouchEventManager.csで制御)
+
 ## TODO
 - VRで動作するようにする
 - ブラウザへの入力(キーコードなど)の送信
