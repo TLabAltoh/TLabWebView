@@ -67,3 +67,6 @@ TLabWebView/TLabWebView.prefabをシーンに追加するだけで，ビルド�
 ## TODO
 - VRで動作するようにする
 - ブラウザへの入力(キーコードなど)の送信
+
+## リンク
+[使用したJavaプラグインのソースコード](https://github.com/TLabAltoh/TLabWebViewPlugin)

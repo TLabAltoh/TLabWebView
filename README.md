@@ -69,3 +69,6 @@ Just add TLabWebView/TLabWebView.prefab to your scene to run WebView after build
 ## TODO
 - Make it work in VR.
 - Sending input (e.g. key codes) to the browser
+
+## Link
+[Source code of the java plugin used](https://github.com/TLabAltoh/TLabWebViewPlugin)
