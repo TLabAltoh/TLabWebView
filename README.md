@@ -9,7 +9,7 @@ Hardware-accelerated rendering is also available
 Screenshot run on Android 10, Adreno 505  
 
 
-<img src="https://user-images.githubusercontent.com/121733943/213294032-29502633-2f48-4f9e-91e4-269316920855.png" width="512">
+![Screenshot_20230119-055237](https://user-images.githubusercontent.com/121733943/213294032-29502633-2f48-4f9e-91e4-269316920855.png)
 
 
 After the update, the search tab is now supported  
@@ -20,7 +20,7 @@ After the update, the search tab is now supported
 
 Screenshot run on Android 13, Adreno 619  
 
-<img src="https://user-images.githubusercontent.com/121733943/235582195-ba33dafc-5773-48cd-8068-4e3303749870.gif" width="512">
+![capture](https://user-images.githubusercontent.com/121733943/235582195-ba33dafc-5773-48cd-8068-4e3303749870.gif)
 
 
 ## Operating Environment
