@@ -9,6 +9,12 @@ Android10, Adreno 505で実行した画面
 ![Screenshot_20230119-055237](https://user-images.githubusercontent.com/121733943/213294032-29502633-2f48-4f9e-91e4-269316920855.png)
 
 
+更新後，検索タブに対応しました
+
+
+<img src="https://user-images.githubusercontent.com/121733943/236137674-27b8f81e-7fc6-401b-b3f0-c80f72ada14d.png" width="256">
+
+
 Android13, Adreno 619で実行した画面  
 
 
