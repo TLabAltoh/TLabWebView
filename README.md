@@ -15,7 +15,7 @@ Screenshot run on Android 10, Adreno 505
 After the update, the search tab is now supported  
 
 
-![Screenshot_20230504-160718](https://user-images.githubusercontent.com/121733943/236137674-27b8f81e-7fc6-401b-b3f0-c80f72ada14d.png)
+<img src="https://user-images.githubusercontent.com/121733943/236137674-27b8f81e-7fc6-401b-b3f0-c80f72ada14d.png" width="512">
 
 
 Screenshot run on Android 13, Adreno 619  
