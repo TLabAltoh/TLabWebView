@@ -44,8 +44,6 @@ public class Main : MonoBehaviour
 	{
 		m_FpsTimer = 0;
 		m_FpsCounter = 0;
-
-		Application.targetFrameRate = 60;
 	}
 
 	void Update ()

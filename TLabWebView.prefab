@@ -122,7 +122,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 5892812552932834424}
         m_TargetAssemblyTypeName: Main, Assembly-CSharp
         m_MethodName: LoadUrl
         m_Mode: 1
@@ -15875,8 +15875,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6721217011539885364}
-        m_TargetAssemblyTypeName: TLabWebView, Assembly-CSharp
+      - m_Target: {fileID: 5892812552932834424}
+        m_TargetAssemblyTypeName: Main, Assembly-CSharp
         m_MethodName: StartWebView
         m_Mode: 1
         m_Arguments:
@@ -17736,7 +17736,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WebViewRawImage: {fileID: 6721217011539885321}
-  url: https://www.youtube.com/watch?v=PK0eoB0jQ_M
+  url: https://www.youtube.com/watch?v=eRdto9624Ls
   webWidth: 1024
   webHeight: 1024
   texWidth: 512
