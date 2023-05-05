@@ -94,8 +94,8 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 </manifest>
 ```
 
-3. Open "Assets/Scenes/main"
-4. Change any parameter of TLabWebView attached to TLabWebViewSample/WebView from the hierarchy  
+3. Open Assets/Scenes/main.unity
+4. Change any parameter of TLabWebView attached to TLabWebView/WebView from the hierarchy  
 - Url: URL to load during WebView initialization
 - WebWidth, WebHeight: Web page size
 - TexWidth, TexHeight: Texture2D size

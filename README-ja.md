@@ -92,8 +92,8 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 	<!-- For Unity-WebView -->
 </manifest>
 ```
-3. Assets/Scenes/mainを開く
-4. ヒエラルキーからTLabWebViewSample/WebView にアタッチされている TLabWebViewのパラメータを任意で変更  
+3. Assets/Scenes/main.unity を開く
+4. ヒエラルキーからTLabWebView/WebView にアタッチされている TLabWebViewのパラメータを任意で変更  
 - Url: WebViewの初期化時にロードするURL
 - WebWidth, WebHeight: Webページのサイズ
 - TexWidth, TexHeight: Texture2Dのサイズ
