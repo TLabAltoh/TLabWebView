@@ -125,8 +125,7 @@ public class TLabWebView : MonoBehaviour
 
 	public void StartWebView()
     {
-		if (m_WebViewEnable == true)
-			return;
+		if (m_WebViewEnable) return;
 
 		m_WebViewEnable = true;
 
@@ -140,10 +139,7 @@ public class TLabWebView : MonoBehaviour
 
 	public void UpdateFrame()
     {
-		if (!m_WebViewEnable)
-		{
-			return;
-		}
+		if (!m_WebViewEnable) return;
 
 		byte[] data = GetWebTexturePixel();
 
