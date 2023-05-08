@@ -8,10 +8,10 @@ public class TLabWebView : MonoBehaviour
 	[SerializeField] private RawImage WebViewRawImage;
 
 	[SerializeField] public string url = "https://youtube.com";
-	[SerializeField] public int webWidth = 1024;
-	[SerializeField] public int webHeight = 1024;
-	[SerializeField] public int texWidth = 512;
-	[SerializeField] public int texHeight = 512;
+	[System.NonSerialized] public int webWidth = 1024;
+	[System.NonSerialized] public int webHeight = 1024;
+	[System.NonSerialized] public int texWidth = 512;
+	[System.NonSerialized] public int texHeight = 512;
 
 	private bool m_WebViewEnable;
 	private Texture2D webViewTexture;
