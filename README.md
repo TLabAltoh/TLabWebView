@@ -97,8 +97,8 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 3. Open Assets/Scenes/main.unity
 4. Change any parameter of TLabWebView attached to TLabWebView/WebView from the hierarchy  
 - Url: URL to load during WebView initialization
-- WebWidth, WebHeight: Web page size
-- TexWidth, TexHeight: Texture2D size
+- Texture2D size: 512 * 512
+- WebView size: 1024 * 1024
 
 ### Use from prefab
 Just add TLabWebView/TLabWebView.prefab to your scene to run WebView after building (note that the input control is configured for mobile orientation, controlled by TouchEventManager.cs)
