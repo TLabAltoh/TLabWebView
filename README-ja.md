@@ -95,8 +95,8 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 3. Assets/Scenes/main.unity を開く
 4. ヒエラルキーからTLabWebView/WebView にアタッチされている TLabWebViewのパラメータを任意で変更  
 - Url: WebViewの初期化時にロードするURL
-- WebWidth, WebHeight: Webページのサイズ
-- TexWidth, TexHeight: Texture2Dのサイズ
+- Texture2D サイズ: 512 * 512
+- WebView サイズ: 1024 * 1024
 
 ### プレハブから使用
 TLabWebView/TLabWebView.prefabをシーンに追加するだけで，ビルド後WebViewを実行することができます(入力の制御がモバイル向きに構成されていることに注意してください TouchEventManager.csで制御)
