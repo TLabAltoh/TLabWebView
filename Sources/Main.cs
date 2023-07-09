@@ -6,6 +6,7 @@ public class Main : MonoBehaviour
 	[SerializeField] private TLabWebView m_webView;
 	[SerializeField] private TLabInputField m_inputField;
 	[SerializeField] private TextMeshProUGUI m_FpsText;
+
 	private float m_FpsTimer;
 	private int m_FpsCounter;
 
