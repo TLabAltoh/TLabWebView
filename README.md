@@ -4,24 +4,12 @@
 
 Plug-in for WebView that runs in Unity and can display WebView results as Texture2D  
 Hardware-accelerated rendering is also available  
+Key input support
 
 ## Screenshot  
-Screenshot run on Android 10, Adreno 505  
-
-
-![Screenshot_20230119-055237](https://user-images.githubusercontent.com/121733943/213294032-29502633-2f48-4f9e-91e4-269316920855.png)
-
-
-After the update, the search tab is now supported  
-
-
-<img src="https://user-images.githubusercontent.com/121733943/236137674-27b8f81e-7fc6-401b-b3f0-c80f72ada14d.png" width="256">
-
-
 Screenshot run on Android 13, Adreno 619  
 
-![capture](https://user-images.githubusercontent.com/121733943/235582195-ba33dafc-5773-48cd-8068-4e3303749870.gif)
-
+<img src="https://github.com/TLabAltoh/TLabWebView/assets/121733943/b5428eef-7e21-452b-a348-d2064e712156" width="256">
 
 ## Operating Environment
 OS: Android 10 ~ 13  
@@ -97,15 +85,14 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 3. Open Assets/Scenes/main.unity
 4. Change any parameter of TLabWebView attached to TLabWebView/WebView from the hierarchy  
 - Url: URL to load during WebView initialization
-- Texture2D size: 512 * 512
-- WebView size: 1024 * 1024
+- Texture2D default size: 512 * 512
+- WebView default size: 1024 * 1024
 
 ### Use from prefab
 Just add TLabWebView/TLabWebView.prefab to your scene to run WebView after building (note that the input control is configured for mobile orientation, controlled by TouchEventManager.cs)
 
-## TODO
-- Make it work in VR.
-- Sending input (e.g. key codes) to the browser
+## NOTICE
+- Now supports play in VR ([link](https://github.com/TLabAltoh/TLabWebViewVR)).
 
 ## Link
 [Source code of the java plugin used](https://github.com/TLabAltoh/TLabWebViewPlugin)
