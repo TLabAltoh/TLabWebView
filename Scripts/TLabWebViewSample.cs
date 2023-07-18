@@ -10,11 +10,6 @@ public class TLabWebViewSample : MonoBehaviour
 		m_webView.StartWebView();
 	}
 
-	public void Awake()
-	{
-		DontDestroyOnLoad(gameObject);
-	}
-
 	void Start()
 	{
 		StartWebView();

@@ -178,6 +178,20 @@ public class TLabWebView : MonoBehaviour
 
 		m_NativePlugin.Call("Destroy");
 		m_NativePlugin = null;
+
+		Debug.Log("[tlabwebview] destroy webview");
+#endif
+	}
+
+    protected void OnApplicationQuit()
+    {
+#if UNITY_ANDROID
+		if (m_NativePlugin == null) return;
+
+		m_NativePlugin.Call("Destroy");
+		m_NativePlugin = null;
+
+		Debug.Log("[tlabwebview] destroy webview");
 #endif
 	}
 }
