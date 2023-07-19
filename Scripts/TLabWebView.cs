@@ -17,7 +17,7 @@ public class TLabWebView : MonoBehaviour
 	private Texture2D webViewTexture;
 
 #if UNITY_ANDROID
-	private AndroidJavaClass m_NativePlugin;
+	private AndroidJavaObject m_NativePlugin;
 #endif
 
 	public void Init(int webWidth, int webHeight, int tWidth, int tHeight, int sWidth, int sHeight, string url)
@@ -25,7 +25,7 @@ public class TLabWebView : MonoBehaviour
 #if UNITY_ANDROID
 		if (Application.isEditor) return;
 
-		m_NativePlugin = new AndroidJavaClass("com.tlab.libwebview.UnityConnect");
+		m_NativePlugin = new AndroidJavaObject("com.tlab.libwebview.UnityConnect");
 		m_NativePlugin.CallStatic("initialize", webWidth, webHeight, tWidth, tHeight, sWidth, sHeight, url);
 #endif
 	}
@@ -171,7 +171,7 @@ public class TLabWebView : MonoBehaviour
 		}
 	}
 
-	protected void OnDestroy()
+	private void OnDestroy()
 	{
 #if UNITY_ANDROID
 		if (m_NativePlugin == null) return;
@@ -183,7 +183,7 @@ public class TLabWebView : MonoBehaviour
 #endif
 	}
 
-    protected void OnApplicationQuit()
+    private void OnApplicationQuit()
     {
 #if UNITY_ANDROID
 		if (m_NativePlugin == null) return;
