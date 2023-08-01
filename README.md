@@ -6,6 +6,8 @@ Plug-in for WebView that runs in Unity and can display WebView results as Textur
 Hardware-accelerated rendering is also available  
 Key input support
 
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/tlabaltoh)
+
 ## Screenshot  
 Screenshot run on Android 13, Adreno 619  
 

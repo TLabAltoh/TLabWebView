@@ -2,6 +2,9 @@
 
 Unityで動作するWebViewのプラグイン．WebViewの結果をTexture2Dとして表示できます  
 ハードウェアアクセラレーションによる描画も取得可能  
+キーボード入力をサポート  
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/tlabaltoh)
 
 ## スクリーンショット  
 Android13, Adreno 619で実行した画面  
