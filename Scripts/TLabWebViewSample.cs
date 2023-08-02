@@ -17,6 +17,8 @@ public class TLabWebViewSample : MonoBehaviour
 
 	void Update ()
 	{
+#if UNITY_ANDROID
 		m_webView.UpdateFrame();
+#endif
 	}
 }
