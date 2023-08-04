@@ -5,6 +5,7 @@ public class TouchEventManager : MonoBehaviour
     [SerializeField] private RectTransform screenRect;
     [SerializeField] private TLabWebView tlabWebView;
 
+    // rect transform
     private float[] screenEdge;
     private const int LEFT_IDX = 0;
     private const int RIGHT_IDX = 1;
@@ -14,9 +15,13 @@ public class TouchEventManager : MonoBehaviour
     private const int VERTICAL_IDX = 0;
     private const int HORIZONTAL_IDX = 1;
 
+    // event
     private const int TOUCH_DOWN = 0;
     private const int TOUCH_UP = 1;
     private const int TOUCH_MOVE = 2;
+
+    // state
+    private bool onTheWeb = false;
 
     void Start()
     {
@@ -68,17 +73,39 @@ public class TouchEventManager : MonoBehaviour
 #if !UNITY_EDITOR
         foreach(Touch t in Input.touches)
         {
+#if false
             float x = t.position.x;
             float y = t.position.y;
+#endif
+
+            int x = TouchHorizontal(t.position.x);
+            int y = TouchVertical(t.position.y);
 
             int eventNum = (int)TouchPhase.Stationary;
+
             if (t.phase == TouchPhase.Ended || t.phase == TouchPhase.Canceled) eventNum = TOUCH_UP;
             else if (t.phase == TouchPhase.Began) eventNum = TOUCH_DOWN;
             else if (t.phase == TouchPhase.Moved) eventNum = TOUCH_MOVE;
 
-            Debug.Log("toucheventmanager: mouse pos (" + TouchHorizontal(x).ToString() + ", " + TouchVertical(y).ToString() + ")");
+            if (x > tlabWebView.webWidth || x < 0 || y > tlabWebView.webHeight || y < 0)
+            {
+                if (onTheWeb == true && t.phase == TouchPhase.Moved)
+                    eventNum = TOUCH_UP;
+                else
+                    eventNum = (int)TouchPhase.Stationary;
 
-            tlabWebView.TouchEvent(TouchHorizontal(x), TouchVertical(y), eventNum);
+                onTheWeb = false;
+            }
+            else
+            {
+                onTheWeb = true;
+            }
+
+#if false
+            Debug.Log("toucheventmanager: mouse pos (" + x.ToString() + ", " + y.ToString() + ")");
+#endif
+
+            tlabWebView.TouchEvent(x, y, eventNum);
         }
 #endif
     }
