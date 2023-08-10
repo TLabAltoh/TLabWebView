@@ -1,24 +1,26 @@
 using UnityEngine;
-using TMPro;
 
-public class TLabWebViewSample : MonoBehaviour
+namespace TLab.Android.WebView
 {
-	[SerializeField] private TLabWebView m_webView;
-
-	public void StartWebView()
-    {
-		m_webView.StartWebView();
-	}
-
-	void Start()
+	public class TLabWebViewSample : MonoBehaviour
 	{
-		StartWebView();
-	}
+		[SerializeField] private TLabWebView m_webView;
 
-	void Update ()
-	{
+		public void StartWebView()
+		{
+			m_webView.StartWebView();
+		}
+
+		void Start()
+		{
+			StartWebView();
+		}
+
+		void Update()
+		{
 #if UNITY_ANDROID
-		m_webView.UpdateFrame();
+			m_webView.UpdateFrame();
 #endif
+		}
 	}
 }

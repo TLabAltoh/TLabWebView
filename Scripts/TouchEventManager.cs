@@ -1,74 +1,76 @@
 using UnityEngine;
 
-public class TouchEventManager : MonoBehaviour
+namespace TLab.Android.WebView
 {
-    [SerializeField] private RectTransform screenRect;
-    [SerializeField] private TLabWebView tlabWebView;
-
-    // rect transform
-    private float[] screenEdge;
-    private const int LEFT_IDX = 0;
-    private const int RIGHT_IDX = 1;
-    private const int BOTTOM_IDX = 2;
-    private const int TOP_IDX = 3;
-    private float[] screenSize;
-    private const int VERTICAL_IDX = 0;
-    private const int HORIZONTAL_IDX = 1;
-
-    // event
-    private const int TOUCH_DOWN = 0;
-    private const int TOUCH_UP = 1;
-    private const int TOUCH_MOVE = 2;
-
-    // state
-    private bool onTheWeb = false;
-
-    void Start()
+    public class TouchEventManager : MonoBehaviour
     {
-        if(screenRect == null)
+        [SerializeField] private RectTransform screenRect;
+        [SerializeField] private TLabWebView tlabWebView;
+
+        // rect transform
+        private float[] screenEdge;
+        private const int LEFT_IDX = 0;
+        private const int RIGHT_IDX = 1;
+        private const int BOTTOM_IDX = 2;
+        private const int TOP_IDX = 3;
+        private float[] screenSize;
+        private const int VERTICAL_IDX = 0;
+        private const int HORIZONTAL_IDX = 1;
+
+        // event
+        private const int TOUCH_DOWN = 0;
+        private const int TOUCH_UP = 1;
+        private const int TOUCH_MOVE = 2;
+
+        // state
+        private bool onTheWeb = false;
+
+        void Start()
         {
-            Debug.Log("toucheventmanager: screenRect is null");
-            return;
+            if (screenRect == null)
+            {
+                Debug.Log("toucheventmanager: screenRect is null");
+                return;
+            }
+
+            // Screen Corners[0] : Left bottom
+            // Screen Corners[1] : Left tops
+            // Screen Corners[2] : Right tops
+            // Screen Corners[3] : Right bottom
+            Vector3[] screenCorners = new Vector3[4];
+            screenRect.GetWorldCorners(screenCorners);
+
+            for (int i = 0; i < screenCorners.Length; i++)
+            {
+                screenCorners[i] = RectTransformUtility.WorldToScreenPoint(Camera.main, screenCorners[i]);
+                Vector3 tmp = screenCorners[i];
+                Debug.Log("toucheventmanager: screenCorners[" + i + "]: " + tmp.x + ", " + tmp.y);
+            }
+
+            screenEdge = new float[4];
+            screenEdge[LEFT_IDX] = screenCorners[0].x;
+            screenEdge[RIGHT_IDX] = screenCorners[2].x;
+            screenEdge[BOTTOM_IDX] = screenCorners[0].y;
+            screenEdge[TOP_IDX] = screenCorners[1].y;
+
+            screenSize = new float[2];
+            screenSize[VERTICAL_IDX] = screenEdge[TOP_IDX] - screenEdge[BOTTOM_IDX];
+            screenSize[HORIZONTAL_IDX] = screenEdge[RIGHT_IDX] - screenEdge[LEFT_IDX];
         }
 
-        // Screen Corners[0] : Left bottom
-        // Screen Corners[1] : Left tops
-        // Screen Corners[2] : Right tops
-        // Screen Corners[3] : Right bottom
-        Vector3[] screenCorners = new Vector3[4];
-        screenRect.GetWorldCorners(screenCorners);
-
-        for(int i = 0; i < screenCorners.Length; i++)
+        private int TouchHorizontal(float x)
         {
-            screenCorners[i] = RectTransformUtility.WorldToScreenPoint(Camera.main, screenCorners[i]);
-            Vector3 tmp = screenCorners[i];
-            Debug.Log("toucheventmanager: screenCorners[" + i + "]: " + tmp.x + ", " + tmp.y);
+            return (int)((x - screenEdge[LEFT_IDX]) / screenSize[HORIZONTAL_IDX] * tlabWebView.webWidth);
         }
-        
-        screenEdge = new float[4];
-        screenEdge[LEFT_IDX] = screenCorners[0].x;
-        screenEdge[RIGHT_IDX] = screenCorners[2].x;
-        screenEdge[BOTTOM_IDX] = screenCorners[0].y;
-        screenEdge[TOP_IDX] = screenCorners[1].y;
 
-        screenSize = new float[2];
-        screenSize[VERTICAL_IDX] = screenEdge[TOP_IDX] - screenEdge[BOTTOM_IDX];
-        screenSize[HORIZONTAL_IDX] = screenEdge[RIGHT_IDX] - screenEdge[LEFT_IDX];
-    }
+        private int TouchVertical(float y)
+        {
+            return (int)((1.0f - (y - screenEdge[BOTTOM_IDX]) / screenSize[VERTICAL_IDX]) * tlabWebView.webHeight);
+        }
 
-    private int TouchHorizontal(float x)
-    {
-        return (int)((x - screenEdge[LEFT_IDX]) / screenSize[HORIZONTAL_IDX] * tlabWebView.webWidth);
-    }
-
-    private int TouchVertical(float y)
-    {
-        return (int)((1.0f - (y - screenEdge[BOTTOM_IDX]) / screenSize[VERTICAL_IDX]) * tlabWebView.webHeight);
-    }
-
-    void Update()
-    {
-        if (tlabWebView == null) return;
+        void Update()
+        {
+            if (tlabWebView == null) return;
 
 #if !UNITY_EDITOR
         foreach(Touch t in Input.touches)
@@ -108,5 +110,6 @@ public class TouchEventManager : MonoBehaviour
             tlabWebView.TouchEvent(x, y, eventNum);
         }
 #endif
+        }
     }
 }
