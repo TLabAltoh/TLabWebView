@@ -10,7 +10,7 @@ Unityで動作するWebViewのプラグイン．WebViewの結果をTexture2Dと�
 Android13, Adreno 619で実行した画面  
 
 
-<img src="https://github.com/TLabAltoh/TLabWebView/assets/121733943/b5428eef-7e21-452b-a348-d2064e712156" width="256">
+<img src="Media/tlab-webview.png" width="256">
 
 
 ## 動作環境
