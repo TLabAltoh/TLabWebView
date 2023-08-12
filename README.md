@@ -11,7 +11,7 @@ Key input support
 ## Screenshot  
 Screenshot run on Android 13, Adreno 619  
 
-<img src="https://github.com/TLabAltoh/TLabWebView/assets/121733943/b5428eef-7e21-452b-a348-d2064e712156" width="256">
+<img src="Media/tlab-webview.png" width="256">
 
 ## Operating Environment
 OS: Android 10 ~ 13  
