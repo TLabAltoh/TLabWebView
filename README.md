@@ -23,14 +23,7 @@ Unity: 2021.23f1
 - Unity 2021.3.23f1  
 - [TLabVKeyborad](https://github.com/TLabAltoh/TLabVKeyborad)
 ### Installing
-Clone the repository to any directory under Assets in the Unity project that will use the assets with the following command  
-```
-git clone https://github.com/TLabAltoh/TLabWebView.git
-```
-If you are adding to an existing git project, use the following command instead
-```
-git submodule add https://github.com/TLabAltoh/TLabWebView.git
-```
+Clone the repository or download it from the release, place it under any Unity project and use it
 ### Set up
 1. Change platform to Android from Build Settings  
 2. Add the following symbols to Project Settings --> Player --> Other Settings (to be used at build time)  
