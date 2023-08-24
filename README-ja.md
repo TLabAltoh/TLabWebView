@@ -23,7 +23,7 @@ Unity: 2021.23f1
 - Unity 2021.3.23f1  
 - [TLabVKeyborad](https://github.com/TLabAltoh/TLabVKeyborad)
 ### インストール
-任意のUnityプラジェクト配下にリポジトリをクローンまたは，ダウンロードしたリポジトリを配置して使用してください.
+任意のUnityプロジェクト配下にリポジトリをクローンまたは，ダウンロードしたリポジトリを配置して使用してください.
 ### セットアップ
 1. Build Settingsからプラットフォームを Androidに変更  
 2. Project Settings --> Player --> Other Settings に以下のシンボルを追加(ビルド時に使用)
