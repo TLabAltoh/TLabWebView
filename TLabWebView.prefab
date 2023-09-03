@@ -3749,6 +3749,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WebViewRawImage: {fileID: 1296943328814292584}
   url: https://www.youtube.com/watch?v=eRdto9624Ls
+  download: 
   webWidth: 1024
   webHeight: 1024
   texWidth: 512
