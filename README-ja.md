@@ -82,11 +82,11 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 4. WebViewの設定を変更
 TLabWebView.cs の設定項目(TLabWebView.prefab/WebView にある)  
 <img src="Media/tlab-webview-settings.png" width="256">  
-- Url: WebViewの初期化時にロードするURL
-- DlOption: ファイルをアプリケーションフォルダとダウンロードフォルダどちらにダウンロードするか
-- SubDir: アプリケーションフォルダにダウンロードする場合，{Application folder}/{files}/{SubDir}にダウンロードされる
-- Web (Width/Height): WebViewの解像度 (デフォルト 1024 * 1024)
-- Tex (Width/Height): Texture2Dの解像度 (デフォルト 512 * 512)
+- Url: WebViewの初期化時にロードするURL  
+- DlOption: ファイルをアプリケーションフォルダとダウンロードフォルダどちらにダウンロードするか  
+- SubDir: アプリケーションフォルダにダウンロードする場合，```{Application folder}/{files}/{SubDir}```にダウンロードされる  
+- Web (Width/Height): WebViewの解像度 (デフォルト 1024 * 1024)  
+- Tex (Width/Height): Texture2Dの解像度 (デフォルト 512 * 512)  
 
 ## お知らせ
 - VRでのプレイに対応しました([link](https://github.com/TLabAltoh/TLabWebViewVR))
