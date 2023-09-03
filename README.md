@@ -82,11 +82,11 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 4. Change the setting of WebView
 Setting items in TLabWebView.cs (located in TLabWebView.prefab/WebView)  
 <img src="Media/tlab-webview-settings.png" width="256">  
-- Url: URL to load during WebView initialization  
-- DlOption: Whether to download to the application folder or the downloads folder  
-- SubDir: In case of setting download to application folder, it is downloaded to ```{Application folder}/{files}/{SubDir}```  
-- Web (Width/Height):  Web page resolution (default 1024 * 1024)  
-- Tex (Width/Height): Texture2D resolution used within Unity (default 512 * 512)  
+- Url: URL to load during WebView initialization   
+- DlOption: Whether to download to the application folder or the downloads folder   
+- SubDir: In case of setting download to application folder, it is downloaded to ```{Application folder}/{files}/{SubDir}```   
+- Web (Width/Height):  Web page resolution (default 1024 * 1024)   
+- Tex (Width/Height): Texture2D resolution used within Unity (default 512 * 512)   
 
 ## NOTICE
 - Now supports play in VR ([link](https://github.com/TLabAltoh/TLabWebViewVR)).
