@@ -3,6 +3,8 @@
 Unityで動作するWebViewのプラグイン．WebViewの結果をTexture2Dとして表示できます  
 ハードウェアアクセラレーションによる描画も取得可能  
 キーボード入力をサポート  
+ファイルのダウンロードをサポート  
+javascriptの実行に対応  
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/tlabaltoh)
 
@@ -23,7 +25,7 @@ Unity: 2021.23f1
 - Unity 2021.3.23f1  
 - [TLabVKeyborad](https://github.com/TLabAltoh/TLabVKeyborad)
 ### インストール
-任意のUnityプロジェクト配下にリポジトリをクローンまたは，ダウンロードしたリポジトリを配置して使用してください.
+リポジトリをクローン，またはリリースからダウンロードし，UnityのAssetフォルダに配置してください
 ### セットアップ
 1. Build Settingsからプラットフォームを Androidに変更  
 2. Project Settings --> Player --> Other Settings に以下のシンボルを追加(ビルド時に使用)
@@ -76,14 +78,15 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 	<!-- For Unity-WebView -->
 </manifest>
 ```
-3. Assets/Scenes/main.unity を開く
-4. ヒエラルキーからTLabWebView/WebView にアタッチされている TLabWebViewのパラメータを任意で変更  
+3. TLabWebView/TLabWebView.prefab をシーンに追加
+4. WebViewの設定を変更
+TLabWebView.cs の設定項目(TLabWebView.prefab/WebView にある)  
+<img src="Media/tlab-webview-settings.png" width="256">  
 - Url: WebViewの初期化時にロードするURL
-- Texture2D デフォルトサイズ: 512 * 512
-- WebView デフォルトサイズ: 1024 * 1024
-
-### プレハブから使用
-TLabWebView/TLabWebView.prefabをシーンに追加するだけで，ビルド後WebViewを実行することができます(入力の制御がモバイル向きに構成されていることに注意してください TouchEventManager.csで制御)
+- DlOption: ファイルをアプリケーションフォルダとダウンロードフォルダどちらにダウンロードするか
+- SubDir: アプリケーションフォルダにダウンロードする場合，{Application folder}/{files}/{SubDir}にダウンロードされる
+- Web (Width/Height): WebViewの解像度 (デフォルト 1024 * 1024)
+- Tex (Width/Height): Texture2Dの解像度 (デフォルト 512 * 512)
 
 ## お知らせ
 - VRでのプレイに対応しました([link](https://github.com/TLabAltoh/TLabWebViewVR))

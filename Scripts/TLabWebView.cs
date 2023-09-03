@@ -14,9 +14,13 @@ namespace TLab.Android.WebView
 		}
 
 		[SerializeField] private RawImage WebViewRawImage;
-
 		[SerializeField] private string m_url = "https://youtube.com";
+
+		[Header("File Download Settings")]
 		[SerializeField] private DownloadOption m_dlOption;
+		[SerializeField] private string m_subdir = "downloads";
+
+		[Header("Resolution setting")]
 		[SerializeField] private int m_webWidth = 1024;
 		[SerializeField] private int m_webHeight = 1024;
 		[SerializeField] private int m_texWidth = 512;
@@ -34,13 +38,13 @@ namespace TLab.Android.WebView
 		private AndroidJavaObject m_NativePlugin;
 #endif
 
-		public void Init(int webWidth, int webHeight, int tWidth, int tHeight, int sWidth, int sHeight, string url, int dlOption)
+		public void Init(int webWidth, int webHeight, int tWidth, int tHeight, int sWidth, int sHeight, string url, int dlOption, string subDir)
 		{
 #if UNITY_ANDROID
 			if (Application.isEditor) return;
 
 			m_NativePlugin = new AndroidJavaObject("com.tlab.libwebview.UnityConnect");
-			m_NativePlugin.CallStatic("initialize", webWidth, webHeight, tWidth, tHeight, sWidth, sHeight, url, dlOption);
+			m_NativePlugin.CallStatic("initialize", webWidth, webHeight, tWidth, tHeight, sWidth, sHeight, url, dlOption, subDir);
 #endif
 		}
 
@@ -177,7 +181,7 @@ namespace TLab.Android.WebView
 			m_WebViewEnable = true;
 
 #if UNITY_ANDROID
-			Init(m_webWidth, m_webHeight, m_texWidth, m_texHeight, Screen.width, Screen.height, m_url, (int)m_dlOption);
+			Init(m_webWidth, m_webHeight, m_texWidth, m_texHeight, Screen.width, Screen.height, m_url, (int)m_dlOption, m_subdir);
 			m_webViewTexture = new Texture2D(m_texWidth, m_texHeight, TextureFormat.ARGB32, false);
 			m_webViewTexture.name = "WebImage";
 			WebViewRawImage.texture = m_webViewTexture;

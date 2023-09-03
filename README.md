@@ -5,6 +5,8 @@
 Plug-in for WebView that runs in Unity and can display WebView results as Texture2D  
 Hardware-accelerated rendering is also available  
 Key input support
+File Download Support
+Supports javascript execution  
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/tlabaltoh)
 
@@ -23,7 +25,7 @@ Unity: 2021.23f1
 - Unity 2021.3.23f1  
 - [TLabVKeyborad](https://github.com/TLabAltoh/TLabVKeyborad)
 ### Installing
-Clone the repository or download it from the release, place it under any Unity project and use it
+Clone the repository or download it from the release and place it in the Asset folder of Unity
 ### Set up
 1. Change platform to Android from Build Settings  
 2. Add the following symbols to Project Settings --> Player --> Other Settings (to be used at build time)  
@@ -76,15 +78,15 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 	<!-- For Unity-WebView -->
 </manifest>
 ```
-
-3. Open Assets/Scenes/main.unity
-4. Change any parameter of TLabWebView attached to TLabWebView/WebView from the hierarchy  
+3. Add TLabWebView/TLabWebView.prefab to scene
+4. Change the setting of WebView
+Setting items in TLabWebView.cs (located in TLabWebView.prefab/WebView)  
+<img src="Media/tlab-webview-settings.png" width="256">  
 - Url: URL to load during WebView initialization
-- Texture2D default size: 512 * 512
-- WebView default size: 1024 * 1024
-
-### Use from prefab
-Just add TLabWebView/TLabWebView.prefab to your scene to run WebView after building (note that the input control is configured for mobile orientation, controlled by TouchEventManager.cs)
+- DlOption: Whether to download to the application folder or the downloads folder
+- SubDir: In case of setting download to application folder, it is downloaded to {Application folder}/{files}/{SubDir}
+- Web (Width/Height):  Web page resolution (default 1024 * 1024)
+- Tex (Width/Height): Texture2D resolution used within Unity (default 512 * 512)
 
 ## NOTICE
 - Now supports play in VR ([link](https://github.com/TLabAltoh/TLabWebViewVR)).

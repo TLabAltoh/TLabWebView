@@ -428,16 +428,6 @@ PrefabInstance:
       propertyPath: url
       value: https://1-notes.com/html-image-download-button/
       objectReference: {fileID: 0}
-    - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c,
-        type: 3}
-      propertyPath: m_url
-      value: https://1-notes.com/html-image-download-button/
-      objectReference: {fileID: 0}
-    - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c,
-        type: 3}
-      propertyPath: m_dlOption
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
 --- !u!1 &1702036735
