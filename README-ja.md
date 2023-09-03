@@ -81,7 +81,9 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 3. TLabWebView/TLabWebView.prefab をシーンに追加
 4. WebViewの設定を変更
 TLabWebView.cs の設定項目(TLabWebView.prefab/WebView にある)  
+
 <img src="Media/tlab-webview-settings.png" width="256">  
+
 - Url: WebViewの初期化時にロードするURL  
 - DlOption: ファイルをアプリケーションフォルダとダウンロードフォルダどちらにダウンロードするか  
 - SubDir: アプリケーションフォルダにダウンロードする場合，```{Application folder}/{files}/{SubDir}```にダウンロードされる  
