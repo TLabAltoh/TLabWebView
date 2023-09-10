@@ -90,6 +90,32 @@ Setting items in TLabWebView.cs (located in TLabWebView.prefab/WebView)
 - Web (Width/Height):  Web page resolution (default 1024 * 1024)  
 - Tex (Width/Height): Texture2D resolution used within Unity (default 512 * 512)  
 
+## Scripting API
+### Initialize
+- void Init(int webWidth, int webHeight, int tWidth, int tHeight, int sWidth, int sHeight, string url, int dlOption, string subDir)
+- void StartWebView()
+### Update Frame
+- byte[] GetWebTexturePixel()
+- void UpdateFrame()
+### Capture Element
+- void CaptureHTMLSource()
+- void CaptureElementById(string id)
+- string CurrentHTMLCaptured()
+### Load URL
+- void LoadUrl(string url)
+- void GoForward()
+- void GoBack()
+### Zoom In/Out
+- void ZoomIn()
+- void ZoomOut()
+### Evaluate Javascript
+- void EvaluateJS(string js)
+### Touch Event
+- void TouchEvent(int x, int y, int eventNum)
+### Key Event
+- void KeyEvent(char key)
+- void BackSpace()
+
 ## NOTICE
 - Now supports play in VR ([link](https://github.com/TLabAltoh/TLabWebViewVR)).
 

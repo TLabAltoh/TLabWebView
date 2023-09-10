@@ -90,6 +90,32 @@ TLabWebView.cs の設定項目(TLabWebView.prefab/WebView にある)
 - Web (Width/Height): WebViewの解像度 (デフォルト 1024 * 1024)  
 - Tex (Width/Height): Texture2Dの解像度 (デフォルト 512 * 512)  
 
+## Scripting API
+### Initialize
+- void Init(int webWidth, int webHeight, int tWidth, int tHeight, int sWidth, int sHeight, string url, int dlOption, string subDir)
+- void StartWebView()
+### Update Frame
+- byte[] GetWebTexturePixel()
+- void UpdateFrame()
+### Capture Element
+- void CaptureHTMLSource()
+- void CaptureElementById(string id)
+- string CurrentHTMLCaptured()
+### Load URL
+- void LoadUrl(string url)
+- void GoForward()
+- void GoBack()
+### Zoom In/Out
+- void ZoomIn()
+- void ZoomOut()
+### Evaluate Javascript
+- void EvaluateJS(string js)
+### Touch Event
+- void TouchEvent(int x, int y, int eventNum)
+### Key Event
+- void KeyEvent(char key)
+- void BackSpace()
+
 ## お知らせ
 - VRでのプレイに対応しました([link](https://github.com/TLabAltoh/TLabWebViewVR))
 
