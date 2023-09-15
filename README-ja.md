@@ -92,29 +92,34 @@ TLabWebView.cs の設定項目(TLabWebView.prefab/WebView にある)
 
 ## Scripting API
 ### Initialize
-- void Init(int webWidth, int webHeight, int tWidth, int tHeight, int sWidth, int sHeight, string url, int dlOption, string subDir)
-- void StartWebView()
+- public void Init(int webWidth, int webHeight, int tWidth, int tHeight, int sWidth, int sHeight, string url, int dlOption, string subDir)
+- public void StartWebView()
 ### Update Frame
-- byte[] GetWebTexturePixel()
-- void UpdateFrame()
+- public byte[] GetWebTexturePixel()
+- public void UpdateFrame()
 ### Capture Element
-- void CaptureHTMLSource()
-- void CaptureElementById(string id)
-- string CurrentHTMLCaptured()
+- public void CaptureHTMLSource()
+- public void CaptureElementById(string id)
+- public string CurrentHTMLCaptured()
 ### Load URL
-- void LoadUrl(string url)
-- void GoForward()
-- void GoBack()
+- public void LoadUrl(string url)
+- public void LoadHTML(string html, string baseURL)
+- public void GoForward()
+- public void GoBack()
 ### Zoom In/Out
-- void ZoomIn()
-- void ZoomOut()
+- public void ZoomIn()
+- public void ZoomOut()
 ### Evaluate Javascript
-- void EvaluateJS(string js)
+- public void EvaluateJS(string js)
 ### Touch Event
-- void TouchEvent(int x, int y, int eventNum)
+- public void TouchEvent(int x, int y, int eventNum)
 ### Key Event
-- void KeyEvent(char key)
-- void BackSpace()
+- public void KeyEvent(char key)
+- public void BackSpace()
+### Clear Cache
+- public void ClearCache(bool includeDiskFiles)
+- public void ClearCookie()
+- public void ClearHistory()
 
 ## お知らせ
 - VRでのプレイに対応しました([link](https://github.com/TLabAltoh/TLabWebViewVR))
