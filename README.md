@@ -109,6 +109,10 @@ Setting items in TLabWebView.cs (located in TLabWebView.prefab/WebView)
 ### Zoom In/Out
 - public void ZoomIn()
 - public void ZoomOut()
+### User Agent
+- public void CaptureUserAgent()
+- public string GetUserAgent()
+- public void SetUserAgent(string ua)
 ### Evaluate Javascript
 - public void EvaluateJS(string js)
 ### Touch Event
