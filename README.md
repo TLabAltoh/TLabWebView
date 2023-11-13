@@ -3,10 +3,10 @@
 [日本語版READMEはこちら](README-ja.md)
 
 Plug-in for WebView that runs in Unity and can display WebView results as Texture2D  
-Hardware-accelerated rendering is also available  
-Key input support
-File Download Support
-Supports javascript execution  
+- Hardware-accelerated rendering is also available  
+- Key input support
+- File Download Support
+- Supports javascript execution  
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/tlabaltoh)
 
@@ -92,10 +92,12 @@ Setting items in TLabWebView.cs (located in TLabWebView.prefab/WebView)
 
 ## Scripting API
 ### Initialize
-- public void Init(int webWidth, int webHeight, int tWidth, int tHeight, int sWidth, int sHeight, string url, int dlOption, string subDir)
+- public void Init(int webWidth, int webHeight, int tWidth, int tHeight, int sWidth, int sHeight, string url, int dlOption, string subDir, IntPtr texId)
+- public bool IsInitialized()
 - public void StartWebView()
 ### Update Frame
-- public byte[] GetWebTexturePixel()
+- public byte[] GetWebTexturePixel() <span style="color: red; ">(obsolete)</span>
+- public IntPtr GetWebTexturePtr()
 - public void UpdateFrame()
 ### Capture Element
 - public void CaptureHTMLSource()
@@ -112,7 +114,7 @@ Setting items in TLabWebView.cs (located in TLabWebView.prefab/WebView)
 ### User Agent
 - public void CaptureUserAgent()
 - public string GetUserAgent()
-- public void SetUserAgent(string ua)
+- public void SetUserAgent(string ua, bool reload)
 ### Evaluate Javascript
 - public void EvaluateJS(string js)
 ### Touch Event
