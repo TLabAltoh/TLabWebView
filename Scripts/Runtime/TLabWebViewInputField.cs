@@ -3,7 +3,7 @@ using TLab.InputField;
 
 namespace TLab.Android.WebView
 {
-    public class TLabWebViewKeyborad : TLabInputFieldBase
+    public class TLabWebViewInputField : TLabInputFieldBase
     {
         [Header("WebView")]
         [SerializeField] private TLabWebView m_webview;
@@ -36,6 +36,17 @@ namespace TLab.Android.WebView
         }
 
         #endregion KEY_EVENT
+
+        public override void OnFocus()
+        {
+            var notActive = !inputFieldIsActive;
+
+            if (m_keyborad.isMobile && notActive)
+            {
+                m_keyborad.SwitchInputField(this);
+                m_keyborad.HideKeyborad(false);
+            }
+        }
 
         public void AddKey(string key)
         {
