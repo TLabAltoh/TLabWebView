@@ -1,5 +1,5 @@
 ﻿#define DEBUG
-#undef DEBUG
+//#undef DEBUG
 
 using System.Collections;
 using System;
@@ -388,6 +388,22 @@ namespace TLab.Android.WebView
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			m_NativePlugin.Call("clearHistory");
+#endif
+		}
+
+		public bool CheckForPermission(UnityEngine.Android.Permission permission)
+		{
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			return UnityEngine.Android.Permission.HasUserAuthorizedPermission(permission.ToString());
+#else
+			return false;
+#endif
+		}
+
+		public void RequestPermission(UnityEngine.Android.Permission permission)
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			UnityEngine.Android.Permission.RequestUserPermission(permission.ToString());
 #endif
 		}
 
