@@ -437,7 +437,6 @@ namespace TLab.Android.WebView
 					GL.IssuePluginEvent(RenderThreadHandlePtr, 0);
 					break;
 				default:
-					m_NativePlugin.CallStatic("checkEGLContextExist");
 					m_NativePlugin.CallStatic("generateSharedTexture", m_texWidth, m_texHeight);
 					break;
 			}
