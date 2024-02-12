@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 
 public class WebViewSample : MonoBehaviour
 {
-    [SerializeField] TLabWebView m_webView;
+    [SerializeField] private TLabWebView m_webView;
+
+    private string THIS_NAME => "[" + this.GetType() + "] ";
 
     public void LoadHTML()
     {
@@ -31,7 +33,9 @@ public class WebViewSample : MonoBehaviour
 
     public void CaptureHTMLSource()
     {
-        // capture html source
+        /**
+         * capture html source
+         */
 
 #if true
         m_webView.CaptureHTMLSource();
@@ -42,7 +46,9 @@ public class WebViewSample : MonoBehaviour
 
     public void CurrentHTMLCaptured()
     {
-        // get current source captured
+        /**
+         * get current source captured
+         */
 
         Debug.Log("Current Captured: " +
 #if true
@@ -70,7 +76,9 @@ public class WebViewSample : MonoBehaviour
 
     public void AddEventListener()
     {
-        // Added a listener to retrieve page scroll events
+        /**
+         * Added a listener to retrieve page scroll events
+         */
 
         /*
             const scrollNum = document.getElementById('scroll-num');
@@ -85,5 +93,19 @@ public class WebViewSample : MonoBehaviour
         string callback = tag_name + ".addEventListener('" + event_name + "'), function(){ });";
 
         m_webView.EvaluateJS(callback);
+    }
+
+    public void SendMessageFromJavascript(string message)
+    {
+        string js = $"window.TLabWebViewActivity.unitySendMessage('{this.gameObject.name}', 'OnMessage', '{message}');";
+
+        m_webView.EvaluateJS(js);
+
+        Debug.Log(THIS_NAME + $"message sent: {message}");
+    }
+
+    public void OnMessage(string message)
+    {
+        Debug.Log(THIS_NAME + $"form javascript: {message}");
     }
 }

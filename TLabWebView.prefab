@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4322460698287699718}
   - component: {fileID: 1296943328814292584}
   - component: {fileID: 6905492866619264919}
+  - component: {fileID: 2559546592015856753}
   m_Layer: 0
   m_Name: WebView
   m_TagString: Untagged
@@ -94,6 +95,19 @@ MonoBehaviour:
   m_webHeight: 1024
   m_texWidth: 512
   m_texHeight: 512
+--- !u!114 &2559546592015856753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858434254838504376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e06f846e1e589444cb635fedc4ba9e4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_webview: {fileID: 6905492866619264919}
 --- !u!1 &6721217010310261587
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,7 +120,6 @@ GameObject:
   - component: {fileID: 6721217010310261598}
   - component: {fileID: 6721217010310261597}
   - component: {fileID: 6721217010310261596}
-  - component: {fileID: 8345417720722456429}
   - component: {fileID: 7155534287284649268}
   m_Layer: 0
   m_Name: TLabWebView
@@ -198,20 +211,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &8345417720722456429
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6721217010310261587}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 021b66a6331a06f479cde03449dfaae4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  screenRect: {fileID: 1414667499401443206}
-  tlabWebView: {fileID: 6905492866619264919}
 --- !u!114 &7155534287284649268
 MonoBehaviour:
   m_ObjectHideFlags: 0
