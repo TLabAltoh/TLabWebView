@@ -12,6 +12,7 @@ Plug-in for WebView that runs in Unity and can display WebView results as Textur
 
 ## Note
 - Now officially compatible with Unity 2021 ~ 2022.
+- We have decided to discontinue the ''' TLabWebViewTouchEventManager ''' and make ''' WebViewInputListener ''' the UI module of TLabWebView from now on. This allows the input module to work independently of plug-ins such as Oculus, XRToolkit, etc.
 
 ## Screenshot  
 Screenshot run on Android 13, Adreno 619  
