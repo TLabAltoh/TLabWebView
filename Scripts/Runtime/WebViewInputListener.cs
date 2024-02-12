@@ -11,6 +11,7 @@ namespace TLab.Android.WebView
         [SerializeField] private TLabWebView m_webview;
 
         private bool m_pointerDown = false;
+        private int? m_pointerId = null;
         private RenderMode m_renderMode;
         private Vector2Int m_inputPosition;
 
@@ -43,8 +44,6 @@ namespace TLab.Android.WebView
             float x = localPosition.x / rectTransform.rect.width + rectTransform.pivot.x;
             float y = 1f - (localPosition.y / rectTransform.rect.height + rectTransform.pivot.y);
 
-            Debug.Log(THIS_NAME + $"x: {x}, y: {y}");
-
             if (Math.Range(x, 0, 1) && Math.Range(y, 0, 1))
             {
                 m_inputPosition = new Vector2Int((int)(x * m_webview.WebWidth), (int)(y * m_webview.WebHeight));
@@ -59,47 +58,45 @@ namespace TLab.Android.WebView
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (!m_pointerDown && GetInputPosition(eventData))
+            if (m_pointerId == null && !m_pointerDown && GetInputPosition(eventData))
             {
+                m_pointerId = eventData.pointerId;
+
                 m_webview.TouchEvent(m_inputPosition.x, m_inputPosition.y, (int)WebTouchEvent.DOWN);
 
                 m_pointerDown = true;
-
-                Debug.Log(THIS_NAME + "pointer down");
             }
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (m_pointerDown && GetInputPosition(eventData))
+            if ((m_pointerId == eventData.pointerId) && m_pointerDown && GetInputPosition(eventData))
             {
                 m_webview.TouchEvent(m_inputPosition.x, m_inputPosition.y, (int)WebTouchEvent.DRAG);
-
-                Debug.Log(THIS_NAME + "pointer drag");
             }
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            if (m_pointerDown && GetInputPosition(eventData))
+            if ((m_pointerId == eventData.pointerId) && m_pointerDown && GetInputPosition(eventData))
             {
                 m_webview.TouchEvent(m_inputPosition.x, m_inputPosition.y, (int)WebTouchEvent.UP);
 
-                m_pointerDown = false;
+                m_pointerId = null;
 
-                Debug.Log(THIS_NAME + "pointer up");
+                m_pointerDown = false;
             }
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (m_pointerDown)
+            if ((m_pointerId == eventData.pointerId) && m_pointerDown)
             {
                 m_webview.TouchEvent(m_inputPosition.x, m_inputPosition.y, (int)WebTouchEvent.UP);
 
-                m_pointerDown = false;
+                m_pointerId = null;
 
-                Debug.Log(THIS_NAME + "pointer exit");
+                m_pointerDown = false;
             }
         }
 
@@ -121,18 +118,6 @@ namespace TLab.Android.WebView
         private void OnDisable()
         {
             m_pointerDown = false;
-        }
-
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
     }
 
