@@ -112,11 +112,15 @@ namespace TLab.Android.WebView
 
             m_renderMode = canvas.renderMode;
 
+            m_pointerId = null;
+
             m_pointerDown = false;
         }
 
         private void OnDisable()
         {
+            m_pointerId = null;
+
             m_pointerDown = false;
         }
     }
