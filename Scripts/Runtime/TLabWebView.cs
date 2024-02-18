@@ -1,5 +1,5 @@
 ﻿#define DEBUG
-//#undef DEBUG
+#undef DEBUG
 
 using System.Collections;
 using System;
@@ -131,7 +131,7 @@ namespace TLab.Android.WebView
 			// If textures can be updated with a pointer, this will not be used.
 
 			if (!m_webViewEnable)
-            {
+			{
 				return new byte[0];
 			}
 
@@ -145,7 +145,7 @@ namespace TLab.Android.WebView
 		public IntPtr GetTexturePtr()
 		{
 			if (!m_webViewEnable)
-            {
+			{
 				return IntPtr.Zero;
 			}
 
@@ -168,7 +168,7 @@ namespace TLab.Android.WebView
 		public void CaptureHTMLSource()
 		{
 			if (!m_webViewEnable)
-            {
+			{
 				return;
 			}
 
@@ -180,7 +180,7 @@ namespace TLab.Android.WebView
 		public void CaptureElementById(string id)
 		{
 			if (!m_webViewEnable)
-            {
+			{
 				return;
 			}
 
@@ -192,7 +192,7 @@ namespace TLab.Android.WebView
 		public string CurrentHTMLCaptured()
 		{
 			if (!m_webViewEnable)
-            {
+			{
 				return null;
 			}
 
@@ -206,7 +206,7 @@ namespace TLab.Android.WebView
 		public void CaptureUserAgent()
 		{
 			if (!m_webViewEnable)
-            {
+			{
 				return;
 			}
 
@@ -218,7 +218,7 @@ namespace TLab.Android.WebView
 		public string GetUserAgent()
 		{
 			if (!m_webViewEnable)
-            {
+			{
 				return "";
 			}
 
@@ -232,7 +232,7 @@ namespace TLab.Android.WebView
 		public void SetUserAgent(string ua, bool reload)
 		{
 			if (!m_webViewEnable)
-            {
+			{
 				return;
 			}
 
@@ -244,7 +244,7 @@ namespace TLab.Android.WebView
 		public void LoadUrl(string url)
 		{
 			if (!m_webViewEnable)
-            {
+			{
 				return;
 			}
 
@@ -256,7 +256,7 @@ namespace TLab.Android.WebView
 		public void LoadHTML(string html, string baseURL)
 		{
 			if (!m_webViewEnable)
-            {
+			{
 				return;
 			}
 
@@ -268,7 +268,7 @@ namespace TLab.Android.WebView
 		public void ZoomIn()
 		{
 			if (!m_webViewEnable)
-            {
+			{
 				return;
 			}
 
@@ -280,7 +280,7 @@ namespace TLab.Android.WebView
 		public void ZoomOut()
 		{
 			if (!m_webViewEnable)
-            {
+			{
 				return;
 			}
 
@@ -292,7 +292,7 @@ namespace TLab.Android.WebView
 		public void EvaluateJS(string js)
 		{
 			if (!m_webViewEnable)
-            {
+			{
 				return;
 			}
 
@@ -304,7 +304,7 @@ namespace TLab.Android.WebView
 		public void GoForward()
 		{
 			if (!m_webViewEnable)
-            {
+			{
 				return;
 			}
 
@@ -316,7 +316,7 @@ namespace TLab.Android.WebView
 		public void GoBack()
 		{
 			if (!m_webViewEnable)
-            {
+			{
 				return;
 			}
 
@@ -328,7 +328,7 @@ namespace TLab.Android.WebView
 		public void TouchEvent(int x, int y, int eventNum)
 		{
 			if (!m_webViewEnable)
-            {
+			{
 				return;
 			}
 
@@ -340,7 +340,7 @@ namespace TLab.Android.WebView
 		public void KeyEvent(char key)
 		{
 			if (!m_webViewEnable)
-            {
+			{
 				return;
 			}
 
@@ -352,7 +352,7 @@ namespace TLab.Android.WebView
 		public void BackSpace()
 		{
 			if (!m_webViewEnable)
-            {
+			{
 				return;
 			}
 
@@ -401,7 +401,7 @@ namespace TLab.Android.WebView
 		}
 
 		public void RequestPermission(UnityEngine.Android.Permission permission)
-        {
+		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			UnityEngine.Android.Permission.RequestUserPermission(permission.ToString());
 #endif
@@ -418,10 +418,12 @@ namespace TLab.Android.WebView
 
 		private IEnumerator StartWebViewTask()
 		{
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			if (m_NativeClass == null)
 			{
 				m_NativeClass = new AndroidJavaClass("com.tlab.libwebview.UnityConnect");
 			}
+#endif
 
 			yield return new WaitForEndOfFrame();
 
@@ -481,7 +483,7 @@ namespace TLab.Android.WebView
 		public void UpdateFrame()
 		{
 			if (!m_webViewEnable)
-            {
+			{
 				return;
 			}
 
@@ -494,7 +496,7 @@ namespace TLab.Android.WebView
 		}
 
 		public void Destroy()
-        {
+		{
 #if UNITY_ANDROID
 			if (m_NativePlugin == null)
 			{
