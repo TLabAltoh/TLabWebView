@@ -85,6 +85,7 @@ TLabWebView.cs の設定項目(TLabWebView.prefab/WebView にある)
 - public string GetUserAgent()
 - public void SetUserAgent(string ua, bool reload)
 ### Evaluate Javascript
+- public void RegisterOnPageFinishCallback(string js)
 - public void EvaluateJS(string js)
 ### Touch Event
 - public void TouchEvent(int x, int y, int eventNum)

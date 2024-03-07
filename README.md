@@ -85,6 +85,7 @@ Setting items in TLabWebView.cs (located in TLabWebView.prefab/WebView)
 - public string GetUserAgent()
 - public void SetUserAgent(string ua, bool reload)
 ### Evaluate Javascript
+- public void RegisterOnPageFinishCallback(string js)
 - public void EvaluateJS(string js)
 ### Touch Event
 - public void TouchEvent(int x, int y, int eventNum)

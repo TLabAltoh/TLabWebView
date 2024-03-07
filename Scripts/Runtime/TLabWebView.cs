@@ -30,6 +30,9 @@ namespace TLab.Android.WebView
 		[SerializeField] private int m_texWidth = 512;
 		[SerializeField] private int m_texHeight = 512;
 
+		[Header("Javascript callback")]
+		[SerializeField] private string m_onPageFinish;
+
 		public int WebWidth { get => m_webWidth; }
 		public int WebHeight { get => m_webHeight; }
 		public int TexWidth { get => m_texWidth; }
@@ -91,12 +94,12 @@ namespace TLab.Android.WebView
 			int webWidth, int webHeight,
 			int tWidth, int tHeight,
 			int sWidth, int sHeight,
-			string url, int dlOption, string subDir)
+			string url, int dlOption, string subDir, string onPageFinish)
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			if (m_NativePlugin != null)
 			{
-				m_NativePlugin.Call("initialize", webWidth, webHeight, tWidth, tHeight, sWidth, sHeight, url, dlOption, subDir);
+				m_NativePlugin.Call("initialize", webWidth, webHeight, tWidth, tHeight, sWidth, sHeight, url, dlOption, subDir, onPageFinish);
 			}
 #endif
 		}
@@ -289,6 +292,18 @@ namespace TLab.Android.WebView
 #endif
 		}
 
+		public void RegisterOnPageFinishCallback(string js)
+		{
+			if (!m_webViewEnable)
+			{
+				return;
+			}
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("registerOnPageFinishCallback", js);
+#endif
+		}
+
 		public void EvaluateJS(string js)
 		{
 			if (!m_webViewEnable)
@@ -454,12 +469,12 @@ namespace TLab.Android.WebView
 				m_webWidth, m_webHeight,
 				m_texWidth, m_texHeight,
 				Screen.width, Screen.height,
-				m_url, (int)m_dlOption, m_subdir);
+				m_url, (int)m_dlOption, m_subdir, m_onPageFinish);
 
 			yield return new WaitForEndOfFrame();
 
 			while (!IsInitialized())
-            {
+			{
 				yield return new WaitForEndOfFrame();
 			}
 
