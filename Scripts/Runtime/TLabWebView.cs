@@ -1,5 +1,5 @@
 ﻿#define DEBUG
-#undef DEBUG
+//#undef DEBUG
 
 using System.Collections;
 using System;
@@ -11,7 +11,7 @@ namespace TLab.Android.WebView
 {
 	public class TLabWebView : MonoBehaviour
 	{
-		private enum DownloadOption
+		public enum DownloadOption
 		{
 			applicationFolder,
 			downloadFolder
@@ -22,7 +22,7 @@ namespace TLab.Android.WebView
 
 		[Header("File Download Settings")]
 		[SerializeField] private DownloadOption m_dlOption;
-		[SerializeField] private string m_subdir = "downloads";
+		[SerializeField] private string m_subDir = "downloads";
 
 		[Header("Resolution setting")]
 		[SerializeField] private int m_webWidth = 1024;
@@ -33,10 +33,13 @@ namespace TLab.Android.WebView
 		[Header("Javascript callback")]
 		[SerializeField] private string m_onPageFinish;
 
+		public DownloadOption DlOption { get => m_dlOption; }
+		public string SubDir { get => m_subDir; }
 		public int WebWidth { get => m_webWidth; }
 		public int WebHeight { get => m_webHeight; }
 		public int TexWidth { get => m_texWidth; }
 		public int TexHeight { get => m_texHeight; }
+
 		public bool WebViewEnabled
 		{
 			get => m_webViewEnable;
@@ -49,7 +52,7 @@ namespace TLab.Android.WebView
 		private bool m_webViewEnable = false;
 		private bool m_webViewInitialized = false;
 		private Texture2D m_webViewTexture;
-		private Coroutine m_webvieStartTask;
+		private Coroutine m_webviewInitTask;
 
 		private IntPtr m_texId = IntPtr.Zero;
 
@@ -90,18 +93,41 @@ namespace TLab.Android.WebView
 			AndroidJNI.DetachCurrentThread();
 		}
 
+		public void Init()
+        {
+			if (m_webviewInitTask == null && !m_webViewInitialized)
+			{
+				m_webviewInitTask = StartCoroutine(InitTask());
+			}
+		}
+
 		public void Init(
 			int webWidth, int webHeight,
-			int tWidth, int tHeight,
-			int sWidth, int sHeight,
-			string url, int dlOption, string subDir, string onPageFinish)
+			int texWidth, int texHeight)
+        {
+			m_webWidth = webWidth;
+			m_webHeight = webHeight;
+
+			m_texWidth = texWidth;
+			m_texHeight = texHeight;
+
+			Init();
+		}
+
+        public void Init(
+			int webWidth, int webHeight,
+			int texWidth, int texHeight,
+			string url, DownloadOption dlOption, string subDir, string onPageFinish)
 		{
-#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			if (m_NativePlugin != null)
-			{
-				m_NativePlugin.Call("initialize", webWidth, webHeight, tWidth, tHeight, sWidth, sHeight, url, dlOption, subDir, onPageFinish);
-			}
-#endif
+			m_url = url;
+
+			m_dlOption = dlOption;
+
+			m_subDir = subDir;
+
+			m_onPageFinish = onPageFinish;
+
+			Init(webWidth, webHeight, texWidth, texHeight);
 		}
 
 		public bool IsInitialized()
@@ -431,7 +457,7 @@ namespace TLab.Android.WebView
 			}
 		}
 
-		private IEnumerator StartWebViewTask()
+		private IEnumerator InitTask()
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			if (m_NativeClass == null)
@@ -465,11 +491,10 @@ namespace TLab.Android.WebView
 
 			m_rawImage.texture = m_webViewTexture;
 
-			Init(
-				m_webWidth, m_webHeight,
-				m_texWidth, m_texHeight,
-				Screen.width, Screen.height,
-				m_url, (int)m_dlOption, m_subdir, m_onPageFinish);
+			if (m_NativePlugin != null)
+			{
+				m_NativePlugin.Call("initialize", m_webWidth, m_webHeight, m_texWidth, m_texHeight, Screen.width, Screen.height, m_url, (int)m_dlOption, m_subDir, m_onPageFinish);
+			}
 
 			yield return new WaitForEndOfFrame();
 
@@ -483,16 +508,8 @@ namespace TLab.Android.WebView
 			m_webViewInitialized = true;
 			m_webViewEnable = true;
 
-			m_webvieStartTask = null;
+			m_webviewInitTask = null;
 #endif
-		}
-
-		public void StartWebView()
-		{
-			if (m_webvieStartTask == null && !m_webViewInitialized)
-			{
-				m_webvieStartTask = StartCoroutine(StartWebViewTask());
-			}
 		}
 
 		public void UpdateFrame()

@@ -8,7 +8,7 @@ namespace TLab.Android.WebView
 
 		public void StartWebView()
 		{
-			m_webView.StartWebView();
+			m_webView.Init();
 		}
 
 		void Start()
