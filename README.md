@@ -11,7 +11,7 @@ Plug-in for WebView that runs in Unity and can display WebView results as Textur
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/tlabaltoh)
 
 ## Document
-[see here](https://tlabgames.gitbook.io/tlabwebview)
+[document is here](https://tlabgames.gitbook.io/tlabwebview)
 
 ## Note
 - Now officially compatible with Unity 2021 ~ 2022.
