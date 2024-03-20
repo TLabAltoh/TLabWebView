@@ -8,6 +8,9 @@ Unityで動作するWebViewのプラグイン．WebViewの結果をTexture2Dと�
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/tlabaltoh)
 
+## Document
+[ドキュメントはこちら](https://tlabgames.gitbook.io/tlabwebview)
+
 ## Note
 - 現在，Unity 2021 ~ 2022を正式にサポートしています．
 - ``` TLabWebViewTouchEventManager ```を廃止し，``` WebViewInputListener ```を今後TLabWebViewのUIモジュールとすることにしました．これにより入力モジュールは，Oculus, XRToolkitなどのプラグインに依存せず動作するようになります．
@@ -58,44 +61,6 @@ TLabWebView.cs の設定項目(TLabWebView.prefab/WebView にある)
 - SubDir: アプリケーションフォルダにダウンロードする場合，```{Application folder}/{files}/{SubDir}```にダウンロードされる  
 - Web (Width/Height): WebViewの解像度 (デフォルト 1024 * 1024)  
 - Tex (Width/Height): Texture2Dの解像度 (デフォルト 512 * 512)  
-
-## Scripting API
-### Initialize
-- public void Init(int webWidth, int webHeight, int tWidth, int tHeight, int sWidth, int sHeight, string url, int dlOption, string subDir)
-- public bool IsInitialized()
-- public void StartWebView()
-### Update Frame
-- public byte[] GetWebTexturePixel() <span style="color: red; ">(obsolete)</span>
-- public IntPtr GetTexturePtr()
-- public void UpdateFrame()
-### Capture Element
-- public void CaptureHTMLSource()
-- public void CaptureElementById(string id)
-- public string CurrentHTMLCaptured()
-### Load URL
-- public void LoadUrl(string url)
-- public void LoadHTML(string html, string baseURL)
-- public void GoForward()
-- public void GoBack()
-### Zoom In/Out
-- public void ZoomIn()
-- public void ZoomOut()
-### User Agent
-- public void CaptureUserAgent()
-- public string GetUserAgent()
-- public void SetUserAgent(string ua, bool reload)
-### Evaluate Javascript
-- public void RegisterOnPageFinishCallback(string js)
-- public void EvaluateJS(string js)
-### Touch Event
-- public void TouchEvent(int x, int y, int eventNum)
-### Key Event
-- public void KeyEvent(char key)
-- public void BackSpace()
-### Clear Cache
-- public void ClearCache(bool includeDiskFiles)
-- public void ClearCookie()
-- public void ClearHistory()
 
 ## お知らせ
 - VRでのプレイに対応しました([link](https://github.com/TLabAltoh/TLabWebViewVR))

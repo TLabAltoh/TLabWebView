@@ -10,6 +10,9 @@ Plug-in for WebView that runs in Unity and can display WebView results as Textur
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/tlabaltoh)
 
+## Document
+[see here](https://tlabgames.gitbook.io/tlabwebview)
+
 ## Note
 - Now officially compatible with Unity 2021 ~ 2022.
 - We have decided to discontinue the ``` TLabWebViewTouchEventManager ``` and make ``` WebViewInputListener ``` the UI module of TLabWebView from now on. This allows the input module to work independently of plug-ins such as Oculus, XRToolkit, etc.
@@ -58,44 +61,6 @@ Setting items in TLabWebView.cs (located in TLabWebView.prefab/WebView)
 - SubDir: In case of setting download to application folder, it is downloaded to ```{Application folder}/{files}/{SubDir}```  
 - Web (Width/Height):  Web page resolution (default 1024 * 1024)  
 - Tex (Width/Height): Texture2D resolution used within Unity (default 512 * 512)  
-
-## Scripting API
-### Initialize
-- public void Init(int webWidth, int webHeight, int tWidth, int tHeight, int sWidth, int sHeight, string url, int dlOption, string subDir)
-- public bool IsInitialized()
-- public void StartWebView()
-### Update Frame
-- public byte[] GetWebTexturePixel() <span style="color: red; ">(obsolete)</span>
-- public IntPtr GetTexturePtr()
-- public void UpdateFrame()
-### Capture Element
-- public void CaptureHTMLSource()
-- public void CaptureElementById(string id)
-- public string CurrentHTMLCaptured()
-### Load URL
-- public void LoadUrl(string url)
-- public void LoadHTML(string html, string baseURL)
-- public void GoForward()
-- public void GoBack()
-### Zoom In/Out
-- public void ZoomIn()
-- public void ZoomOut()
-### User Agent
-- public void CaptureUserAgent()
-- public string GetUserAgent()
-- public void SetUserAgent(string ua, bool reload)
-### Evaluate Javascript
-- public void RegisterOnPageFinishCallback(string js)
-- public void EvaluateJS(string js)
-### Touch Event
-- public void TouchEvent(int x, int y, int eventNum)
-### Key Event
-- public void KeyEvent(char key)
-- public void BackSpace()
-### Clear Cache
-- public void ClearCache(bool includeDiskFiles)
-- public void ClearCookie()
-- public void ClearHistory()
 
 ## NOTICE
 - Now supports play in VR ([link](https://github.com/TLabAltoh/TLabWebViewVR)).
