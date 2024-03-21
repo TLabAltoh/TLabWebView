@@ -1,5 +1,5 @@
 ﻿#define DEBUG
-#undef DEBUG
+//#undef DEBUG
 
 using System.Collections;
 using System;
@@ -32,6 +32,7 @@ namespace TLab.Android.WebView
 
 		[Header("Javascript callback")]
 		[SerializeField] private string m_onPageFinish;
+		[SerializeField] private string m_onDownloadFinish;
 
 		public DownloadOption DlOption { get => m_dlOption; }
 		public string SubDir { get => m_subDir; }
@@ -120,7 +121,7 @@ namespace TLab.Android.WebView
 		public void Init(
 			int webWidth, int webHeight,
 			int texWidth, int texHeight,
-			string url, DownloadOption dlOption, string subDir, string onPageFinish)
+			string url, DownloadOption dlOption, string subDir, string onPageFinish, string onDownloadFinish)
 		{
 			m_url = url;
 
@@ -129,6 +130,8 @@ namespace TLab.Android.WebView
 			m_subDir = subDir;
 
 			m_onPageFinish = onPageFinish;
+
+			m_onDownloadFinish = onDownloadFinish;
 
 			Init(webWidth, webHeight, texWidth, texHeight);
 		}
@@ -435,6 +438,24 @@ namespace TLab.Android.WebView
 #endif
 		}
 
+		public void SetOnPageFinish(string onPageFinish)
+		{
+			m_onPageFinish = onPageFinish;
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("setOnPageFinish", m_onPageFinish);
+#endif
+		}
+
+		public void SetOnDownloadFinish(string onDownloadFinish)
+		{
+			m_onDownloadFinish = onDownloadFinish;
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("onDownloadFinish", m_onDownloadFinish);
+#endif
+		}
+
 		public bool CheckForPermission(UnityEngine.Android.Permission permission)
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -496,7 +517,7 @@ namespace TLab.Android.WebView
 
 			if (m_NativePlugin != null)
 			{
-				m_NativePlugin.Call("initialize", m_webWidth, m_webHeight, m_texWidth, m_texHeight, Screen.width, Screen.height, m_url, (int)m_dlOption, m_subDir, m_onPageFinish);
+				m_NativePlugin.Call("initialize", m_webWidth, m_webHeight, m_texWidth, m_texHeight, Screen.width, Screen.height, m_url, (int)m_dlOption, m_subDir, m_onPageFinish, m_onDownloadFinish);
 			}
 
 			yield return new WaitForEndOfFrame();
