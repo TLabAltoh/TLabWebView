@@ -39,7 +39,7 @@ public class DownloadEventTest : MonoBehaviour
     public void OnDownloadFinish(string message)
     {
         //argment:
-        //var unity_webview_dl_url (string),
+        //var unity_webview_dl_uri (string),
         //var unity_webview_dl_id (long)
 
         //window.TLabWebViewActivity.unitySendMessage('Download Event Test', 'OnDownloadFinish', 'download finish. uri: ' + unity_webview_dl_uri + ', id: ' + unity_webview_dl_id);

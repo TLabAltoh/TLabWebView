@@ -9,6 +9,18 @@ using UnityEngine.UI;
 
 namespace TLab.Android.WebView
 {
+	[System.Serializable]
+	public class JsEventCallback
+	{
+		[SerializeField] public string onPageFinish;
+		[SerializeField] public string onDownloadStart;
+		[SerializeField] public string onDownloadFinish;
+
+		[SerializeField] public string dl_uri_name;
+		[SerializeField] public string dl_url_name;
+		[SerializeField] public string dl_id_name;
+	}
+
 	public class TLabWebView : MonoBehaviour
 	{
 		public enum DownloadOption
@@ -38,16 +50,21 @@ namespace TLab.Android.WebView
 		[SerializeField] private int m_texHeight = 512;
 
 		[Header("Javascript callback")]
-		[SerializeField] private string m_onPageFinish;
-		[SerializeField] private string m_onDownloadStart;
-		[SerializeField] private string m_onDownloadFinish;
+		[SerializeField] private JsEventCallback m_jsEventCallback = new JsEventCallback();
+
+		public int WebWidth { get => m_webWidth; }
+
+		public int WebHeight { get => m_webHeight; }
+
+		public int TexWidth { get => m_texWidth; }
+
+		public int TexHeight { get => m_texHeight; }
 
 		public DownloadOption DlOption { get => m_dlOption; }
+
 		public string SubDir { get => m_subDir; }
-		public int WebWidth { get => m_webWidth; }
-		public int WebHeight { get => m_webHeight; }
-		public int TexWidth { get => m_texWidth; }
-		public int TexHeight { get => m_texHeight; }
+
+		public JsEventCallback jsEventCallback { get => m_jsEventCallback; }
 
 		public bool Visuble
 		{
@@ -129,20 +146,13 @@ namespace TLab.Android.WebView
 		public void Init(
 			int webWidth, int webHeight,
 			int texWidth, int texHeight,
-			string url, DownloadOption dlOption, string subDir,
-			string onPageFinish = "", string onDownloadStart = "", string onDownloadFinish = "")
+			string url, DownloadOption dlOption, string subDir)
 		{
 			m_url = url;
 
 			m_dlOption = dlOption;
 
 			m_subDir = subDir;
-
-			m_onPageFinish = onPageFinish;
-
-			m_onDownloadStart = onDownloadStart;
-
-			m_onDownloadFinish = onDownloadFinish;
 
 			Init(webWidth, webHeight, texWidth, texHeight);
 		}
@@ -451,28 +461,62 @@ namespace TLab.Android.WebView
 
 		public void SetOnPageFinish(string onPageFinish)
 		{
-			m_onPageFinish = onPageFinish;
+			m_jsEventCallback.onPageFinish = onPageFinish;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("setOnPageFinish", m_onPageFinish);
+			m_NativePlugin.Call("setOnPageFinish", m_jsEventCallback.onPageFinish);
 #endif
 		}
 
 		public void SetOnDownloadFinish(string onDownloadFinish)
 		{
-			m_onDownloadFinish = onDownloadFinish;
+			m_jsEventCallback.onDownloadFinish = onDownloadFinish;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("onDownloadFinish", m_onDownloadFinish);
+			m_NativePlugin.Call("setOnDownloadFinish", m_jsEventCallback.onDownloadFinish);
 #endif
 		}
 
 		public void SetOnDownloadStart(string onDownloadStart)
 		{
-			m_onDownloadStart = onDownloadStart;
+			m_jsEventCallback.onDownloadStart = onDownloadStart;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("onDownloadStart", m_onDownloadStart);
+			m_NativePlugin.Call("setOnDownloadStart", m_jsEventCallback.onDownloadStart);
+#endif
+		}
+
+		public void SetDlEventVariableName(
+			string dl_url_name, string dl_uri_name, string dl_id_name)
+		{
+			m_jsEventCallback.dl_url_name = dl_url_name;
+			m_jsEventCallback.dl_uri_name = dl_uri_name;
+			m_jsEventCallback.dl_id_name = dl_id_name;
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call(
+				"setDownloadEventVariableName",
+				m_jsEventCallback.dl_url_name,
+				m_jsEventCallback.dl_uri_name,
+				m_jsEventCallback.dl_id_name);
+#endif
+		}
+
+		public void SetDlOption(DownloadOption option)
+		{
+			m_dlOption = option;
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("setDlOption", (int)m_dlOption);
+#endif
+		}
+
+		public void SetSubDir(string subdir)
+		{
+			m_subDir = subdir;
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("setSubDir", m_subDir);
 #endif
 		}
 
@@ -519,13 +563,6 @@ namespace TLab.Android.WebView
 
 		private IEnumerator InitTask()
 		{
-#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			if (m_NativeClass == null)
-			{
-				m_NativeClass = new AndroidJavaClass("com.tlab.libwebview.UnityConnect");
-			}
-#endif
-
 			yield return new WaitForEndOfFrame();
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -553,12 +590,22 @@ namespace TLab.Android.WebView
 
 			if (m_NativePlugin != null)
 			{
+				SetDlOption(m_dlOption);
+				SetSubDir(m_subDir);
+
+				SetOnPageFinish(m_jsEventCallback.onPageFinish);
+				SetOnDownloadStart(m_jsEventCallback.onDownloadStart);
+				SetOnDownloadFinish(m_jsEventCallback.onDownloadFinish);
+
+				SetDlEventVariableName(
+					m_jsEventCallback.dl_url_name,
+					m_jsEventCallback.dl_uri_name,
+					m_jsEventCallback.dl_id_name);
+
 				m_NativePlugin.Call("initialize",
 					m_webWidth, m_webHeight,
 					m_texWidth, m_texHeight,
-					Screen.width, Screen.height,
-					m_url, (int)m_dlOption, m_subDir,
-					m_onPageFinish, m_onDownloadStart, m_onDownloadFinish);
+					Screen.width, Screen.height, m_url);
 			}
 
 			yield return new WaitForEndOfFrame();
@@ -590,6 +637,16 @@ namespace TLab.Android.WebView
 				m_texId = texId;
 				m_webViewTexture.UpdateExternalTexture(texId);
 			}
+		}
+
+		private void Awake()
+		{
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			if (m_NativeClass == null)
+			{
+				m_NativeClass = new AndroidJavaClass("com.tlab.libwebview.UnityConnect");
+			}
+#endif
 		}
 
 		private void Destroy()

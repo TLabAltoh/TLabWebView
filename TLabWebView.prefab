@@ -90,11 +90,18 @@ MonoBehaviour:
   m_rawImage: {fileID: 1296943328814292584}
   m_url: https://youtube.com
   m_dlOption: 0
-  m_subdir: downloads
+  m_subDir: downloads
   m_webWidth: 1024
   m_webHeight: 1024
   m_texWidth: 512
   m_texHeight: 512
+  m_jsEventCallback:
+    onPageFinish: 
+    onDownloadStart: 
+    onDownloadFinish: 
+    dl_uri_name: unity_webview_dl_uri
+    dl_url_name: unity_webview_dl_url
+    dl_id_name: unity_webview_dl_id
 --- !u!114 &2559546592015856753
 MonoBehaviour:
   m_ObjectHideFlags: 0
