@@ -13,7 +13,14 @@ namespace TLab.Android.WebView
 	{
 		public enum DownloadOption
 		{
+			/// <summary>
+			/// https://developer.android.com/reference/android/app/DownloadManager.Request#setDestinationInExternalFilesDir(android.content.Context,%20java.lang.String,%20java.lang.String)
+			/// </summary>
 			applicationFolder,
+
+			/// <summary>
+			/// https://developer.android.com/reference/android/os/Environment#DIRECTORY_DOWNLOADS
+			/// </summary>
 			downloadFolder
 		}
 
@@ -32,6 +39,7 @@ namespace TLab.Android.WebView
 
 		[Header("Javascript callback")]
 		[SerializeField] private string m_onPageFinish;
+		[SerializeField] private string m_onDownloadStart;
 		[SerializeField] private string m_onDownloadFinish;
 
 		public DownloadOption DlOption { get => m_dlOption; }
@@ -121,7 +129,8 @@ namespace TLab.Android.WebView
 		public void Init(
 			int webWidth, int webHeight,
 			int texWidth, int texHeight,
-			string url, DownloadOption dlOption, string subDir, string onPageFinish, string onDownloadFinish)
+			string url, DownloadOption dlOption, string subDir,
+			string onPageFinish = "", string onDownloadStart = "", string onDownloadFinish = "")
 		{
 			m_url = url;
 
@@ -130,6 +139,8 @@ namespace TLab.Android.WebView
 			m_subDir = subDir;
 
 			m_onPageFinish = onPageFinish;
+
+			m_onDownloadStart = onDownloadStart;
 
 			m_onDownloadFinish = onDownloadFinish;
 
@@ -456,6 +467,31 @@ namespace TLab.Android.WebView
 #endif
 		}
 
+		public void SetOnDownloadStart(string onDownloadStart)
+		{
+			m_onDownloadStart = onDownloadStart;
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("onDownloadStart", m_onDownloadStart);
+#endif
+		}
+
+		public void RequestCaptureDownloadProgress()
+		{
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("requestCaptureDownloadProgress");
+#endif
+		}
+
+		public float GetDownloadProgress()
+		{
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			return m_NativePlugin.Call<float>("getDownloadProgress");
+#else
+			return 0.0f;
+#endif
+		}
+
 		public bool CheckForPermission(UnityEngine.Android.Permission permission)
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -517,7 +553,12 @@ namespace TLab.Android.WebView
 
 			if (m_NativePlugin != null)
 			{
-				m_NativePlugin.Call("initialize", m_webWidth, m_webHeight, m_texWidth, m_texHeight, Screen.width, Screen.height, m_url, (int)m_dlOption, m_subDir, m_onPageFinish, m_onDownloadFinish);
+				m_NativePlugin.Call("initialize",
+					m_webWidth, m_webHeight,
+					m_texWidth, m_texHeight,
+					Screen.width, Screen.height,
+					m_url, (int)m_dlOption, m_subDir,
+					m_onPageFinish, m_onDownloadStart, m_onDownloadFinish);
 			}
 
 			yield return new WaitForEndOfFrame();

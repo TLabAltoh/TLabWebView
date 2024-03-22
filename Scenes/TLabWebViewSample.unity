@@ -622,7 +622,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &859879337
 RectTransform:
   m_ObjectHideFlags: 0
@@ -655,6 +655,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02591813623dc3d4f888e789ed6a0709, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_webview: {fileID: 1382796560}
 --- !u!1 &868148356
 GameObject:
   m_ObjectHideFlags: 0
@@ -3440,6 +3441,26 @@ PrefabInstance:
     - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
       propertyPath: url
       value: https://1-notes.com/html-image-download-button/
+      objectReference: {fileID: 0}
+    - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
+      propertyPath: m_url
+      value: https://file-examples.com/wp-content/storage/2017/10/file-sample_150kB.pdf
+      objectReference: {fileID: 0}
+    - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
+      propertyPath: m_dlOption
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
+      propertyPath: m_onDownloadStart
+      value: 'window.TLabWebViewActivity.unitySendMessage(''Download Event Test'',
+        ''OnDownloadStart'', ''download start. url: '' + unity_webview_dl_url + '',
+        id: '' + unity_webview_dl_id);'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
+      propertyPath: m_onDownloadFinish
+      value: 'window.TLabWebViewActivity.unitySendMessage(''Download Event Test'',
+        ''OnDownloadFinish'', ''download finish. uri: '' + unity_webview_dl_uri +
+        '', id: '' + unity_webview_dl_id);'
       objectReference: {fileID: 0}
     - target: {fileID: 6945026766670083062, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
       propertyPath: m_AnchorMax.y
