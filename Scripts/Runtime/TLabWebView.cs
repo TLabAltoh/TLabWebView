@@ -1,5 +1,5 @@
 ﻿#define DEBUG
-//#undef DEBUG
+#undef DEBUG
 
 using System.Collections;
 using System;
@@ -16,9 +16,9 @@ namespace TLab.Android.WebView
 		[SerializeField] public string onDownloadStart;
 		[SerializeField] public string onDownloadFinish;
 
-		[SerializeField] public string dl_uri_name;
-		[SerializeField] public string dl_url_name;
-		[SerializeField] public string dl_id_name;
+		[SerializeField] public string dl_uri_name = "unity_webview_dl_uri";
+		[SerializeField] public string dl_url_name = "unity_webview_dl_url";
+		[SerializeField] public string dl_id_name = "unity_webview_dl_id";
 	}
 
 	public class TLabWebView : MonoBehaviour
@@ -85,7 +85,7 @@ namespace TLab.Android.WebView
 
 		private IntPtr m_texId = IntPtr.Zero;
 
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 		private static AndroidJavaClass m_NativeClass;
 		private AndroidJavaObject m_NativePlugin;
 #endif
