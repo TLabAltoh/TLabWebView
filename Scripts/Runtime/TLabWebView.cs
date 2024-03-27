@@ -100,7 +100,7 @@ namespace TLab.Android.WebView
 		[AOT.MonoPInvokeCallback(typeof(RenderEventDelegate))]
 		private static void RunOnRenderThread(int eventID)
 		{
-#if !WEBVIEW_SUPPORT_OCULUS
+#if !UNITYWEBVIEW_ANDROID_SUPPORT_OCULUS
 			/*
 			 * Perhaps Java Env is already attached to the render thread.
 			 */
@@ -125,7 +125,7 @@ namespace TLab.Android.WebView
 
 			AndroidJNI.CallStaticVoidMethod(jniClass, jniFunc, m_jniArgs);
 
-#if !WEBVIEW_SUPPORT_OCULUS
+#if !UNITYWEBVIEW_ANDROID_SUPPORT_OCULUS
 			AndroidJNI.DetachCurrentThread();
 #endif
 		}
