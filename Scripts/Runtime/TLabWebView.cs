@@ -100,7 +100,11 @@ namespace TLab.Android.WebView
 		[AOT.MonoPInvokeCallback(typeof(RenderEventDelegate))]
 		private static void RunOnRenderThread(int eventID)
 		{
-			AndroidJNI.AttachCurrentThread();
+			/*
+			 * Perhaps Java Env is already attached to the render thread.
+			 */
+
+			//AndroidJNI.AttachCurrentThread();
 
 			IntPtr jniClass = AndroidJNI.FindClass("com/tlab/libwebview/UnityConnect");
 			if (jniClass == IntPtr.Zero || jniClass == null)
@@ -119,7 +123,7 @@ namespace TLab.Android.WebView
 
 			AndroidJNI.CallStaticVoidMethod(jniClass, jniFunc, m_jniArgs);
 
-			AndroidJNI.DetachCurrentThread();
+			//AndroidJNI.DetachCurrentThread();
 		}
 
 		public void Init()
