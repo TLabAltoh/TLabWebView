@@ -3849,11 +3849,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
       propertyPath: m_url
-      value: https://developer.mozilla.org/ja/docs/Web/HTML/Element/input/date
+      value: http://192.168.3.8:5600
+      objectReference: {fileID: 0}
+    - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
+      propertyPath: m_subDir
+      value: subdir
       objectReference: {fileID: 0}
     - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
       propertyPath: m_dlOption
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
       propertyPath: m_onDownloadStart
