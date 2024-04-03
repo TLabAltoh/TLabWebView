@@ -1,5 +1,5 @@
 ﻿#define DEBUG
-#undef DEBUG
+//#undef DEBUG
 
 using System.Collections;
 using System;
@@ -353,7 +353,35 @@ namespace TLab.Android.WebView
 #endif
 		}
 
-		public void RegisterOnPageFinishCallback(string js)
+		public int GetScrollX()
+		{
+			if (!m_enabled)
+			{
+				return 0;
+			}
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			return m_NativePlugin.Call<int>("getScrollX");
+#else
+			return 0;
+#endif
+		}
+
+		public int GetScrollY()
+		{
+			if (!m_enabled)
+			{
+				return 0;
+			}
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			return m_NativePlugin.Call<int>("getScrollY");
+#else
+			return 0;
+#endif
+		}
+
+		public void SetScroll(int x, int y)
 		{
 			if (!m_enabled)
 			{
@@ -361,7 +389,7 @@ namespace TLab.Android.WebView
 			}
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("registerOnPageFinishCallback", js);
+			m_NativePlugin.Call("setScroll", x, y);
 #endif
 		}
 
