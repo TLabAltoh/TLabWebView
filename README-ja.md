@@ -28,14 +28,36 @@ GPU: Qualcomm Adreno 505, 619
 Unity: 2021.23f1  
 
 ## スタートガイド
+
 ### 必要な要件
+
 - Unity 2021.3.23f1  
 - [TLabVKeyborad](https://github.com/TLabAltoh/TLabVKeyborad)
+
 ### インストール
+
 リポジトリをクローン，またはリリースからダウンロードし，UnityのAssetフォルダに配置してください
+
 ### セットアップ
-1. Build Settingsからプラットフォームを Androidに変更  
-2. Project Settings --> Player --> Other Settings に以下のシンボルを追加(ビルド時に使用)
+
+- Build Settings
+
+| Property      | Value   |
+| ------------- | ------- |
+| Platform      | Android |
+
+- Project Settings
+
+| Property          | Value                                 |
+| ----------------- | ------------------------------------- |
+| Color Space       | Linear                                |
+| Graphics          | OpenGLES3                             |
+| Minimum API Level | 26                                    |
+| Target API Level  | 30 (Unity 2021), 31 ~ 32 (Unity 2022) |
+
+
+-  Project Settings --> Player --> Other Settings に以下のシンボルを追加(ビルド時に使用)
+
 ```
 UNITYWEBVIEW_ANDROID_USES_CLEARTEXT_TRAFFIC
 ```
@@ -45,22 +67,6 @@ UNITYWEBVIEW_ANDROID_ENABLE_CAMERA
 ```
 UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 ```
-- Color Space: Linear
-- Graphics: OpenGLES3
-- Minimum API Level: 26 
-- Target API Level: 30 (Unity 2021), 31 ~ 32 (Unity 2022)
-  
-3. TLabWebView/TLabWebView.prefab をシーンに追加
-4. WebViewの設定を変更
-TLabWebView.cs の設定項目(TLabWebView.prefab/WebView にある)  
-
-<img src="Media/tlab-webview-settings.png" width="256">  
-
-- Url: WebViewの初期化時にロードするURL  
-- DlOption: ファイルをアプリケーションフォルダとダウンロードフォルダどちらにダウンロードするか  
-- SubDir: アプリケーションフォルダにダウンロードする場合，```{Application folder}/{files}/{SubDir}```にダウンロードされる  
-- Web (Width/Height): WebViewの解像度 (デフォルト 1024 * 1024)  
-- Tex (Width/Height): Texture2Dの解像度 (デフォルト 512 * 512)  
 
 ## お知らせ
 - VRでのプレイに対応しました([link](https://github.com/TLabAltoh/TLabWebViewVR))

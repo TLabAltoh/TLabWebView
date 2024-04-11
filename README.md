@@ -28,14 +28,37 @@ GPU: Qualcomm Adreno 505, 619
 Unity: 2021.23f1  
 
 ## Getting Started
+
 ### Prerequisites
+
 - Unity 2021.3.23f1  
 - [TLabVKeyborad](https://github.com/TLabAltoh/TLabVKeyborad)
+
 ### Installing
+
 Clone the repository or download it from the release and place it in the Asset folder of Unity
-### Set up
-1. Change platform to Android from Build Settings  
-2. Add the following symbols to Project Settings --> Player --> Other Settings (to be used at build time)  
+
+### Set Up
+
+- Build Settings
+
+| Property      | Value   |
+| ------------- | ------- |
+| Platform      | Android |
+
+- Project Settings
+
+| Property          | Value                                 |
+| ----------------- | ------------------------------------- |
+| Color Space       | Linear                                |
+| Graphics          | OpenGLES3                             |
+| Minimum API Level | 26                                    |
+| Target API Level  | 30 (Unity 2021), 31 ~ 32 (Unity 2022) |
+
+
+- Add the following symbols to Project Settings --> Player --> Other Settings (to be used at build time)
+
+
 ```
 UNITYWEBVIEW_ANDROID_USES_CLEARTEXT_TRAFFIC
 ```
@@ -45,25 +68,10 @@ UNITYWEBVIEW_ANDROID_ENABLE_CAMERA
 ```
 UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 ```
-- Color Space: Linear
-- Graphics: OpenGLES3
-- Minimum API Level: 26 
-- Target API Level: 30 (Unity 2021), 31 ~ 32 (Unity 2022)
-
-3. Add TLabWebView/TLabWebView.prefab to scene
-4. Change the setting of WebView
-Setting items in TLabWebView.cs (located in TLabWebView.prefab/WebView)  
-
-<img src="Media/tlab-webview-settings.png" width="256">  
-
-- Url: URL to load during WebView initialization  
-- DlOption: Whether to download to the application folder or the downloads folder  
-- SubDir: In case of setting download to application folder, it is downloaded to ```{Application folder}/{files}/{SubDir}```  
-- Web (Width/Height):  Web page resolution (default 1024 * 1024)  
-- Tex (Width/Height): Texture2D resolution used within Unity (default 512 * 512)  
 
 ## NOTICE
 - Now supports play in VR ([link](https://github.com/TLabAltoh/TLabWebViewVR)).
 
 ## Link
 [Source code of the java plugin used](https://github.com/TLabAltoh/TLabWebViewPlugin)
+
