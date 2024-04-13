@@ -13,14 +13,11 @@ Unityで動作するWebViewのプラグイン．WebViewの結果をTexture2Dと�
 
 ## Note
 - 現在，Unity 2021 ~ 2022を正式にサポートしています．
-- ``` TLabWebViewTouchEventManager ```を廃止し，``` WebViewInputListener ```を今後TLabWebViewのUIモジュールとすることにしました．これにより入力モジュールは，Oculus, XRToolkitなどのプラグインに依存せず動作するようになります．
 
 ## スクリーンショット  
 Android13, Adreno 619で実行した画面  
 
-
 <img src="Media/tlab-webview.png" width="256">
-
 
 ## 動作環境
 OS: Android 10 ~ 13  
