@@ -24,7 +24,7 @@ Screenshot run on Android 13, Adreno 619
 ## Operating Environment
 OS: Android 10 ~ 13  
 GPU: Qualcomm Adreno 505, 619  
-Unity: 2021.23f1  
+Unity: 2021.3  
 
 ## Getting Started
 

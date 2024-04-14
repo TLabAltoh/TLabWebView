@@ -22,13 +22,13 @@ Android13, Adreno 619で実行した画面
 ## 動作環境
 OS: Android 10 ~ 13  
 GPU: Qualcomm Adreno 505, 619  
-Unity: 2021.23f1  
+Unity: 2021.3  
 
 ## スタートガイド
 
 ### 必要な要件
 
-- Unity 2021.3.23f1  
+- Unity 2021.3 LTS  
 - [TLabVKeyborad](https://github.com/TLabAltoh/TLabVKeyborad)
 
 ### インストール
