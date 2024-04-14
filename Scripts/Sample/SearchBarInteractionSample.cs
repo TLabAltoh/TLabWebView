@@ -1,12 +1,13 @@
 using UnityEngine;
-using TMPro;
+using TLab.InputField;
 using TLab.Android.WebView;
 
 public class SearchBarInteractionSample : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI m_text;
     [SerializeField] private TLabWebView m_webview;
+    [SerializeField] private TLabVKeyborad m_keyborad;
 
+#if false
     /// <summary>
     /// Press button to execute
     /// </summary>
@@ -36,32 +37,45 @@ public class SearchBarInteractionSample : MonoBehaviour
             searchShadowRoot(document, 'input');
             searchShadowRoot(document, 'textarea');
 
-            for (var i = 0; i < elements.length; i++) {
-                elements[i].addEventListener('focusin', (e) => {
-                    const target = e.target;
-                    if (target.tagName == 'INPUT' || target.tagName == 'TEXTAREA') {
-                       window.TLabWebViewActivity.unitySendMessage('SearchBar Interaction Sample', 'OnMessage', 'Foucusin');
-                    }
-                });
-    
-                elements[i].addEventListener('focusout', (e) => {
-                    const target = e.target;
-                    if (target.tagName == 'INPUT' || target.tagName == 'TEXTAREA') {
-                       window.TLabWebViewActivity.unitySendMessage('SearchBar Interaction Sample', 'OnMessage', 'Foucusout');
-                    }
-                });
+            function focusin (e) {
+                const target = e.target;
+                if (target.tagName == 'INPUT' || target.tagName == 'TEXTAREA') {
+                    window.TLabWebViewActivity.unitySendMessage('SearchBar', 'OnMessage', 'Foucusin');
+                }
             }
 
-            window.TLabWebViewActivity.unitySendMessage('SearchBar Interaction Sample', 'OnMessage', 'Executed');
+            function focusout (e) {
+                const target = e.target;
+                if (target.tagName == 'INPUT' || target.tagName == 'TEXTAREA') {
+                    window.TLabWebViewActivity.unitySendMessage('SearchBar', 'OnMessage', 'Foucusout');
+                }
+            }
+
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].removeEventListener('focusin', focusin);
+                elements[i].removeEventListener('focusout', focusout);
+
+                elements[i].addEventListener('focusin', focusin);
+                elements[i].addEventListener('focusout', focusout);
+            }
             ";
 
         m_webview.EvaluateJS(jsCode);
     }
+#endif
 
     public void OnMessage(string message)
     {
-        Debug.Log(message);
+        Debug.Log("OnMessage: " + message);
 
-        m_text.text = message;
+        switch (message)
+        {
+            case "Foucusin":
+                m_keyborad.HideKeyborad(false);
+                break;
+            case "Foucusout":
+                m_keyborad.HideKeyborad(true);
+                break;
+        }
     }
 }
