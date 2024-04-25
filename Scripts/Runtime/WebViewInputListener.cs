@@ -22,6 +22,11 @@ namespace TLab.Android.WebView
 
         private string THIS_NAME => "[" + this.GetType() + "] ";
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="eventData"></param>
+        /// <returns></returns>
         private bool GetInputPosition(PointerEventData eventData)
         {
             Vector2 localPosition = Vector2.zero;
@@ -44,7 +49,7 @@ namespace TLab.Android.WebView
 
             if (Math.Range(x, 0, 1) && Math.Range(y, 0, 1))
             {
-                m_inputPosition = new Vector2Int((int)(x * m_webview.WebWidth), (int)(y * m_webview.WebHeight));
+                m_inputPosition = new Vector2Int((int)(x * m_webview.webWidth), (int)(y * m_webview.webHeight));
 
                 return true;
             }
@@ -54,6 +59,10 @@ namespace TLab.Android.WebView
             return false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="eventData"></param>
         public void OnPointerDown(PointerEventData eventData)
         {
             if (m_pointerId == null && !m_pointerDown && GetInputPosition(eventData))
@@ -66,6 +75,10 @@ namespace TLab.Android.WebView
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="eventData"></param>
         public void OnDrag(PointerEventData eventData)
         {
             if ((m_pointerId == eventData.pointerId) && m_pointerDown && GetInputPosition(eventData))
@@ -74,6 +87,10 @@ namespace TLab.Android.WebView
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="eventData"></param>
         public void OnPointerUp(PointerEventData eventData)
         {
             if ((m_pointerId == eventData.pointerId) && m_pointerDown && GetInputPosition(eventData))
@@ -86,6 +103,10 @@ namespace TLab.Android.WebView
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="eventData"></param>
         public void OnPointerExit(PointerEventData eventData)
         {
             if ((m_pointerId == eventData.pointerId) && m_pointerDown)
@@ -125,6 +146,13 @@ namespace TLab.Android.WebView
 
     public static class Math
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public static bool Range(float i, float min, float max)
         {
             if (min >= max)

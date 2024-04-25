@@ -1,11 +1,12 @@
 using UnityEngine;
 using TLab.InputField;
-using TLab.Android.WebView;
 
-public class SearchBarInteractionSample : MonoBehaviour
+namespace TLab.Android.WebView.Sample
 {
-    [SerializeField] private TLabWebView m_webview;
-    [SerializeField] private TLabVKeyborad m_keyborad;
+    public class SearchBarInteractionSample : MonoBehaviour
+    {
+        [SerializeField] private TLabWebView m_webview;
+        [SerializeField] private TLabVKeyborad m_keyborad;
 
 #if false
     /// <summary>
@@ -64,18 +65,23 @@ public class SearchBarInteractionSample : MonoBehaviour
     }
 #endif
 
-    public void OnMessage(string message)
-    {
-        Debug.Log("OnMessage: " + message);
-
-        switch (message)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        public void OnMessage(string message)
         {
-            case "Foucusin":
-                m_keyborad.HideKeyborad(false);
-                break;
-            case "Foucusout":
-                m_keyborad.HideKeyborad(true);
-                break;
+            Debug.Log("OnMessage: " + message);
+
+            switch (message)
+            {
+                case "Foucusin":
+                    m_keyborad.HideKeyborad(false);
+                    break;
+                case "Foucusout":
+                    m_keyborad.HideKeyborad(true);
+                    break;
+            }
         }
     }
 }

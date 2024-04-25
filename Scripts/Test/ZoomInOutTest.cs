@@ -1,17 +1,19 @@
 using UnityEngine;
-using TLab.Android.WebView;
 
-public class ZoomInOutTest : MonoBehaviour
+namespace TLab.Android.WebView.Test
 {
-    [SerializeField] private TLabWebView m_webview;
-
-    public void ZoomIn()
+    public class ZoomInOutTest : MonoBehaviour
     {
-        m_webview.ZoomIn();
-    }
+        [SerializeField] private TLabWebView m_webview;
 
-    public void ZoomOut()
-    {
-        m_webview.ZoomOut();
+        public void ZoomIn()
+        {
+            m_webview.ZoomIn();
+        }
+
+        public void ZoomOut()
+        {
+            m_webview.ZoomOut();
+        }
     }
 }

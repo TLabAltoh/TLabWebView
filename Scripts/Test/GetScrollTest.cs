@@ -1,17 +1,19 @@
 using UnityEngine;
-using TLab.Android.WebView;
 
-public class GetScrollTest : MonoBehaviour
+namespace TLab.Android.WebView.Test
 {
-    [SerializeField] private TLabWebView m_webview;
-
-    private string THIS_NAME => "[scroll] ";
-
-    void Update()
+    public class GetScrollTest : MonoBehaviour
     {
-        if (m_webview.IsInitialized())
+        [SerializeField] private TLabWebView m_webview;
+
+        private string THIS_NAME => "[scroll] ";
+
+        void Update()
         {
-            Debug.Log(THIS_NAME + $"{m_webview.GetScrollX()}, {m_webview.GetScrollY()}");
+            if (m_webview.IsInitialized())
+            {
+                Debug.Log(THIS_NAME + $"{m_webview.GetScrollX()}, {m_webview.GetScrollY()}");
+            }
         }
     }
 }

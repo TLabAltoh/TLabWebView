@@ -1,16 +1,19 @@
 using UnityEngine;
 
-public class DestroyTest : MonoBehaviour
+namespace TLab.Android.WebView.Test
 {
-    [SerializeField] private GameObject m_prefab;
-
-    public void OnButtonClick()
+    public class DestroyTest : MonoBehaviour
     {
-        if (m_prefab != null)
-        {
-            GameObject.Destroy(m_prefab);
+        [SerializeField] private GameObject m_prefab;
 
-            Debug.Log($"{m_prefab.name} has been destroyed.");
+        public void OnButtonClick()
+        {
+            if (m_prefab != null)
+            {
+                GameObject.Destroy(m_prefab);
+
+                Debug.Log($"{m_prefab.name} has been destroyed.");
+            }
         }
     }
 }

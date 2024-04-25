@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class FPSCounter : MonoBehaviour
+namespace TLab.Android.WebView.Sample
 {
-    [SerializeField, HideInInspector] private TextMeshProUGUI m_counter;
-
-    void Start()
+    public class FPSCounter : MonoBehaviour
     {
-        m_counter = GetComponent<TextMeshProUGUI>();
-        Application.targetFrameRate = 60;
-    }
+        [SerializeField, HideInInspector] private TextMeshProUGUI m_counter;
 
-    void Update()
-    {
-        m_counter.text = (1.0f / Time.deltaTime).ToString("0.000");
+        void Start()
+        {
+            m_counter = GetComponent<TextMeshProUGUI>();
+            Application.targetFrameRate = 60;
+        }
+
+        void Update()
+        {
+            m_counter.text = (1.0f / Time.deltaTime).ToString("0.000");
+        }
     }
 }
