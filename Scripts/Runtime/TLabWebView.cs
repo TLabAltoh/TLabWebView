@@ -707,17 +707,6 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="permission"></param>
-		public void RequestPermission(UnityEngine.Android.Permission permission)
-		{
-#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			UnityEngine.Android.Permission.RequestUserPermission(permission.ToString());
-#endif
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
 		/// <returns></returns>
 		private IEnumerator InitTask()
 		{

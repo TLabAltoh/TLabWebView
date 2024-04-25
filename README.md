@@ -70,6 +70,11 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 ```
 
 ## NOTICE
+- If you want to access files that are in external storage (like download, picture). you need to add follow manifest in Android 11 ([detail](https://developer.android.com/training/data-storage/manage-all-files?hl=en)).
+```.xml
+<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+```
+
 - Now supports play in VR ([link](https://github.com/TLabAltoh/TLabWebViewVR)).
 
 ## TODO
