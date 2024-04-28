@@ -27,5 +27,19 @@ namespace TLab.Android.WebView.Test
 
             m_webview.ResizeWeb(webWidth / 2, webHeight / 2);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Resize()
+        {
+            var texWidth = m_webview.texWidth;
+            var texHeight = m_webview.texHeight;
+
+            var webWidth = m_webview.webWidth;
+            var webHeight = m_webview.webHeight;
+
+            m_webview.Resize(texWidth / 2, texHeight / 2, webWidth / 2, webHeight / 2);
+        }
     }
 }

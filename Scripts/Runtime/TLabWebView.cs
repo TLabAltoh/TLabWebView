@@ -521,6 +521,58 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="texWidth"></param>
+		/// <param name="texHeight"></param>
+		/// <param name="webWidth"></param>
+		/// <param name="webHeight"></param>
+		public void Resize(int texWidth, int texHeight, int webWidth, int webHeight)
+		{
+			if (m_state != State.INITIALIZED)
+			{
+				return;
+			}
+
+			m_texWidth = texWidth;
+			m_texHeight = texHeight;
+			m_webWidth = webWidth;
+			m_webHeight = webHeight;
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("resize", texWidth, texHeight, webWidth, webHeight);
+#endif
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="top"></param>
+		public void PageUp(bool top)
+		{
+			if (m_state != State.INITIALIZED)
+			{
+				return;
+			}
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("pageUp", top);
+#endif
+		}
+
+		public void PageDown(bool bottom)
+		{
+			if (m_state != State.INITIALIZED)
+			{
+				return;
+			}
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("pageDown", bottom);
+#endif
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="key"></param>
 		public void KeyEvent(char key)
 		{
