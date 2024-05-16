@@ -11,13 +11,13 @@ namespace TLab.Android.WebView
 	[System.Serializable]
 	public class JsEventCallback
 	{
-		[SerializeField] public string onPageFinish;
-		[SerializeField] public string onDownloadStart;
-		[SerializeField] public string onDownloadFinish;
+		public string onPageFinish;
+		public string onDownloadStart;
+		public string onDownloadFinish;
 
-		[SerializeField] public string dl_uri_name = "unity_webview_dl_uri";
-		[SerializeField] public string dl_url_name = "unity_webview_dl_url";
-		[SerializeField] public string dl_id_name = "unity_webview_dl_id";
+		public string dl_uri_name = "unity_webview_dl_uri";
+		public string dl_url_name = "unity_webview_dl_url";
+		public string dl_id_name = "unity_webview_dl_id";
 	}
 
 	public class TLabWebView : MonoBehaviour
@@ -402,7 +402,7 @@ namespace TLab.Android.WebView
 		/// </summary>
 		/// <param name="x"></param>
 		/// <param name="y"></param>
-		public void SetScroll(int x, int y)
+		public void ScrollTo(int x, int y)
 		{
 			if (m_state != State.INITIALIZED)
 			{
@@ -410,7 +410,24 @@ namespace TLab.Android.WebView
 			}
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("setScroll", x, y);
+			m_NativePlugin.Call("scrollTo", x, y);
+#endif
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		public void ScrollBy(int x, int y)
+		{
+			if (m_state != State.INITIALIZED)
+			{
+				return;
+			}
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("scrollBy", x, y);
 #endif
 		}
 
