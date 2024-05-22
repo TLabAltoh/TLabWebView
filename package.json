@@ -1,0 +1,15 @@
+{
+    "name": "com.tlabaltoh.webview",
+    "version": "0.0.0",
+    "displayName": "TLabWebView",
+    "description": "Plug-in for WebView that runs in Unity and can display WebView results as Texture2D",
+    "author": {
+        "name": "tlabaltoh",
+        "url": "https://tlab-games.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/TLabAltoh/TLabWebView.git"
+    },
+    "license": "MIT License"
+}
