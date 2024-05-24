@@ -11,5 +11,12 @@
         "type": "git",
         "url": "https://github.com/TLabAltoh/TLabWebView.git"
     },
+    "samples": [
+        {
+            "displayName": "Sample Scenes",
+            "description": "",
+            "path": "Samples/Scenes"
+        }
+    ],
     "license": "MIT License"
 }
