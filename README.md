@@ -18,6 +18,10 @@ Plug-in for WebView that runs in Unity and can display WebView results as Textur
 - [x] Unity 2021
 - [x] Unity 2022
 
+## Graphics api this plugin supports
+- [x] OpenGLES
+- [x] Vulkan (with some limitations)
+
 ## Screenshot  
 Screenshot run on Android 13, Adreno 619  
 
@@ -53,7 +57,6 @@ Clone the repository or download it from the release and place it in the Asset f
 | Property          | Value                                 |
 | ----------------- | ------------------------------------- |
 | Color Space       | Linear                                |
-| Graphics          | OpenGLES3                             |
 | Minimum API Level | 26                                    |
 | Target API Level  | 30 (Unity 2021), 31 ~ 32 (Unity 2022) |
 
@@ -75,10 +78,12 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 ```
 
+- This plugin supports both Vulkan and OpenGLES, but if you are building an application that uses a Vulkan graphics API, the Android device must support OpenGLES as well as Vulkan. This is because some processes in this plugin depend on the GLES API.
+
 - Now supports play in VR ([link](https://github.com/TLabAltoh/TLabWebViewVR)).
 
 ## TODO
-- Vulkan support
+- Remove the GLES API dependency from the Vulkan use case.
 
 ## Link
 [Source code of the java plugin used](https://github.com/TLabAltoh/TLabWebViewPlugin)

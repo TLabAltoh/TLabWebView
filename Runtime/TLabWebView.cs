@@ -1,5 +1,5 @@
 ﻿#define DEBUG
-#undef DEBUG
+//#undef DEBUG
 
 using System.Collections;
 using System;
@@ -84,6 +84,12 @@ namespace TLab.Android.WebView
 
 		private IntPtr m_rawObject;
 #endif
+
+		private IntPtr m_prevTexID;
+
+		private delegate void UpdateFrameFunc();
+
+		private UpdateFrameFunc m_updateFrameFunc;
 
 		/// <summary>
 		/// 
@@ -172,7 +178,7 @@ namespace TLab.Android.WebView
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public IntPtr GetTexturePtr()
+		public IntPtr GetBindedPlatformTextureID()
 		{
 			if (m_state != State.INITIALIZED)
 			{
@@ -180,7 +186,7 @@ namespace TLab.Android.WebView
 			}
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			return JNIUtil.GetTexturePtr((int)m_rawObject);
+			return NativePlugin.GetBindedPlatformTextureID((int)m_rawObject);
 #else
 			return IntPtr.Zero;
 #endif
@@ -773,22 +779,40 @@ namespace TLab.Android.WebView
 #endif
 		}
 
+
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <returns></returns>
 		private IEnumerator InitTask()
 		{
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			// I cannot find the way to preload (load on startup)
+			// jni shared library. so call library function and
+			// load dinamically here. (call unity plugin on load)
+			if (SystemInfo.renderingThreadingMode == UnityEngine.Rendering.RenderingThreadingMode.MultiThreaded)
+			{
+				GL.IssuePluginEvent(NativePlugin.DummyRenderEventFunc(), 0);
+			}
+			else
+			{
+				NativePlugin.DummyRenderEvent(0);
+			}
+#endif
+
 			m_state = State.INITIALISING;
 
 			yield return new WaitForEndOfFrame();
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+
 			m_NativePlugin = new AndroidJavaObject("com.tlab.libwebview.UnityConnect");
 
 			m_rawObject = m_NativePlugin.GetRawObject();
 
 			m_rawImage.texture = new Texture2D(m_texWidth, m_texHeight, TextureFormat.ARGB32, false, false);
+
+			m_prevTexID = m_rawImage.texture.GetNativeTexturePtr();
 
 			if (m_NativePlugin != null)
 			{
@@ -804,10 +828,14 @@ namespace TLab.Android.WebView
 					m_jsEventCallback.dl_uri_name,
 					m_jsEventCallback.dl_id_name);
 
+				var isVulkan = (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Vulkan);
+
+				m_updateFrameFunc = isVulkan ? UpdateVulkanFrame : UpdateGLESFrame;
+
 				m_NativePlugin.Call("initialize",
 					m_webWidth, m_webHeight,
 					m_texWidth, m_texHeight,
-					Screen.width, Screen.height, m_url);
+					Screen.width, Screen.height, m_url, isVulkan);
 			}
 
 			while (!IsInitialized())
@@ -816,6 +844,45 @@ namespace TLab.Android.WebView
 			}
 
 			m_state = State.INITIALIZED;
+#endif
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private void UpdateGLESFrame()
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			int rawObject = (int)m_NativePlugin.GetRawObject();
+
+			var texID = GetBindedPlatformTextureID();
+
+			if ((texID != IntPtr.Zero) && (texID != m_prevTexID))
+			{
+				var tmp = (Texture2D)m_rawImage.texture;
+				tmp.UpdateExternalTexture(texID);
+
+				m_prevTexID = texID;
+			}
+#endif
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private void UpdateVulkanFrame()
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			int rawObject = (int)m_NativePlugin.GetRawObject();
+
+			bool flag = NativePlugin.GetSharedBufferUpdateFlag(rawObject);
+			if (flag)
+			{
+				Debug.Log(THIS_NAME + "update unity texture");
+				m_rawImage.texture = new Texture2D(m_texWidth, m_texHeight, TextureFormat.RGBA32, false, true);
+				NativePlugin.SetUnityTextureID(rawObject, (long)m_rawImage.texture.GetNativeTexturePtr());
+				NativePlugin.SetHardwareBufferUpdateFlag(rawObject, false);
+			}
 #endif
 		}
 
@@ -832,21 +899,22 @@ namespace TLab.Android.WebView
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			if (SystemInfo.renderingThreadingMode == UnityEngine.Rendering.RenderingThreadingMode.MultiThreaded)
 			{
-				GL.IssuePluginEvent(JNIUtil.UpdateSurfaceFunc(), (int)m_NativePlugin.GetRawObject());
+				GL.IssuePluginEvent(NativePlugin.UpdateSurfaceFunc(), (int)m_NativePlugin.GetRawObject());
 			}
 			else
 			{
-				JNIUtil.UpdateSurface((int)m_NativePlugin.GetRawObject());
+				NativePlugin.UpdateSurface((int)m_NativePlugin.GetRawObject());
 			}
 #endif
 
-			var newPtr = GetTexturePtr();
-			var oldPtr = m_rawImage.texture.GetNativeTexturePtr();
+			// External texture update behaviour
+			// OpenGLES: Use the same texture
+			// Vulkan: Create new VkImage and copy buffer to new one,
+			// Texture Buffer is not shared so in order to update
+			// frame, need to call update frame every frame. (Maybe
+			// this processing is too heavy)
 
-			if ((newPtr != IntPtr.Zero) && (newPtr != oldPtr))
-			{
-				((Texture2D)m_rawImage.texture).UpdateExternalTexture(newPtr);
-			}
+			m_updateFrameFunc.Invoke();
 		}
 
 		/// <summary>
