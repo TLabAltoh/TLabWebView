@@ -16,6 +16,10 @@ Unityで動作するWebViewのプラグイン．WebViewの結果をTexture2Dと�
 - [x] Unity 2021
 - [x] Unity 2022
 
+## 対応するグラフィックスAPI
+- [x] OpenGLES
+- [x] Vulkan (一部制限あり)
+
 ## スクリーンショット  
 Android13, Adreno 619で実行した画面  
 
@@ -75,10 +79,12 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 ```
 
+- このプラグインは，OpenGLESとVulkanの両方をサポートしていますが，Vulkanでビルドをする場合はAndroidデバイスがVulkanだけでなくOpenGLESもサポートしていることが必要になります．これは，プラグインの一部の処理がGLES APIに依存しているためです．
+
 - VRでのプレイに対応しました([link](https://github.com/TLabAltoh/TLabWebViewVR))
 
 ## TODO
-- Vulkanのサポート
+- Vulkanのユースケースにおいて，GLES APIへの依存を削除する．
 
 ## リンク
 [使用したJavaプラグインのソースコード](https://github.com/TLabAltoh/TLabWebViewPlugin)
