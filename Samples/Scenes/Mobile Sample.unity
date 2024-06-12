@@ -3041,10 +3041,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
-      propertyPath: m_url
-      value: http://192.168.3.7:5600
-      objectReference: {fileID: 0}
-    - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
       propertyPath: m_jsEventCallback.dlEvent.onStart
       value: 'window.TLabWebViewActivity.unitySendMessage(''Download Event Test'',
         ''OnDownloadStart'', ''download start. url: '' + unity_webview_dl_url + '',
