@@ -3040,6 +3040,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
+      propertyPath: m_url
+      value: http://192.168.3.7:5600
+      objectReference: {fileID: 0}
+    - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
+      propertyPath: m_jsEventCallback.dlEvent.onStart
+      value: 'window.TLabWebViewActivity.unitySendMessage(''Download Event Test'',
+        ''OnDownloadStart'', ''download start. url: '' + unity_webview_dl_url + '',
+        id: '' + unity_webview_dl_id);'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
+      propertyPath: m_jsEventCallback.dlEvent.onFinish
+      value: 'window.TLabWebViewActivity.unitySendMessage(''Download Event Test'',
+        ''OnDownloadFinish'', ''download finish. uri: '' + unity_webview_dl_uri +
+        '', id: '' + unity_webview_dl_id);'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
+      propertyPath: m_jsEventCallback.catchDlUrlEvent.go
+      value: Download Event Test
+      objectReference: {fileID: 0}
+    - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
+      propertyPath: m_jsEventCallback.catchDlUrlEvent.func
+      value: OnCatchDownloadUrl
+      objectReference: {fileID: 0}
     - target: {fileID: 6960073521778781876, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -5347,7 +5371,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!222 &1386231930566831952
 CanvasRenderer:
   m_ObjectHideFlags: 0

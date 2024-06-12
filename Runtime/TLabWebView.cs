@@ -8,33 +8,8 @@ using UnityEngine.UI;
 
 namespace TLab.Android.WebView
 {
-	[System.Serializable]
-	public class JsEventCallback
-	{
-		public string onPageFinish;
-		public string onDownloadStart;
-		public string onDownloadFinish;
-
-		public string dl_uri_name = "unity_webview_dl_uri";
-		public string dl_url_name = "unity_webview_dl_url";
-		public string dl_id_name = "unity_webview_dl_id";
-	}
-
 	public class TLabWebView : MonoBehaviour
 	{
-		public enum DownloadOption
-		{
-			/// <summary>
-			/// https://developer.android.com/reference/android/app/DownloadManager.Request#setDestinationInExternalFilesDir(android.content.Context,%20java.lang.String,%20java.lang.String)
-			/// </summary>
-			APPLICATION_FOLDER,
-
-			/// <summary>
-			/// https://developer.android.com/reference/android/os/Environment#DIRECTORY_DOWNLOADS
-			/// </summary>
-			DOWNLOAD_FOLDER
-		}
-
 		public enum State
 		{
 			INITIALISING,
@@ -48,16 +23,16 @@ namespace TLab.Android.WebView
 
 		[Header("File Download Settings")]
 		[SerializeField] private DownloadOption m_dlOption;
-		[SerializeField] private string m_subDir = "downloads";
+		[SerializeField] private string m_dlSubDir = "downloads";
 
-		[Header("Resolution setting")]
+		[Header("Resolution Setting")]
 		[SerializeField] private int m_webWidth = 1024;
 		[SerializeField] private int m_webHeight = 1024;
 		[SerializeField] private int m_texWidth = 512;
 		[SerializeField] private int m_texHeight = 512;
 
-		[Header("Javascript callback")]
-		[SerializeField] private JsEventCallback m_jsEventCallback = new JsEventCallback();
+		[Header("Event Callback")]
+		[SerializeField] private EventCallback m_jsEventCallback = new EventCallback();
 
 		public int webWidth => m_webWidth;
 
@@ -69,13 +44,13 @@ namespace TLab.Android.WebView
 
 		public DownloadOption dlOption => m_dlOption;
 
-		public string subDir => m_subDir;
+		public string subDir => m_dlSubDir;
 
 		public State state => m_state;
 
 		private static string THIS_NAME = "[tlabwebview] ";
 
-		public JsEventCallback jsEventCallback => m_jsEventCallback;
+		public EventCallback jsEventCallback => m_jsEventCallback;
 
 		private State m_state = State.NONE;
 
@@ -141,7 +116,7 @@ namespace TLab.Android.WebView
 
 			m_dlOption = dlOption;
 
-			m_subDir = subDir;
+			m_dlSubDir = subDir;
 
 			Init(webWidth, webHeight, texWidth, texHeight);
 		}
@@ -161,16 +136,6 @@ namespace TLab.Android.WebView
 			return false;
 #else
 			return false;
-#endif
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private void UpdateSurface()
-		{
-#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("updateSurface");
 #endif
 		}
 
@@ -664,55 +629,94 @@ namespace TLab.Android.WebView
 			m_jsEventCallback.onPageFinish = onPageFinish;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("setOnPageFinish", m_jsEventCallback.onPageFinish);
+			m_NativePlugin.Call(
+				"setOnPageFinish", 
+				m_jsEventCallback.onPageFinish);
 #endif
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="onDownloadFinish"></param>
-		public void SetOnDownloadFinish(string onDownloadFinish)
+		/// <param name="onFinish"></param>
+		public void SetOnDownloadFinish(string onFinish)
 		{
-			m_jsEventCallback.onDownloadFinish = onDownloadFinish;
+			m_jsEventCallback.dlEvent.onFinish = onFinish;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("setOnDownloadFinish", m_jsEventCallback.onDownloadFinish);
+			m_NativePlugin.Call(
+				"setOnDownloadFinish", 
+				m_jsEventCallback.dlEvent.onFinish);
 #endif
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="onDownloadStart"></param>
-		public void SetOnDownloadStart(string onDownloadStart)
+		/// <param name="onStart"></param>
+		public void SetOnDownloadStart(string onStart)
 		{
-			m_jsEventCallback.onDownloadStart = onDownloadStart;
+			m_jsEventCallback.dlEvent.onStart = onStart;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("setOnDownloadStart", m_jsEventCallback.onDownloadStart);
+			m_NativePlugin.Call(
+				"setOnDownloadStart", 
+				m_jsEventCallback.dlEvent.onStart);
 #endif
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="dl_url_name"></param>
-		/// <param name="dl_uri_name"></param>
-		/// <param name="dl_id_name"></param>
-		public void SetDlEventVariableName(
-			string dl_url_name, string dl_uri_name, string dl_id_name)
+		/// <param name="varDlUrlName"></param>
+		/// <param name="varDlUriName"></param>
+		/// <param name="varDlIdName"></param>
+		public void SetDownloadEventVariableName(
+			string varDlUrlName, string varDlUriName, string varDlIdName)
 		{
-			m_jsEventCallback.dl_url_name = dl_url_name;
-			m_jsEventCallback.dl_uri_name = dl_uri_name;
-			m_jsEventCallback.dl_id_name = dl_id_name;
+			m_jsEventCallback.dlEvent.varDlUrlName = varDlUrlName;
+			m_jsEventCallback.dlEvent.varDlUriName = varDlUriName;
+			m_jsEventCallback.dlEvent.varDlIdName = varDlIdName;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			m_NativePlugin.Call(
 				"setDownloadEventVariableName",
-				m_jsEventCallback.dl_url_name,
-				m_jsEventCallback.dl_uri_name,
-				m_jsEventCallback.dl_id_name);
+				m_jsEventCallback.dlEvent.varDlUrlName,
+				m_jsEventCallback.dlEvent.varDlUriName,
+				m_jsEventCallback.dlEvent.varDlIdName);
+#endif
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="go"></param>
+		/// <param name="func"></param>
+		public void SetOnCatchDownloadUrl(string go, string func)
+        {
+			m_jsEventCallback.catchDlUrlEvent.go = go;
+			m_jsEventCallback.catchDlUrlEvent.func = func;
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call(
+				"setOnCatchDownloadUrl",
+				m_jsEventCallback.catchDlUrlEvent.go,
+				m_jsEventCallback.catchDlUrlEvent.func);
+#endif
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="url"></param>
+		/// <param name="userAgent"></param>
+		/// <param name="contentDisposition"></param>
+		/// <param name="mimetype"></param>
+		public void DownloadFromUrl(string url, string userAgent, 
+			string contentDisposition, string mimetype)
+		{
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("downloadFromUrl", url, userAgent, contentDisposition, mimetype);
 #endif
 		}
 
@@ -720,7 +724,7 @@ namespace TLab.Android.WebView
 		/// 
 		/// </summary>
 		/// <param name="option"></param>
-		public void SetDlOption(DownloadOption option)
+		public void SetDownloadOption(DownloadOption option)
 		{
 			m_dlOption = option;
 
@@ -732,13 +736,13 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="subdir"></param>
-		public void SetSubDir(string subdir)
+		/// <param name="dlSubDir"></param>
+		public void SetDownloadSubDir(string dlSubDir)
 		{
-			m_subDir = subdir;
+			m_dlSubDir = dlSubDir;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("setSubDir", m_subDir);
+			m_NativePlugin.Call("setDownloadSubDir", m_dlSubDir);
 #endif
 		}
 
@@ -816,17 +820,21 @@ namespace TLab.Android.WebView
 
 			if (m_NativePlugin != null)
 			{
-				SetDlOption(m_dlOption);
-				SetSubDir(m_subDir);
+				SetDownloadOption(m_dlOption);
+				SetDownloadSubDir(m_dlSubDir);
 
 				SetOnPageFinish(m_jsEventCallback.onPageFinish);
-				SetOnDownloadStart(m_jsEventCallback.onDownloadStart);
-				SetOnDownloadFinish(m_jsEventCallback.onDownloadFinish);
+				SetOnDownloadStart(m_jsEventCallback.dlEvent.onStart);
+				SetOnDownloadFinish(m_jsEventCallback.dlEvent.onFinish);
 
-				SetDlEventVariableName(
-					m_jsEventCallback.dl_url_name,
-					m_jsEventCallback.dl_uri_name,
-					m_jsEventCallback.dl_id_name);
+				SetOnCatchDownloadUrl(
+					m_jsEventCallback.catchDlUrlEvent.go,
+					m_jsEventCallback.catchDlUrlEvent.func);
+
+				SetDownloadEventVariableName(
+					m_jsEventCallback.dlEvent.varDlUrlName,
+					m_jsEventCallback.dlEvent.varDlUriName,
+					m_jsEventCallback.dlEvent.varDlIdName);
 
 				var isVulkan = (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Vulkan);
 
