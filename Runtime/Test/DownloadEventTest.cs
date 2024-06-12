@@ -56,5 +56,18 @@ namespace TLab.Android.WebView.Test
 
             Debug.Log(THIS_NAME + $"message receive: {message}");
         }
+
+        public void OnCatchDownloadUrl(string argument)
+        {
+            var commands = argument.Split("\n");
+            var url = commands[0];
+            var userAgent = commands[1];
+            var contentDisposition = commands[2];
+            var mimeType = commands[3];
+
+            Debug.Log(THIS_NAME + $"message receive: catch download url ... url:{url}, userAgent:{userAgent}, contentDisposition:{contentDisposition}, mimeType:{mimeType}");
+
+            m_webview.DownloadFromUrl(url, userAgent, contentDisposition, mimeType);
+        }
     }
 }
