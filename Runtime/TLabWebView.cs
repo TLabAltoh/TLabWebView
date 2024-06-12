@@ -1,5 +1,5 @@
 ﻿#define DEBUG
-//#undef DEBUG
+#undef DEBUG
 
 using System.Collections;
 using System;
@@ -851,7 +851,7 @@ namespace TLab.Android.WebView
 		/// 
 		/// </summary>
 		private void UpdateGLESFrame()
-        {
+		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			int rawObject = (int)m_NativePlugin.GetRawObject();
 
@@ -871,7 +871,7 @@ namespace TLab.Android.WebView
 		/// 
 		/// </summary>
 		private void UpdateVulkanFrame()
-        {
+		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			int rawObject = (int)m_NativePlugin.GetRawObject();
 
@@ -896,6 +896,13 @@ namespace TLab.Android.WebView
 				return;
 			}
 
+			// External texture update behaviour
+			// OpenGLES: Use the same texture
+			// Vulkan: Create new VkImage and copy buffer to new one,
+			// Texture Buffer is not shared so in order to update
+			// frame, need to call update frame every frame. (Maybe
+			// this processing is too heavy)
+
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			if (SystemInfo.renderingThreadingMode == UnityEngine.Rendering.RenderingThreadingMode.MultiThreaded)
 			{
@@ -905,16 +912,9 @@ namespace TLab.Android.WebView
 			{
 				NativePlugin.UpdateSurface((int)m_NativePlugin.GetRawObject());
 			}
-#endif
-
-			// External texture update behaviour
-			// OpenGLES: Use the same texture
-			// Vulkan: Create new VkImage and copy buffer to new one,
-			// Texture Buffer is not shared so in order to update
-			// frame, need to call update frame every frame. (Maybe
-			// this processing is too heavy)
 
 			m_updateFrameFunc.Invoke();
+#endif
 		}
 
 		/// <summary>
