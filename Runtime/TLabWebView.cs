@@ -139,6 +139,20 @@ namespace TLab.Android.WebView
 #endif
 		}
 
+		public byte[] GetWebBuffer(string key)
+        {
+			if (m_state != State.INITIALIZED)
+			{
+				return new byte[0];
+			}
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			return m_NativePlugin.Call<byte[]>("getWebBuffer", key);
+#else
+			return new byte[0];
+#endif
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
