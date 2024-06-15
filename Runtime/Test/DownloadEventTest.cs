@@ -68,7 +68,7 @@ namespace TLab.Android.WebView.Test
             byte[] buf = m_webview.GetWebBuffer(bufferName);
 
             Debug.Log(THIS_NAME + $"message receive: {buf[0]}, {buf[1]}, {buf[2]}, {buf[3]}, {buf[4]}, length: {buf.Length}");    // data:
-            Debug.Log(THIS_NAME + $"message receive: {buf[3999999]}, {buf[4000000]}, {buf[4000001]}, {buf[4000002]}, {buf[4500]}, {buf[100]}, {buf[600]}, {buf[500]}");
+            Debug.Log(THIS_NAME + $"message receive: {buf[buf.Length - 1]}, {buf[3999999]}, {buf[4000000]}, {buf[4000001]}, {buf[4000002]}, {buf[4500]}, {buf[100]}, {buf[600]}, {buf[500]}");
 
             string js = $"window.TLabWebViewActivity.free('{bufferName}');";
 
@@ -84,9 +84,9 @@ namespace TLab.Android.WebView.Test
                     "    if (segmentSize === 0) return;" +
                     "" +
                     "    var i = offset;" +
-                    "    while(i + segmentSize < buffer.length)" +
+                    "    while(i + segmentSize <= buffer.length)" +
                     "    {" +
-                    "       window.TLabWebViewActivity.write(bufferName, buffer.slice(i, i + segmentSize), i + segmentSize);" +
+                    "       window.TLabWebViewActivity.write(bufferName, buffer.slice(i, i + segmentSize));" +
                     "       i += segmentSize" +
                     "    }" +
                     "" +
