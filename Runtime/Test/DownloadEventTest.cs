@@ -131,14 +131,14 @@ namespace TLab.Android.WebView.Test
 
             Debug.Log(THIS_NAME + $"message receive: catch download url ... url:{url}, userAgent:{userAgent}, contentDisposition:{contentDisposition}, mimeType:{mimeType}");
 
+#if true
+            m_webview.DownloadFromUrl(url, userAgent, contentDisposition, mimeType);
+#else
             if (url.StartsWith("blob:"))
             {
                 BlobToDataUrl(url, mimeType);
             }
-            else
-            {
-                m_webview.DownloadFromUrl(url, userAgent, contentDisposition, mimeType);
-            }
+#endif
         }
     }
 }
