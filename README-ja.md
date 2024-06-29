@@ -40,10 +40,29 @@ Android13, Adreno 619で実行した画面
 - [TLabVKeyborad](https://github.com/TLabAltoh/TLabVKeyborad)
 
 ### インストール
+<details><summary>こちらをご覧ください</summary>
 
-リポジトリをクローン，またはリリースからダウンロードし，UnityのAssetフォルダに配置してください
+#### Submodule
+以下のコマンドでリポジトリをクローンしてください
+```
+git clone https://github.com/TLabAltoh/TLabWebView.git
+```
+or
+```
+git submodule add https://github.com/TLabAltoh/TLabWebView.git
+```
+
+#### UPM
+Unity Package Managerで```add package from git ...```から以下のurlでパッケージをダウンロードしてください
+```
+https://github.com/TLabAltoh/TLabWebView.git#upm
+```
+
+</details>
 
 ### セットアップ
+
+<details><summary>こちらをご覧ください</summary>
 
 - Build Settings
 
@@ -70,6 +89,14 @@ UNITYWEBVIEW_ANDROID_ENABLE_CAMERA
 ```
 ```
 UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
+```
+
+</details>
+
+### Prefab
+以下に置いてあるプレハブをCanvasに追加することでWebViewを実装できます
+```
+/Resources/TLabWebView.prefab
 ```
 
 ## お知らせ
