@@ -42,9 +42,29 @@ Screenshot run on Android 13, Adreno 619
 
 ### Installing
 
-Clone the repository or download it from the release and place it in the Asset folder of Unity
+<details><summary>Please see here</summary>
+
+#### Submodule
+Clone this repository with the following command
+```
+git clone https://github.com/TLabAltoh/TLabWebView.git
+```
+or
+```
+git submodule add https://github.com/TLabAltoh/TLabWebView.git
+```
+
+#### UPM
+```add package from git URL ...```
+```
+https://github.com/TLabAltoh/TLabWebView.git#upm
+```
+
+</details>
 
 ### Set Up
+
+<details><summary>Please see here</summary>
 
 - Build Settings
 
@@ -70,6 +90,14 @@ UNITYWEBVIEW_ANDROID_ENABLE_CAMERA
 ```
 ```
 UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
+```
+
+</details>
+
+### Prefab
+Prefab is here. Just add prefab to the canvas to implement webview
+```
+/Resources/TLabWebView.prefab
 ```
 
 ## NOTICE
