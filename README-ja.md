@@ -29,7 +29,7 @@ Android13, Adreno 619で実行した画面
 
 |       |                          |
 | ----- | ------------------------ |
-| OS    | Android 10 ~ 13          |
+| OS    | Android 10 ~ 14          |
 | GPU   | Qualcomm Adreno 505, 619 |
 | Unity | 2021.3                   |
 
