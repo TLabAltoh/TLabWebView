@@ -34,6 +34,9 @@ namespace TLab.Android.WebView
 		[Header("Event Callback")]
 		[SerializeField] private EventCallback m_jsEventCallback = new EventCallback();
 
+		[Header("Other Option")]
+		[SerializeField] private string[] m_intentFilters;
+
 		public int webWidth => m_webWidth;
 
 		public int webHeight => m_webHeight;
@@ -140,7 +143,7 @@ namespace TLab.Android.WebView
 		}
 
 		public byte[] GetWebBuffer(string key)
-        {
+		{
 			if (m_state != State.INITIALIZED)
 			{
 				return new byte[0];
@@ -644,7 +647,7 @@ namespace TLab.Android.WebView
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			m_NativePlugin.Call(
-				"setOnPageFinish", 
+				"setOnPageFinish",
 				m_jsEventCallback.onPageFinish);
 #endif
 		}
@@ -659,7 +662,7 @@ namespace TLab.Android.WebView
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			m_NativePlugin.Call(
-				"setOnDownloadFinish", 
+				"setOnDownloadFinish",
 				m_jsEventCallback.dlEvent.onFinish);
 #endif
 		}
@@ -674,7 +677,7 @@ namespace TLab.Android.WebView
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			m_NativePlugin.Call(
-				"setOnDownloadStart", 
+				"setOnDownloadStart",
 				m_jsEventCallback.dlEvent.onStart);
 #endif
 		}
@@ -707,7 +710,7 @@ namespace TLab.Android.WebView
 		/// <param name="go"></param>
 		/// <param name="func"></param>
 		public void SetOnCatchDownloadUrl(string go, string func)
-        {
+		{
 			m_jsEventCallback.catchDlUrlEvent.go = go;
 			m_jsEventCallback.catchDlUrlEvent.func = func;
 
@@ -722,11 +725,24 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="filters"></param>
+		public void SetIntentFilters(string[] filters)
+		{
+			m_intentFilters = filters;
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("setIntentFilters", filters);
+#endif
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="url"></param>
 		/// <param name="userAgent"></param>
 		/// <param name="contentDisposition"></param>
 		/// <param name="mimetype"></param>
-		public void DownloadFromUrl(string url, string userAgent, 
+		public void DownloadFromUrl(string url, string userAgent,
 			string contentDisposition, string mimetype)
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -840,6 +856,8 @@ namespace TLab.Android.WebView
 				SetOnPageFinish(m_jsEventCallback.onPageFinish);
 				SetOnDownloadStart(m_jsEventCallback.dlEvent.onStart);
 				SetOnDownloadFinish(m_jsEventCallback.dlEvent.onFinish);
+
+				SetIntentFilters(m_intentFilters);
 
 				SetOnCatchDownloadUrl(
 					m_jsEventCallback.catchDlUrlEvent.go,
