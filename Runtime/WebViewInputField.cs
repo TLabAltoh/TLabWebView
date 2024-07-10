@@ -1,9 +1,9 @@
 using UnityEngine;
-using TLab.InputField;
+using TLab.VKeyborad;
 
 namespace TLab.Android.WebView
 {
-    public class TLabWebViewInputField : TLabInputFieldBase
+    public class WebViewInputField : InputFieldBase
     {
         [Header("WebView")]
         [SerializeField] private TLabWebView m_webview;

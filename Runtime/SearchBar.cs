@@ -1,10 +1,10 @@
 using UnityEngine;
 using TMPro;
-using TLab.InputField;
+using TLab.VKeyborad;
 
 namespace TLab.Android.WebView
 {
-    public class SearchBar : TLabInputFieldBase
+    public class SearchBar : InputFieldBase
     {
         [Header("WebView")]
         [SerializeField] private TLabWebView m_webview;

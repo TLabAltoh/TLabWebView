@@ -87,7 +87,7 @@ namespace TLab.Android.WebView
 		/// <param name="webHeight"></param>
 		/// <param name="texWidth"></param>
 		/// <param name="texHeight"></param>
-		public void Init(
+		public void InitResolution(
 			int webWidth, int webHeight,
 			int texWidth, int texHeight)
 		{
@@ -96,8 +96,38 @@ namespace TLab.Android.WebView
 
 			m_texWidth = texWidth;
 			m_texHeight = texHeight;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="webWidth"></param>
+		/// <param name="webHeight"></param>
+		/// <param name="texWidth"></param>
+		/// <param name="texHeight"></param>
+		public void Init(
+			int webWidth, int webHeight,
+			int texWidth, int texHeight)
+		{
+			InitResolution(webWidth, webHeight, texWidth, texHeight);
 
 			Init();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="url"></param>
+		/// <param name="dlOption"></param>
+		/// <param name="subDir"></param>
+		public void InitOption(
+			string url, DownloadOption dlOption, string subDir)
+		{
+			m_url = url;
+
+			m_dlOption = dlOption;
+
+			m_dlSubDir = subDir;
 		}
 
 		/// <summary>
@@ -115,11 +145,7 @@ namespace TLab.Android.WebView
 			int texWidth, int texHeight,
 			string url, DownloadOption dlOption, string subDir)
 		{
-			m_url = url;
-
-			m_dlOption = dlOption;
-
-			m_dlSubDir = subDir;
+			InitOption(url, dlOption, subDir);
 
 			Init(webWidth, webHeight, texWidth, texHeight);
 		}
@@ -818,7 +844,7 @@ namespace TLab.Android.WebView
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		private IEnumerator InitTask()
+		public IEnumerator InitTask()
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			// I cannot find the way to preload (load on startup)
@@ -833,6 +859,8 @@ namespace TLab.Android.WebView
 				NativePlugin.DummyRenderEvent(0);
 			}
 #endif
+
+			//Debug.Log(THIS_NAME + "State.INITIALISING");
 
 			m_state = State.INITIALISING;
 
@@ -885,6 +913,8 @@ namespace TLab.Android.WebView
 
 			m_state = State.INITIALIZED;
 #endif
+
+			//Debug.Log(THIS_NAME + "State.INITIALIZED");
 		}
 
 		/// <summary>

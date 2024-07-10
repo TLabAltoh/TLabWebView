@@ -2952,6 +2952,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TLabWebView
       objectReference: {fileID: 0}
+    - target: {fileID: 6721217010310261587, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6721217010310261598, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
       propertyPath: m_Camera
       value: 
@@ -3107,6 +3111,10 @@ PrefabInstance:
     - target: {fileID: 7108934748825899564, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7155534287284649268, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7225607103907126638, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
       propertyPath: m_SizeDelta.x
