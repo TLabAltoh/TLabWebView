@@ -1,5 +1,5 @@
 ﻿#define DEBUG
-//#undef DEBUG
+#undef DEBUG
 
 using System.Collections;
 using System;
