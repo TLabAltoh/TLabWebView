@@ -1,5 +1,5 @@
 ﻿#define DEBUG
-#undef DEBUG
+//#undef DEBUG
 
 using System.Collections;
 using System;
@@ -929,6 +929,11 @@ namespace TLab.Android.WebView
 
 			if ((texID != IntPtr.Zero) && (texID != m_prevTexID))
 			{
+				// Unity's external texture temporarily lacks
+				// the native texture reference, but Unity's
+				// texture is immediately updated with the
+				// existing native texture.
+
 				var tmp = (Texture2D)m_rawImage.texture;
 				tmp.UpdateExternalTexture(texID);
 
@@ -948,10 +953,23 @@ namespace TLab.Android.WebView
 			bool flag = NativePlugin.GetSharedBufferUpdateFlag(rawObject);
 			if (flag)
 			{
-				Debug.Log(THIS_NAME + "update unity texture");
-				m_rawImage.texture = new Texture2D(m_texWidth, m_texHeight, TextureFormat.RGBA32, false, true);
-				NativePlugin.SetUnityTextureID(rawObject, (long)m_rawImage.texture.GetNativeTexturePtr());
+				// Destroy the shared texture and verify that
+				// the native plugin no longer references the
+				// Unity texture.
+
+				var tmp = new Texture2D(m_texWidth, m_texHeight, TextureFormat.RGBA32, false, true);
+
+				NativePlugin.SetUnityTextureID(rawObject, (long)tmp.GetNativeTexturePtr());
 				NativePlugin.SetHardwareBufferUpdateFlag(rawObject, false);
+
+				var release = m_rawImage.texture;
+
+				m_rawImage.texture = tmp;
+
+				if (release != null)
+				{
+					Destroy(release);
+				}
 			}
 #endif
 		}
@@ -999,7 +1017,14 @@ namespace TLab.Android.WebView
 			}
 
 			m_NativePlugin.Call("Destroy");
+			m_NativePlugin.Dispose();
 			m_NativePlugin = null;
+
+			if (m_rawImage.texture != null)
+			{
+				Destroy(m_rawImage.texture);
+				m_rawImage.texture = null;
+			}
 
 			m_state = State.DESTROYED;
 #endif
