@@ -1,6 +1,8 @@
 ﻿#define DEBUG
-#undef DEBUG
+//#undef DEBUG
 
+using System.Runtime.InteropServices;
+using System.Collections.Generic;
 using System.Collections;
 using System;
 using UnityEngine;
@@ -60,8 +62,52 @@ namespace TLab.Android.WebView
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 		private AndroidJavaObject m_NativePlugin;
 
+		private class DeletableNativePlugin
+		{
+			public Texture texture;
+			public AndroidJavaObject androidJavaObject;
+
+			public DeletableNativePlugin(Texture texture, AndroidJavaObject androidJavaObject)
+			{
+				this.texture = texture;
+				this.androidJavaObject = androidJavaObject;
+			}
+		}
+
+		private static Queue<DeletableNativePlugin> m_deletableNativePlugins = new Queue<DeletableNativePlugin>();
+
 		private IntPtr m_rawObject;
 #endif
+
+		private delegate void RenderEventDelegate(int id);
+
+		private static RenderEventDelegate DestroyNativePluginHandle = new RenderEventDelegate(DestroyNativePlugin);
+
+		private static IntPtr DestroyNativePluginHandlePtr = Marshal.GetFunctionPointerForDelegate(DestroyNativePluginHandle);
+
+		[AOT.MonoPInvokeCallback(typeof(RenderEventDelegate))]
+		private static void DestroyNativePlugin(int id)
+		{
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			foreach (var deletable in m_deletableNativePlugins)
+			{
+				if (deletable.androidJavaObject != null)
+				{
+					deletable.androidJavaObject.Call("Destroy");
+					deletable.androidJavaObject.Dispose();
+					deletable.androidJavaObject = null;
+				}
+
+				if (deletable.texture != null)
+				{
+					Destroy(deletable.texture);
+					deletable.texture = null;
+				}
+			}
+
+			m_deletableNativePlugins.Clear();
+#endif
+		}
 
 		private IntPtr m_prevTexID;
 
@@ -1011,19 +1057,25 @@ namespace TLab.Android.WebView
 		private void Destroy()
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			if (m_NativePlugin == null)
-			{
-				return;
-			}
 
-			m_NativePlugin.Call("Destroy");
-			m_NativePlugin.Dispose();
+			var deletable = new DeletableNativePlugin(m_rawImage.texture, m_NativePlugin);
+
+			m_deletableNativePlugins.Enqueue(deletable);
+
 			m_NativePlugin = null;
+			m_rawImage.texture = null;
 
-			if (m_rawImage.texture != null)
+			// I need to call this function on unity's render thread
+			// because releaseSharedTexture() call GLES or Vulkan
+			// function and it needs to be called on render thread.
+
+			if (SystemInfo.renderingThreadingMode == UnityEngine.Rendering.RenderingThreadingMode.MultiThreaded)
 			{
-				Destroy(m_rawImage.texture);
-				m_rawImage.texture = null;
+				GL.IssuePluginEvent(DestroyNativePluginHandlePtr, 0);
+			}
+			else
+			{
+				DestroyNativePlugin(0);
 			}
 
 			m_state = State.DESTROYED;
