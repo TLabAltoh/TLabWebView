@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using TMPro;
 using TLab.VKeyborad;
@@ -13,6 +14,8 @@ namespace TLab.Android.WebView
         [SerializeField] private TextMeshProUGUI m_searchBar;
 
         [System.NonSerialized] public string m_text = "";
+
+        private string THIS_NAME => "[" + this.GetType() + "] ";
 
         #region KEY_EVENT
 
@@ -49,23 +52,22 @@ namespace TLab.Android.WebView
 
         public void LoadUrl()
         {
-            var https = "https://";
-            var http = "http://";
-            var hedder = "";
-            if (m_searchBar.text.Length > http.Length)
+            const string HTTPS_PREFIX = "https://";
+            const string HTTP_PREFIX = "http://";
+
+            string url;
+
+            if (m_searchBar.text.StartsWith(HTTPS_PREFIX) || m_searchBar.text.StartsWith(HTTP_PREFIX))
             {
-                if (m_searchBar.text.Substring(0, https.Length - 1) != https &&
-                    m_searchBar.text.Substring(0, http.Length - 1) != http)
-                {
-                    hedder = "https://www.google.com/search?q=";
-                }
+                url = m_searchBar.text;
             }
             else
             {
-                hedder = "https://www.google.com/search?q=";
+
+                url = $"https://www.google.com/search?q={m_searchBar.text}";
             }
 
-            m_webview.LoadUrl(hedder + m_searchBar.text);
+            m_webview.LoadUrl(url);
         }
 
         public void Display()
@@ -76,6 +78,7 @@ namespace TLab.Android.WebView
         public void AddKey(string key)
         {
             m_text += key;
+
             Display();
         }
     }
