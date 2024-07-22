@@ -4,6 +4,7 @@ namespace TLab.Android.WebView.Test
 {
     public class DestroyTest : MonoBehaviour
     {
+        [SerializeField] private TLabWebView m_webview;
         [SerializeField] private GameObject m_prefab;
 
         public void OnButtonClick()
