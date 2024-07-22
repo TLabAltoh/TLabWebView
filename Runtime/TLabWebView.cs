@@ -1,5 +1,5 @@
 ﻿#define DEBUG
-#undef DEBUG
+//#undef DEBUG
 
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
@@ -64,12 +64,10 @@ namespace TLab.Android.WebView
 
 		private class DeletableNativePlugin
 		{
-			public Texture texture;
 			public AndroidJavaObject androidJavaObject;
 
-			public DeletableNativePlugin(Texture texture, AndroidJavaObject androidJavaObject)
+			public DeletableNativePlugin(AndroidJavaObject androidJavaObject)
 			{
-				this.texture = texture;
 				this.androidJavaObject = androidJavaObject;
 			}
 		}
@@ -96,12 +94,6 @@ namespace TLab.Android.WebView
 					deletable.androidJavaObject.Call("Destroy");
 					deletable.androidJavaObject.Dispose();
 					deletable.androidJavaObject = null;
-				}
-
-				if (deletable.texture != null)
-				{
-					Destroy(deletable.texture);
-					deletable.texture = null;
 				}
 			}
 
@@ -918,9 +910,7 @@ namespace TLab.Android.WebView
 
 			m_rawObject = m_NativePlugin.GetRawObject();
 
-			m_rawImage.texture = new Texture2D(m_texWidth, m_texHeight, TextureFormat.ARGB32, false, false);
-
-			m_prevTexID = m_rawImage.texture.GetNativeTexturePtr();
+			m_prevTexID = IntPtr.Zero;
 
 			if (m_NativePlugin != null)
 			{
@@ -969,8 +959,6 @@ namespace TLab.Android.WebView
 		private void UpdateGLESFrame()
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			int rawObject = (int)m_NativePlugin.GetRawObject();
-
 			var texID = GetBindedPlatformTextureID();
 
 			if ((texID != IntPtr.Zero) && (texID != m_prevTexID))
@@ -980,8 +968,15 @@ namespace TLab.Android.WebView
 				// texture is immediately updated with the
 				// existing native texture.
 
-				var tmp = (Texture2D)m_rawImage.texture;
-				tmp.UpdateExternalTexture(texID);
+				if (m_rawImage.texture == null)
+				{
+					m_rawImage.texture = Texture2D.CreateExternalTexture(m_texWidth, m_texHeight, TextureFormat.ARGB32, false, false, texID);
+				}
+				else
+				{
+					var tmp0 = (Texture2D)m_rawImage.texture;
+					tmp0.UpdateExternalTexture(texID);
+				}
 
 				m_prevTexID = texID;
 			}
@@ -1058,11 +1053,17 @@ namespace TLab.Android.WebView
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 
-			var deletable = new DeletableNativePlugin(m_rawImage.texture, m_NativePlugin);
+			var deletable = new DeletableNativePlugin(m_NativePlugin);
 
 			m_deletableNativePlugins.Enqueue(deletable);
 
 			m_NativePlugin = null;
+
+			// I need to call destroy in main thread
+			// This may delete the external texture sooner than
+			// the native plugin's destroy process, but this is
+			// currently not a problem.
+			Destroy(m_rawImage.texture);
 			m_rawImage.texture = null;
 
 			// I need to call this function on unity's render thread
