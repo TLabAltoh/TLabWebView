@@ -107,6 +107,20 @@ namespace TLab.Android.WebView
 
 		private UpdateFrameFunc m_updateFrameFunc;
 
+
+		private static Vector2Int m_screenFullRes;
+
+		/// <summary>
+		/// https://github.com/TLabAltoh/TLabWebView/issues/6
+		/// </summary>
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
+		private static void PreInitWebView()
+		{
+			m_screenFullRes = new Vector2Int(Screen.width, Screen.height);
+
+			//Debug.Log(THIS_NAME + $"screen resolution: {Screen.width}, {Screen.height}");
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -941,7 +955,7 @@ namespace TLab.Android.WebView
 				m_NativePlugin.Call("initialize",
 					m_webWidth, m_webHeight,
 					m_texWidth, m_texHeight,
-					Screen.width, Screen.height, m_url, isVulkan);
+					m_screenFullRes.x, m_screenFullRes.y, m_url, isVulkan);
 			}
 
 			while (!IsInitialized())
