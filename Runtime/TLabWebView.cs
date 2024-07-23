@@ -910,6 +910,8 @@ namespace TLab.Android.WebView
 
 			m_rawObject = m_NativePlugin.GetRawObject();
 
+			m_rawImage.texture = null;
+
 			m_prevTexID = IntPtr.Zero;
 
 			if (m_NativePlugin != null)
@@ -968,14 +970,20 @@ namespace TLab.Android.WebView
 				// texture is immediately updated with the
 				// existing native texture.
 
+				const string SUB_TAG = " [gles multi instance] ";
+
+				Debug.Log(THIS_NAME + SUB_TAG + m_rawImage.texture);
+
 				if (m_rawImage.texture == null)
 				{
 					m_rawImage.texture = Texture2D.CreateExternalTexture(m_texWidth, m_texHeight, TextureFormat.ARGB32, false, false, texID);
+					Debug.Log(THIS_NAME + SUB_TAG + "create external new: " + texID);
 				}
 				else
 				{
 					var tmp0 = (Texture2D)m_rawImage.texture;
 					tmp0.UpdateExternalTexture(texID);
+					Debug.Log(THIS_NAME + SUB_TAG + "update external new: " + texID);
 				}
 
 				m_prevTexID = texID;
