@@ -1,5 +1,5 @@
 ﻿#define DEBUG
-//#undef DEBUG
+#undef DEBUG
 
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
@@ -972,18 +972,18 @@ namespace TLab.Android.WebView
 
 				const string SUB_TAG = " [gles multi instance] ";
 
-				Debug.Log(THIS_NAME + SUB_TAG + m_rawImage.texture);
+				//Debug.Log(THIS_NAME + SUB_TAG + m_rawImage.texture);
 
 				if (m_rawImage.texture == null)
 				{
 					m_rawImage.texture = Texture2D.CreateExternalTexture(m_texWidth, m_texHeight, TextureFormat.ARGB32, false, false, texID);
-					Debug.Log(THIS_NAME + SUB_TAG + "create external new: " + texID);
+					//Debug.Log(THIS_NAME + SUB_TAG + "create external new: " + texID);
 				}
 				else
 				{
 					var tmp0 = (Texture2D)m_rawImage.texture;
 					tmp0.UpdateExternalTexture(texID);
-					Debug.Log(THIS_NAME + SUB_TAG + "update external new: " + texID);
+					//Debug.Log(THIS_NAME + SUB_TAG + "update external new: " + texID);
 				}
 
 				m_prevTexID = texID;
