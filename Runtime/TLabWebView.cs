@@ -220,6 +220,18 @@ namespace TLab.Android.WebView
 #endif
 		}
 
+		public void AlertDialogOnSelectOption(string id, string option)
+		{
+			if (m_state != State.INITIALIZED)
+			{
+				return;
+			}
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("alertDialogOnSelectOption", id, option);
+#endif
+		}
+
 		public byte[] GetWebBuffer(string key)
 		{
 			if (m_state != State.INITIALIZED)
@@ -984,7 +996,7 @@ namespace TLab.Android.WebView
 				// texture is immediately updated with the
 				// existing native texture.
 
-				const string SUB_TAG = " [gles multi instance] ";
+				//const string SUB_TAG = " [gles multi instance] ";
 
 				//Debug.Log(THIS_NAME + SUB_TAG + m_rawImage.texture);
 
