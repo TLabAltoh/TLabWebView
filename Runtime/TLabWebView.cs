@@ -1,5 +1,5 @@
 ﻿#define DEBUG
-#undef DEBUG
+//#undef DEBUG
 
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
@@ -38,6 +38,9 @@ namespace TLab.Android.WebView
 
 		[Header("Other Option")]
 		[SerializeField] private string[] m_intentFilters;
+		[SerializeField] private bool m_useHardwareBuffer = true;
+
+		#region PROPERTYS
 
 		public int webWidth => m_webWidth;
 
@@ -53,9 +56,13 @@ namespace TLab.Android.WebView
 
 		public State state => m_state;
 
-		private static string THIS_NAME = "[tlabwebview] ";
+		public bool useHardwareBuffer => m_useHardwareBuffer;
 
 		public EventCallback jsEventCallback => m_jsEventCallback;
+
+		#endregion PROPERTYS
+
+		private static string THIS_NAME = "[tlabwebview] ";
 
 		private State m_state = State.NONE;
 
@@ -109,6 +116,10 @@ namespace TLab.Android.WebView
 
 
 		private static Vector2Int m_screenFullRes;
+
+		//
+		// Initialize
+		//
 
 		/// <summary>
 		/// https://github.com/TLabAltoh/TLabWebView/issues/6
@@ -220,18 +231,99 @@ namespace TLab.Android.WebView
 #endif
 		}
 
-		public void AlertDialogOnSelectOption(string id, string option)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerator InitTask()
 		{
-			if (m_state != State.INITIALIZED)
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			// I cannot find the way to preload (load on startup)
+			// jni shared library. so call library function and
+			// load dinamically here. (call unity plugin on load)
+			if (SystemInfo.renderingThreadingMode == UnityEngine.Rendering.RenderingThreadingMode.MultiThreaded)
 			{
-				return;
+				GL.IssuePluginEvent(NativePlugin.DummyRenderEventFunc(), 0);
 			}
+			else
+			{
+				NativePlugin.DummyRenderEvent(0);
+			}
+#endif
+
+			//Debug.Log(THIS_NAME + "State.INITIALISING");
+
+			m_state = State.INITIALISING;
+
+			yield return new WaitForEndOfFrame();
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("alertDialogOnSelectOption", id, option);
+
+			m_NativePlugin = new AndroidJavaObject("com.tlab.libwebview.UnityConnect");
+
+			m_rawObject = m_NativePlugin.GetRawObject();
+
+			m_rawImage.texture = null;
+
+			m_prevTexID = IntPtr.Zero;
+
+			if (m_NativePlugin != null)
+			{
+				SetDownloadOption(m_dlOption);
+				SetDownloadSubDir(m_dlSubDir);
+
+				SetOnPageFinish(m_jsEventCallback.onPageFinish);
+				SetOnDownloadStart(m_jsEventCallback.dlEvent.onStart);
+				SetOnDownloadFinish(m_jsEventCallback.dlEvent.onFinish);
+
+				SetIntentFilters(m_intentFilters);
+
+				SetOnCatchDownloadUrl(
+					m_jsEventCallback.catchDlUrlEvent.go,
+					m_jsEventCallback.catchDlUrlEvent.func);
+
+				SetDownloadEventVariableName(
+					m_jsEventCallback.dlEvent.varDlUrlName,
+					m_jsEventCallback.dlEvent.varDlUriName,
+					m_jsEventCallback.dlEvent.varDlIdName);
+
+				var isVulkan = (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Vulkan);
+
+				if (!m_useHardwareBuffer)
+				{
+					m_updateFrameFunc = UpdateFrameWithByteBuffer;
+				}
+				else
+				{
+					m_updateFrameFunc = isVulkan ? UpdateVulkanFrame : UpdateGLESFrame;
+				}
+
+				m_NativePlugin.Call("initialize",
+					m_webWidth, m_webHeight,
+					m_texWidth, m_texHeight,
+					m_screenFullRes.x, m_screenFullRes.y, m_url, isVulkan, m_useHardwareBuffer);
+			}
+
+			while (!IsInitialized())
+			{
+				yield return new WaitForEndOfFrame();
+			}
+
+			m_state = State.INITIALIZED;
 #endif
+
+			//Debug.Log(THIS_NAME + "State.INITIALIZED");
 		}
 
+		//
+		// Javascript
+		//
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
 		public byte[] GetWebBuffer(string key)
 		{
 			if (m_state != State.INITIALIZED)
@@ -245,6 +337,26 @@ namespace TLab.Android.WebView
 			return new byte[0];
 #endif
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="js"></param>
+		public void EvaluateJS(string js)
+		{
+			if (m_state != State.INITIALIZED)
+			{
+				return;
+			}
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("evaluateJS", js);
+#endif
+		}
+
+		//
+		// View to HardwareBuffer Renderer
+		//
 
 		/// <summary>
 		/// 
@@ -264,6 +376,10 @@ namespace TLab.Android.WebView
 #endif
 		}
 
+		//
+		// URL
+		//
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -276,6 +392,54 @@ namespace TLab.Android.WebView
 			return null;
 #endif
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="url"></param>
+		public void LoadUrl(string url)
+		{
+			if (m_state != State.INITIALIZED)
+			{
+				return;
+			}
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("loadUrl", url);
+#endif
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="onPageFinish"></param>
+		public void SetOnPageFinish(string onPageFinish)
+		{
+			m_jsEventCallback.onPageFinish = onPageFinish;
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call(
+				"setOnPageFinish",
+				m_jsEventCallback.onPageFinish);
+#endif
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="filters"></param>
+		public void SetIntentFilters(string[] filters)
+		{
+			m_intentFilters = filters;
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("setIntentFilters", filters);
+#endif
+		}
+
+		//
+		// HTML
+		//
 
 		/// <summary>
 		/// 
@@ -329,6 +493,27 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="html"></param>
+		/// <param name="baseURL"></param>
+		public void LoadHTML(string html, string baseURL)
+		{
+			if (m_state != State.INITIALIZED)
+			{
+				return;
+			}
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("loadHtml", html, baseURL);
+#endif
+		}
+
+		//
+		// UserAgent
+		//
+
+		/// <summary>
+		/// 
+		/// </summary>
 		public void CaptureUserAgent()
 		{
 			if (m_state != State.INITIALIZED)
@@ -376,38 +561,9 @@ namespace TLab.Android.WebView
 #endif
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="url"></param>
-		public void LoadUrl(string url)
-		{
-			if (m_state != State.INITIALIZED)
-			{
-				return;
-			}
-
-#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("loadUrl", url);
-#endif
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="html"></param>
-		/// <param name="baseURL"></param>
-		public void LoadHTML(string html, string baseURL)
-		{
-			if (m_state != State.INITIALIZED)
-			{
-				return;
-			}
-
-#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("loadHtml", html, baseURL);
-#endif
-		}
+		//
+		// Zoom IN/OUT
+		//
 
 		/// <summary>
 		/// 
@@ -438,6 +594,10 @@ namespace TLab.Android.WebView
 			m_NativePlugin.Call("zoomOut");
 #endif
 		}
+
+		//
+		// Scroll
+		//
 
 		/// <summary>
 		/// 
@@ -512,8 +672,8 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="js"></param>
-		public void EvaluateJS(string js)
+		/// <param name="top"></param>
+		public void PageUp(bool top)
 		{
 			if (m_state != State.INITIALIZED)
 			{
@@ -521,9 +681,29 @@ namespace TLab.Android.WebView
 			}
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("evaluateJS", js);
+			m_NativePlugin.Call("pageUp", top);
 #endif
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="bottom"></param>
+		public void PageDown(bool bottom)
+		{
+			if (m_state != State.INITIALIZED)
+			{
+				return;
+			}
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("pageDown", bottom);
+#endif
+		}
+
+		//
+		// Go forward/back
+		//
 
 		/// <summary>
 		/// 
@@ -555,23 +735,9 @@ namespace TLab.Android.WebView
 #endif
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="x"></param>
-		/// <param name="y"></param>
-		/// <param name="eventNum"></param>
-		public void TouchEvent(int x, int y, int eventNum)
-		{
-			if (m_state != State.INITIALIZED)
-			{
-				return;
-			}
-
-#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("touchEvent", x, y, eventNum);
-#endif
-		}
+		//
+		// Resize
+		//
 
 		/// <summary>
 		/// 
@@ -637,11 +803,17 @@ namespace TLab.Android.WebView
 #endif
 		}
 
+		//
+		// TouchEvent
+		//
+
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="top"></param>
-		public void PageUp(bool top)
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <param name="eventNum"></param>
+		public void TouchEvent(int x, int y, int eventNum)
 		{
 			if (m_state != State.INITIALIZED)
 			{
@@ -649,21 +821,13 @@ namespace TLab.Android.WebView
 			}
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("pageUp", top);
+			m_NativePlugin.Call("touchEvent", x, y, eventNum);
 #endif
 		}
 
-		public void PageDown(bool bottom)
-		{
-			if (m_state != State.INITIALIZED)
-			{
-				return;
-			}
-
-#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("pageDown", bottom);
-#endif
-		}
+		//
+		// KeyEvent
+		//
 
 		/// <summary>
 		/// 
@@ -696,6 +860,10 @@ namespace TLab.Android.WebView
 #endif
 		}
 
+		//
+		// Cache
+		//
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -727,20 +895,9 @@ namespace TLab.Android.WebView
 #endif
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="onPageFinish"></param>
-		public void SetOnPageFinish(string onPageFinish)
-		{
-			m_jsEventCallback.onPageFinish = onPageFinish;
-
-#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call(
-				"setOnPageFinish",
-				m_jsEventCallback.onPageFinish);
-#endif
-		}
+		//
+		// Download
+		//
 
 		/// <summary>
 		/// 
@@ -815,19 +972,6 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="filters"></param>
-		public void SetIntentFilters(string[] filters)
-		{
-			m_intentFilters = filters;
-
-#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("setIntentFilters", filters);
-#endif
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
 		/// <param name="url"></param>
 		/// <param name="userAgent"></param>
 		/// <param name="contentDisposition"></param>
@@ -889,6 +1033,10 @@ namespace TLab.Android.WebView
 #endif
 		}
 
+		//
+		//
+		//
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -903,83 +1051,9 @@ namespace TLab.Android.WebView
 #endif
 		}
 
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		public IEnumerator InitTask()
-		{
-#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			// I cannot find the way to preload (load on startup)
-			// jni shared library. so call library function and
-			// load dinamically here. (call unity plugin on load)
-			if (SystemInfo.renderingThreadingMode == UnityEngine.Rendering.RenderingThreadingMode.MultiThreaded)
-			{
-				GL.IssuePluginEvent(NativePlugin.DummyRenderEventFunc(), 0);
-			}
-			else
-			{
-				NativePlugin.DummyRenderEvent(0);
-			}
-#endif
-
-			//Debug.Log(THIS_NAME + "State.INITIALISING");
-
-			m_state = State.INITIALISING;
-
-			yield return new WaitForEndOfFrame();
-
-#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-
-			m_NativePlugin = new AndroidJavaObject("com.tlab.libwebview.UnityConnect");
-
-			m_rawObject = m_NativePlugin.GetRawObject();
-
-			m_rawImage.texture = null;
-
-			m_prevTexID = IntPtr.Zero;
-
-			if (m_NativePlugin != null)
-			{
-				SetDownloadOption(m_dlOption);
-				SetDownloadSubDir(m_dlSubDir);
-
-				SetOnPageFinish(m_jsEventCallback.onPageFinish);
-				SetOnDownloadStart(m_jsEventCallback.dlEvent.onStart);
-				SetOnDownloadFinish(m_jsEventCallback.dlEvent.onFinish);
-
-				SetIntentFilters(m_intentFilters);
-
-				SetOnCatchDownloadUrl(
-					m_jsEventCallback.catchDlUrlEvent.go,
-					m_jsEventCallback.catchDlUrlEvent.func);
-
-				SetDownloadEventVariableName(
-					m_jsEventCallback.dlEvent.varDlUrlName,
-					m_jsEventCallback.dlEvent.varDlUriName,
-					m_jsEventCallback.dlEvent.varDlIdName);
-
-				var isVulkan = (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Vulkan);
-
-				m_updateFrameFunc = isVulkan ? UpdateVulkanFrame : UpdateGLESFrame;
-
-				m_NativePlugin.Call("initialize",
-					m_webWidth, m_webHeight,
-					m_texWidth, m_texHeight,
-					m_screenFullRes.x, m_screenFullRes.y, m_url, isVulkan);
-			}
-
-			while (!IsInitialized())
-			{
-				yield return new WaitForEndOfFrame();
-			}
-
-			m_state = State.INITIALIZED;
-#endif
-
-			//Debug.Log(THIS_NAME + "State.INITIALIZED");
-		}
+		//
+		// UpdateFrame
+		//
 
 		/// <summary>
 		/// 
@@ -1048,6 +1122,39 @@ namespace TLab.Android.WebView
 			}
 #endif
 		}
+
+		/// <summary>
+		/// Update frame from CPU side. This function is for non-hardware buffer use case.
+		/// </summary>
+		private void UpdateFrameWithByteBuffer()
+		{
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			var buf = (byte[])(Array)m_NativePlugin.Call<sbyte[]>("getByteBuffer");
+
+			if (buf == null)
+            {
+				return;
+            }
+
+			if (m_rawImage.texture == null)
+			{
+				m_rawImage.texture = new Texture2D(m_texWidth, m_texHeight, TextureFormat.RGBA32, false, true);
+			}
+			else
+			{
+                if (m_rawImage.texture.width * m_rawImage.texture.height * 4 != buf.Length)
+                {
+                    Destroy(m_rawImage.texture);
+
+                    m_rawImage.texture = new Texture2D(m_texWidth, m_texHeight, TextureFormat.RGBA32, false, true);
+                }
+            }
+
+            var tmp = (Texture2D)m_rawImage.texture;
+            tmp.LoadRawTextureData(buf);
+            tmp.Apply();
+#endif
+        }
 
 		/// <summary>
 		/// 
