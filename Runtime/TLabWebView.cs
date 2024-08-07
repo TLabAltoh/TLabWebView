@@ -1,5 +1,5 @@
 ﻿#define DEBUG
-//#undef DEBUG
+#undef DEBUG
 
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
@@ -1154,7 +1154,7 @@ namespace TLab.Android.WebView
             tmp.LoadRawTextureData(buf);
             tmp.Apply();
 #endif
-        }
+		}
 
 		/// <summary>
 		/// 
