@@ -1755,6 +1755,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -32
       objectReference: {fileID: 0}
+    - target: {fileID: 4577992619078758283, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4999283766628033071, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2371,6 +2375,22 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 732371173}
+    - target: {fileID: 8357724044250159002, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
+      propertyPath: m_url
+      value: https://www.htmq.com/html5/input.shtml
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357724044250159002, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
+      propertyPath: m_useCustomWidget
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357724044250159002, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
+      propertyPath: m_useHardwareBuffer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357724044250159002, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
+      propertyPath: m_disableHtml5Widget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8375428003235316855, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
