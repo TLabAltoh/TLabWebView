@@ -107,8 +107,10 @@ MonoBehaviour:
     catchDlUrlEvent:
       go: 
       func: 
-  m_uniqueId: {fileID: 0}
   m_intentFilters: []
+  m_fps: 30
+  m_useHardwareBuffer: 1
+  m_disableHtml5Widget: 0
 --- !u!114 &2559546592015856753
 MonoBehaviour:
   m_ObjectHideFlags: 0

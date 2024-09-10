@@ -21,10 +21,13 @@ namespace TLab.Android.WebView
 		public static extern void UpdateSurface(int instance_ptr);
 
 		[DllImport(LIB_JNI_LIB_WEBVIEW)]
-		public static extern IntPtr GetBindedPlatformTextureID(int instance_ptr);
+		public static extern IntPtr GetPlatformTextureID(int instance_ptr);
 
 		[DllImport(LIB_JNI_LIB_WEBVIEW)]
 		public static extern void SetUnityTextureID(int instance_ptr, long unity_texture_id);
+
+		[DllImport(LIB_JNI_LIB_WEBVIEW)]
+		public static extern bool ContentExists(int instance_ptr);
 
 		[DllImport(LIB_JNI_LIB_WEBVIEW)]
 		public static extern bool GetSharedBufferUpdateFlag(int instance_ptr);

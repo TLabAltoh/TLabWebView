@@ -38,6 +38,8 @@ namespace TLab.Android.WebView
 
 		[Header("Other Option")]
 		[SerializeField] private string[] m_intentFilters;
+		[SerializeField, Min(0)] private int m_fps = 30;
+		[SerializeField] private bool m_useCustomWidget = false;
 		[SerializeField] private bool m_useHardwareBuffer = true;
 
 		#region PROPERTYS
@@ -108,12 +110,12 @@ namespace TLab.Android.WebView
 #endif
 		}
 
-		private IntPtr m_prevTexID;
-
 		private delegate void UpdateFrameFunc();
 
 		private UpdateFrameFunc m_updateFrameFunc;
 
+		private Texture2D m_loadingView;
+		private Texture2D m_contentView;
 
 		private static Vector2Int m_screenFullRes;
 
@@ -131,7 +133,7 @@ namespace TLab.Android.WebView
 		}
 
 		/// <summary>
-		/// Launch initialize task if WebView is not initialized yet
+		/// Launch initialize task if WebView is not initialized yet.
 		/// </summary>
 		public void Init()
 		{
@@ -142,7 +144,7 @@ namespace TLab.Android.WebView
 		}
 
 		/// <summary>
-		/// Set resolution for both WebView and texture (called on initialization)
+		/// Set resolution for both WebView and texture (called on initialization).
 		/// </summary>
 		/// <param name="webWidth">WebView width</param>
 		/// <param name="webHeight">WebView height</param>
@@ -160,7 +162,7 @@ namespace TLab.Android.WebView
 		}
 
 		/// <summary>
-		/// Launch initialize task if WebView is not initialized yet
+		/// Launch initialize task if WebView is not initialized yet.
 		/// </summary>
 		/// <param name="webWidth">WebView width</param>
 		/// <param name="webHeight">WebView height</param>
@@ -192,15 +194,15 @@ namespace TLab.Android.WebView
 		}
 
 		/// <summary>
-		/// Launch initialize task if WebView is not initialized yet
+		/// Launch initialize task if WebView is not initialized yet.
 		/// </summary>
 		/// <param name="webWidth">WebView width</param>
 		/// <param name="webHeight">WebView height</param>
 		/// <param name="texWidth">Texture width</param>
 		/// <param name="texHeight">Texture height</param>
 		/// <param name="url">URL that loads first</param>
-		/// <param name="dlOption">The directory of the device to which the content is being downloaded.</param>
-		/// <param name="subDir">Subdirectory of the directory from which the content is downloaded.</param>
+		/// <param name="dlOption">The directory of the device to which the content is being downloaded</param>
+		/// <param name="subDir">Subdirectory of the directory from which the content is downloaded</param>
 		public void Init(
 			int webWidth, int webHeight,
 			int texWidth, int texHeight,
@@ -214,7 +216,7 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// If it returns true, this WebView component is already initialized.
 		/// </summary>
-		/// <returns>Whether or not this WebView component is initialized.</returns>
+		/// <returns>Whether or not this WebView component is initialized</returns>
 		public bool IsInitialized()
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -259,11 +261,12 @@ namespace TLab.Android.WebView
 
 			m_NativePlugin = new AndroidJavaObject("com.tlab.libwebview.UnityConnect");
 
+			m_loadingView = Texture2D.linearGrayTexture;
+			m_contentView = null;
+
+			m_rawImage.texture = m_loadingView;
+
 			m_rawObject = m_NativePlugin.GetRawObject();
-
-			m_rawImage.texture = null;
-
-			m_prevTexID = IntPtr.Zero;
 
 			if (m_NativePlugin != null)
 			{
@@ -299,7 +302,8 @@ namespace TLab.Android.WebView
 				m_NativePlugin.Call("initialize",
 					m_webWidth, m_webHeight,
 					m_texWidth, m_texHeight,
-					m_screenFullRes.x, m_screenFullRes.y, m_url, isVulkan, m_useHardwareBuffer);
+					m_screenFullRes.x, m_screenFullRes.y,
+					m_url, isVulkan, m_useHardwareBuffer, m_useCustomWidget, m_fps);
 			}
 
 			while (!IsInitialized())
@@ -318,10 +322,10 @@ namespace TLab.Android.WebView
 		//
 
 		/// <summary>
-		/// Retrieve buffers that allocated in order to map javascript buffre to java 
+		/// Retrieve buffers that allocated in order to map javascript buffer to java 
 		/// <see href="https://github.com/TLabAltoh/TLabWebView/blob/master/Runtime/Test/DownloadEventTest.cs">example is here</see>
 		/// </summary>
-		/// <param name="key">Name of buffers that allocated in order to map javascript buffre to java</param>
+		/// <param name="key">Name of buffers that allocated in order to map javascript buffer to java</param>
 		/// <returns>current buffer value</returns>
 		public byte[] GetWebBuffer(string key)
 		{
@@ -375,7 +379,7 @@ namespace TLab.Android.WebView
 		/// Return the texture pointer of the WebView frame (NOTE: In Vulkan, the VkImage pointer returned by this function could not be used for UpdateExternalTexture. This issue has not been fixed).
 		/// </summary>
 		/// <returns>texture pointer of the webview frame (Vulkan: VkImage, OpenGLES: TexID)</returns>
-		public IntPtr GetBindedPlatformTextureID()
+		public IntPtr GetPlatformTextureID()
 		{
 			if (m_state != State.INITIALIZED)
 			{
@@ -383,7 +387,7 @@ namespace TLab.Android.WebView
 			}
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			return NativePlugin.GetBindedPlatformTextureID((int)m_rawObject);
+			return NativePlugin.GetPlatformTextureID((int)m_rawObject);
 #else
 			return IntPtr.Zero;
 #endif
@@ -394,9 +398,9 @@ namespace TLab.Android.WebView
 		//
 
 		/// <summary>
-		/// Get current url that the webview instance is loading
+		/// Get current url that the webview instance is loading.
 		/// </summary>
-		/// <returns>current url that the webview instance is loading</returns>
+		/// <returns>Current url that the webview instance is loading</returns>
 		public string GetUrl()
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -409,7 +413,7 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// Loads the given URL.
 		/// </summary>
-		/// <param name="url">the URL of the resource to load.</param>
+		/// <param name="url">The URL of the resource to load</param>
 		public void LoadUrl(string url)
 		{
 			if (m_state != State.INITIALIZED)
@@ -438,7 +442,7 @@ namespace TLab.Android.WebView
 		}
 
 		/// <summary>
-		/// Register url patterns to treat as deep links
+		/// Register url patterns to treat as deep links.
 		/// </summary>
 		/// <param name="filters">Url patterns that are treated as deep links (regular expression)</param>
 		public void SetIntentFilters(string[] filters)
@@ -472,7 +476,7 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// Capture specific HTML elements currently displayed async.
 		/// </summary>
-		/// <param name="id">target html element tag</param>
+		/// <param name="id">Target HTML element tag</param>
 		public void CaptureElementById(string id)
 		{
 			if (m_state != State.INITIALIZED)
@@ -488,7 +492,7 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// Gets the HTML value currently captured.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>HTML currently captured</returns>
 		public string CurrentHTMLCaptured()
 		{
 			if (m_state != State.INITIALIZED)
@@ -506,7 +510,7 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// Loads the given HTML.
 		/// </summary>
-		/// <param name="html">The html of the resource to load.</param>
+		/// <param name="html">The HTML of the resource to load</param>
 		/// <param name="baseURL">baseURL</param>
 		public void LoadHTML(string html, string baseURL)
 		{
@@ -542,7 +546,7 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// Gets the currently captured userAgent string.
 		/// </summary>
-		/// <returns>UserAnget String that is currently being captured.</returns>
+		/// <returns>UserAgent String that is currently being captured</returns>
 		public string GetUserAgent()
 		{
 			if (m_state != State.INITIALIZED)
@@ -561,7 +565,7 @@ namespace TLab.Android.WebView
 		/// Update userAgent with the given userAgent string.
 		/// </summary>
 		/// <param name="ua">UserAgent string</param>
-		/// <param name="reload">If true, reload web page when userAgent is updated.</param>
+		/// <param name="reload">If true, reload web page when userAgent is updated</param>
 		public void SetUserAgent(string ua, bool reload)
 		{
 			if (m_state != State.INITIALIZED)
@@ -613,7 +617,7 @@ namespace TLab.Android.WebView
 		//
 
 		/// <summary>
-		/// Get content's scroll position x
+		/// Get content's scroll position x.
 		/// </summary>
 		/// <returns>Page content's current scroll position x</returns>
 		public int GetScrollX()
@@ -631,7 +635,7 @@ namespace TLab.Android.WebView
 		}
 
 		/// <summary>
-		/// Get content's scroll position y
+		/// Get content's scroll position y.
 		/// </summary>
 		/// <returns>Page content's current scroll position y</returns>
 		public int GetScrollY()
@@ -649,7 +653,7 @@ namespace TLab.Android.WebView
 		}
 
 		/// <summary>
-		/// Set content's scroll position
+		/// Set content's scroll position.
 		/// </summary>
 		/// <param name="x">Scroll position x of the destination</param>
 		/// <param name="y">Scroll position y of the destination</param>
@@ -666,7 +670,7 @@ namespace TLab.Android.WebView
 		}
 
 		/// <summary>
-		/// Move the scrolled position of webview
+		/// Move the scrolled position of webview.
 		/// </summary>
 		/// <param name="x">The amount of pixels to scroll by horizontally</param>
 		/// <param name="y">The amount of pixels to scroll by vertically</param>
@@ -685,7 +689,7 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// Scrolls the contents of this WebView up by half the view size.
 		/// </summary>
-		/// <param name="top">true to jump to the top of the page</param>
+		/// <param name="top">True to jump to the top of the page</param>
 		public void PageUp(bool top)
 		{
 			if (m_state != State.INITIALIZED)
@@ -701,7 +705,7 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// Scrolls the contents of this WebView down by half the page size.
 		/// </summary>
-		/// <param name="bottom">true to jump to bottom of page</param>
+		/// <param name="bottom">True to jump to bottom of page</param>
 		public void PageDown(bool bottom)
 		{
 			if (m_state != State.INITIALIZED)
@@ -753,7 +757,7 @@ namespace TLab.Android.WebView
 		//
 
 		/// <summary>
-		/// Update WebView texture resolusion
+		/// Update WebView texture resolution
 		/// </summary>
 		/// <param name="texWidth">Texture new width</param>
 		/// <param name="texHeight">Texture new height</param>
@@ -764,6 +768,8 @@ namespace TLab.Android.WebView
 				return;
 			}
 
+			m_rawImage.texture = m_loadingView;
+
 			m_texWidth = texWidth;
 			m_texHeight = texHeight;
 
@@ -773,7 +779,7 @@ namespace TLab.Android.WebView
 		}
 
 		/// <summary>
-		/// Update WebView resolution
+		/// Update WebView resolution.
 		/// </summary>
 		/// <param name="webWidth">WebView new width</param>
 		/// <param name="webHeight">WebView new height</param>
@@ -784,6 +790,8 @@ namespace TLab.Android.WebView
 				return;
 			}
 
+			m_rawImage.texture = m_loadingView;
+
 			m_webWidth = webWidth;
 			m_webHeight = webHeight;
 
@@ -793,7 +801,7 @@ namespace TLab.Android.WebView
 		}
 
 		/// <summary>
-		/// Update resolusion for both WebView and Texture
+		/// Update resolution for both WebView and Texture.
 		/// </summary>
 		/// <param name="texWidth">Texture new width</param>
 		/// <param name="texHeight">Texture new height</param>
@@ -805,6 +813,8 @@ namespace TLab.Android.WebView
 			{
 				return;
 			}
+
+			m_rawImage.texture = m_loadingView;
 
 			m_texWidth = texWidth;
 			m_texHeight = texHeight;
@@ -821,7 +831,7 @@ namespace TLab.Android.WebView
 		//
 
 		/// <summary>
-		/// Dispatch of a touch event
+		/// Dispatch of a touch event.
 		/// </summary>
 		/// <param name="x">Touch position x</param>
 		/// <param name="y">Touch position y</param>
@@ -843,7 +853,7 @@ namespace TLab.Android.WebView
 		//
 
 		/// <summary>
-		/// Dispatch of a basic keycode event
+		/// Dispatch of a basic keycode event.
 		/// </summary>
 		/// <param name="key">'a', 'b', 'A' ....</param>
 		public void KeyEvent(char key)
@@ -859,7 +869,7 @@ namespace TLab.Android.WebView
 		}
 
 		/// <summary>
-		/// Dispatch of a backspace key event
+		/// Dispatch of a backspace key event.
 		/// </summary>
 		public void BackSpace()
 		{
@@ -880,7 +890,7 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// Clear WebView Cache.
 		/// </summary>
-		/// <param name="includeDiskFiles">If false, only the RAM cache will be cleared.</param>
+		/// <param name="includeDiskFiles">If false, only the RAM cache will be cleared</param>
 		public void ClearCache(bool includeDiskFiles)
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -899,7 +909,7 @@ namespace TLab.Android.WebView
 		}
 
 		/// <summary>
-		/// Clear WebView History
+		/// Clear WebView History.
 		/// </summary>
 		public void ClearHistory()
 		{
@@ -967,8 +977,8 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// Set up the callback of the on catch download URL with the given parameters.
 		/// </summary>
-		/// <param name="go">The name of the game object that has the function of the target instance.</param>
-		/// <param name="func">Target Instance Function Name.</param>
+		/// <param name="go">The name of the game object that has the function of the target instance</param>
+		/// <param name="func">Target Instance Function Name</param>
 		public void SetOnCatchDownloadUrl(string go, string func)
 		{
 			m_jsEventCallback.catchDlUrlEvent.go = go;
@@ -983,7 +993,7 @@ namespace TLab.Android.WebView
 		}
 
 		/// <summary>
-		/// Request file download to Download Manager
+		/// Request file download to Download Manager.
 		/// </summary>
 		/// <param name="url">The full url to the content that should be downloaded</param>
 		/// <param name="userAgent">The user agent to be used for the download</param>
@@ -1013,7 +1023,7 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// Specifies the subdirectory from which the files are to be downloaded.
 		/// </summary>
-		/// <param name="dlSubDir">The subdirectory from which the files are downloaded. This directory is created under the directory specified in DownloadOption.</param>
+		/// <param name="dlSubDir">The subdirectory from which the files are downloaded. This directory is created under the directory specified in DownloadOption</param>
 		public void SetDownloadSubDir(string dlSubDir)
 		{
 			m_dlSubDir = dlSubDir;
@@ -1036,7 +1046,7 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// Get the progress of the download event currently being recorded.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>Current download progress (0 ~ 1)</returns>
 		public float GetDownloadProgress()
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -1074,32 +1084,36 @@ namespace TLab.Android.WebView
 		private void UpdateGLESFrame()
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			var texID = GetBindedPlatformTextureID();
+			int rawObject = (int)m_NativePlugin.GetRawObject();
 
-			if ((texID != IntPtr.Zero) && (texID != m_prevTexID))
+			var frag = NativePlugin.GetSharedBufferUpdateFlag(rawObject);
+			if (!frag)
 			{
-				// Unity's external texture temporarily lacks
-				// the native texture reference, but Unity's
-				// texture is immediately updated with the
-				// existing native texture.
+				var texID = GetPlatformTextureID();
 
-				//const string SUB_TAG = " [gles multi instance] ";
+				// In OpenGLES API, the texture created by
+				// CreateExternalTexture has same texture pointer
+				// as function's arguments. And texture size is
+				// not same with passed as arguments to display
+				// (it seems same to native texture size). In
+				// OpenGLES API, is buffer allocated for texture
+				// size passed as arguments? If so, do I need to
+				// pass zero (or one) for argments of texture size
+				// to reduce overhead of memory allocation?
 
-				//Debug.Log(THIS_NAME + SUB_TAG + m_rawImage.texture);
+				var tmp = Texture2D.CreateExternalTexture(1, 1, TextureFormat.ARGB32, false, false, texID);
 
-				if (m_rawImage.texture == null)
+				Debug.Log(THIS_NAME + $"[CreateExternalTexture] size: {tmp.width}, {tmp.height}, id: {texID}, {tmp.GetNativeTexturePtr()}");
+
+				NativePlugin.SetHardwareBufferUpdateFlag(rawObject, true);
+
+				m_rawImage.texture = tmp;
+				var release = m_contentView;
+				if (release != null)
 				{
-					m_rawImage.texture = Texture2D.CreateExternalTexture(m_texWidth, m_texHeight, TextureFormat.ARGB32, false, false, texID);
-					//Debug.Log(THIS_NAME + SUB_TAG + "create external new: " + texID);
+					Destroy(release);
 				}
-				else
-				{
-					var tmp0 = (Texture2D)m_rawImage.texture;
-					tmp0.UpdateExternalTexture(texID);
-					//Debug.Log(THIS_NAME + SUB_TAG + "update external new: " + texID);
-				}
-
-				m_prevTexID = texID;
+				m_contentView = tmp;
 			}
 #endif
 		}
@@ -1113,25 +1127,25 @@ namespace TLab.Android.WebView
 			int rawObject = (int)m_NativePlugin.GetRawObject();
 
 			bool flag = NativePlugin.GetSharedBufferUpdateFlag(rawObject);
-			if (flag)
+			if (!flag)
 			{
 				// Destroy the shared texture and verify that
 				// the native plugin no longer references the
-				// Unity texture.
+				// Unity texture. Because in Vulkan API, native
+				// plugin directly copied buffer to Unity texture.
 
 				var tmp = new Texture2D(m_texWidth, m_texHeight, TextureFormat.RGBA32, false, true);
 
 				NativePlugin.SetUnityTextureID(rawObject, (long)tmp.GetNativeTexturePtr());
-				NativePlugin.SetHardwareBufferUpdateFlag(rawObject, false);
-
-				var release = m_rawImage.texture;
+				NativePlugin.SetHardwareBufferUpdateFlag(rawObject, true);
 
 				m_rawImage.texture = tmp;
-
+				var release = m_contentView;
 				if (release != null)
 				{
 					Destroy(release);
 				}
+				m_contentView = tmp;
 			}
 #endif
 		}
@@ -1143,29 +1157,27 @@ namespace TLab.Android.WebView
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			var buf = (byte[])(Array)m_NativePlugin.Call<sbyte[]>("getByteBuffer");
+			// Because the content is already validated, there is
+			// no need to buffer's null validation here.
 
-			if (buf == null)
+			if (m_contentView == null)
 			{
-				return;
-			}
-
-			if (m_rawImage.texture == null)
-			{
-				m_rawImage.texture = new Texture2D(m_texWidth, m_texHeight, TextureFormat.RGBA32, false, true);
+				m_contentView = new Texture2D(m_texWidth, m_texHeight, TextureFormat.RGBA32, false, true);
 			}
 			else
 			{
-				if (m_rawImage.texture.width * m_rawImage.texture.height * 4 != buf.Length)
+				if (m_contentView.width * m_contentView.height * 4 != buf.Length)
 				{
-					Destroy(m_rawImage.texture);
+					Destroy(m_contentView);
 
-					m_rawImage.texture = new Texture2D(m_texWidth, m_texHeight, TextureFormat.RGBA32, false, true);
+					m_contentView = new Texture2D(m_texWidth, m_texHeight, TextureFormat.RGBA32, false, true);
 				}
 			}
 
-			var tmp = (Texture2D)m_rawImage.texture;
-			tmp.LoadRawTextureData(buf);
-			tmp.Apply();
+			m_contentView.LoadRawTextureData(buf);
+			m_contentView.Apply();
+
+			m_rawImage.texture = m_contentView;
 #endif
 		}
 
@@ -1196,7 +1208,11 @@ namespace TLab.Android.WebView
 				NativePlugin.UpdateSurface((int)m_NativePlugin.GetRawObject());
 			}
 
-			m_updateFrameFunc.Invoke();
+			var frag = NativePlugin.ContentExists((int)m_NativePlugin.GetRawObject());
+			if (frag)
+			{
+				m_updateFrameFunc.Invoke();
+			}
 #endif
 		}
 
@@ -1217,8 +1233,8 @@ namespace TLab.Android.WebView
 			// This may delete the external texture sooner than
 			// the native plugin's destroy process, but this is
 			// currently not a problem.
-			Destroy(m_rawImage.texture);
-			m_rawImage.texture = null;
+			Destroy(m_contentView);
+			m_contentView = null;
 
 			// I need to call this function on unity's render thread
 			// because releaseSharedTexture() call GLES or Vulkan

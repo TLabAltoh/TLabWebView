@@ -66,9 +66,9 @@ https://github.com/TLabAltoh/TLabWebView.git#upm
 
 - Build Settings
 
-| Property      | Value   |
-| ------------- | ------- |
-| Platform      | Android |
+| Property | Value   |
+| -------- | ------- |
+| Platform | Android |
 
 - Project Settings
 
@@ -104,6 +104,26 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 ```.xml
 <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 ```
+
+- Android WebViewは [WebXR API](https://developer.mozilla.org/ja/docs/Web/API/WebXR_Device_API/Fundamentals) をサポートしません．
+
+- OculusQuestはいくつかのHTML5 input タグをサポートしていません(下記を参照してください)．もしそれらを使用したい場合は，```TLabWebView```クラスの```useCustomWidget```を有効にしてください．Androidで標準に使用されているウィジェットの代わりに，プラグイン側で実装されたウィジェットがWebView上に表示されます．下記は，OculusQuestがサポートしていないHTML5 input タグに対するプラグインの対応状況です．
+
+    ### 動作を検証済み
+
+    - [x] [datetime-local](https://developer.mozilla.org/ja/docs/Web/HTML/Element/input/datetime-local)
+    - [x] [date](https://developer.mozilla.org/ja/docs/Web/HTML/Element/input/date)
+    - [x] [time](https://developer.mozilla.org/ja/docs/Web/HTML/Element/input/time)
+    - [x] [color](https://developer.mozilla.org/ja/docs/Web/HTML/Element/input/color)
+    - [ ] [week](https://developer.mozilla.org/ja/docs/Web/HTML/Element/input/week)
+    - [ ] [month](https://developer.mozilla.org/ja/docs/Web/HTML/Element/input/month)
+
+    ### 動作未検証
+
+    - [ ] [image](https://developer.mozilla.org/ja/docs/Web/HTML/Element/input/image)
+    - [ ] [file](https://developer.mozilla.org/ja/docs/Web/HTML/Element/input/file)
+
+    また，プラグイン側で実装されたウィジェットは，JavascriptからHTML5 input タグのポインターイベント([```onmousedown```](https://developer.mozilla.org/ja/docs/Web/API/Element/mousedown_event), [```onclick```](https://developer.mozilla.org/ja/docs/Web/API/Element/click_event))を無効にすることで実装されています．この実装は，いくつかのウェブサイトでは問題を引き起こす可能性があることを留意してください．
 
 - このプラグインは，OpenGLESとVulkanの両方をサポートしていますが，Vulkanでビルドをする場合はAndroidデバイスがVulkanだけでなくOpenGLESもサポートしていることが必要になります．これは，プラグインの一部の処理がGLES APIに依存しているためです．
 
