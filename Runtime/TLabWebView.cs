@@ -24,39 +24,43 @@ namespace TLab.Android.WebView
 		[SerializeField] private string m_url = "https://youtube.com";
 
 		[Header("File Download Settings")]
-		[SerializeField] private DownloadOption m_dlOption;
-		[SerializeField] private string m_dlSubDir = "downloads";
+		[SerializeField] private DownloadOption m_downloadOption;
+		[SerializeField] private string m_downloadSubDirectory = "downloads";
 
 		[Header("Resolution Setting")]
-		[SerializeField] private int m_webWidth = 1024;
-		[SerializeField] private int m_webHeight = 1024;
-		[SerializeField] private int m_texWidth = 512;
-		[SerializeField] private int m_texHeight = 512;
+		[SerializeField] private Vector2Int m_webSize = new Vector2Int(1024, 1024);
+		[SerializeField] private Vector2Int m_texSize = new Vector2Int(512, 512);
 
 		[Header("Event Callback")]
 		[SerializeField] private EventCallback m_jsEventCallback = new EventCallback();
 
-		[Header("Other Option")]
+		[Header("Other Settings")]
 		[SerializeField] private string[] m_intentFilters;
-		[SerializeField, Min(0)] private int m_fps = 30;
+		[SerializeField, Min(1)] private int m_fps = 30;
 		[SerializeField] private bool m_useCustomWidget = false;
 		[SerializeField] private CaptureMode m_captureMode = CaptureMode.HARDWARE_BUFFER;
 
 		#region PROPERTYS
 
-		public int webWidth => m_webWidth;
+		public RawImage rawImage => m_rawImage;
 
-		public int webHeight => m_webHeight;
+		public string url => m_url;
 
-		public int texWidth => m_texWidth;
+		public Vector2Int webSize => m_webSize;
 
-		public int texHeight => m_texHeight;
+		public Vector2Int texSize => m_texSize;
 
-		public DownloadOption dlOption => m_dlOption;
+		public DownloadOption downloadOption => m_downloadOption;
 
-		public string subDir => m_dlSubDir;
+		public string downloadSubDirectory => m_downloadSubDirectory;
 
 		public State state => m_state;
+
+		public int fps => m_fps;
+
+		public string[] intentFilters => m_intentFilters;
+
+		public bool useCustomWidget => m_useCustomWidget;
 
 		public CaptureMode captureMode => m_captureMode;
 
@@ -144,35 +148,24 @@ namespace TLab.Android.WebView
 		}
 
 		/// <summary>
-		/// Set resolution for both WebView and texture (called on initialization).
+		/// Set resolution for both WebView and Texture (called on initialization).
 		/// </summary>
-		/// <param name="webWidth">WebView width</param>
-		/// <param name="webHeight">WebView height</param>
-		/// <param name="texWidth">Texture width</param>
-		/// <param name="texHeight">Texture height</param>
-		public void InitResolution(
-			int webWidth, int webHeight,
-			int texWidth, int texHeight)
+		/// <param name="webSize">Web Size</param>
+		/// <param name="texSize">Tex Size</param>
+		public void InitResolution(Vector2Int webSize, Vector2Int texSize)
 		{
-			m_webWidth = webWidth;
-			m_webHeight = webHeight;
-
-			m_texWidth = texWidth;
-			m_texHeight = texHeight;
+			m_webSize = webSize;
+			m_texSize = texSize;
 		}
 
 		/// <summary>
 		/// Launch initialize task if WebView is not initialized yet.
 		/// </summary>
-		/// <param name="webWidth">WebView width</param>
-		/// <param name="webHeight">WebView height</param>
-		/// <param name="texWidth">Texture width</param>
-		/// <param name="texHeight">Texture height</param>
-		public void Init(
-			int webWidth, int webHeight,
-			int texWidth, int texHeight)
+		/// <param name="webSize">Web Size</param>
+		/// <param name="texSize">Tex Size</param>
+		public void Init(Vector2Int webSize, Vector2Int texSize)
 		{
-			InitResolution(webWidth, webHeight, texWidth, texHeight);
+			InitResolution(webSize, texSize);
 
 			Init();
 		}
@@ -181,36 +174,35 @@ namespace TLab.Android.WebView
 		/// 
 		/// </summary>
 		/// <param name="url">URL that loads first</param>
-		/// <param name="dlOption">The directory of the device to which the content is being downloaded.</param>
-		/// <param name="subDir">Subdirectory of the directory from which the content is downloaded.</param>
-		public void InitOption(
-			string url, DownloadOption dlOption, string subDir)
+		/// <param name="fps">Fps fo rendering</param>
+		/// <param name="downloadOption">The directory of the device to which the content is being downloaded.</param>
+		/// <param name="downloadSubDirectory">Sub directory of the directory from which the content is downloaded.</param>
+		public void InitOption(string url, int fps, DownloadOption downloadOption, string downloadSubDirectory)
 		{
 			m_url = url;
 
-			m_dlOption = dlOption;
+			m_fps = fps;
 
-			m_dlSubDir = subDir;
+			m_downloadOption = downloadOption;
+
+			m_downloadSubDirectory = downloadSubDirectory;
 		}
 
 		/// <summary>
 		/// Launch initialize task if WebView is not initialized yet.
 		/// </summary>
-		/// <param name="webWidth">WebView width</param>
-		/// <param name="webHeight">WebView height</param>
-		/// <param name="texWidth">Texture width</param>
-		/// <param name="texHeight">Texture height</param>
+		/// <param name="webSize">Web Size</param>
+		/// <param name="texSize">Tex Size</param>
 		/// <param name="url">URL that loads first</param>
-		/// <param name="dlOption">The directory of the device to which the content is being downloaded</param>
-		/// <param name="subDir">Subdirectory of the directory from which the content is downloaded</param>
-		public void Init(
-			int webWidth, int webHeight,
-			int texWidth, int texHeight,
-			string url, DownloadOption dlOption, string subDir)
+		/// <param name="fps">Fps fo rendering</param>
+		/// <param name="downloadOption">The directory of the device to which the content is being downloaded</param>
+		/// <param name="downloadSubDirectory">Subdirectory of the directory from which the content is downloaded</param>
+		public void Init(Vector2Int webSize, Vector2Int texSize,
+			string url, int fps, DownloadOption downloadOption, string downloadSubDirectory)
 		{
-			InitOption(url, dlOption, subDir);
+			InitOption(url, fps, downloadOption, downloadSubDirectory);
 
-			Init(webWidth, webHeight, texWidth, texHeight);
+			Init(webSize, texSize);
 		}
 
 		/// <summary>
@@ -273,23 +265,25 @@ namespace TLab.Android.WebView
 
 			if (m_NativePlugin != null)
 			{
-				SetDownloadOption(m_dlOption);
-				SetDownloadSubDir(m_dlSubDir);
+				SetDownloadOption(m_downloadOption);
+				SetDownloadSubDirectory(downloadSubDirectory);
 
 				SetOnPageFinish(m_jsEventCallback.onPageFinish);
-				SetOnDownloadStart(m_jsEventCallback.dlEvent.onStart);
-				SetOnDownloadFinish(m_jsEventCallback.dlEvent.onFinish);
+				SetOnDownloadStart(m_jsEventCallback.downloadEvent.onStart);
+				SetOnDownloadFinish(m_jsEventCallback.downloadEvent.onFinish);
 
 				SetIntentFilters(m_intentFilters);
 
+				SetFps(m_fps);
+
 				SetOnCatchDownloadUrl(
-					m_jsEventCallback.catchDlUrlEvent.go,
-					m_jsEventCallback.catchDlUrlEvent.func);
+					m_jsEventCallback.catchDownloadUrlEvent.go,
+					m_jsEventCallback.catchDownloadUrlEvent.func);
 
 				SetDownloadEventVariableName(
-					m_jsEventCallback.dlEvent.varDlUrlName,
-					m_jsEventCallback.dlEvent.varDlUriName,
-					m_jsEventCallback.dlEvent.varDlIdName);
+					m_jsEventCallback.downloadEvent.varUrl,
+					m_jsEventCallback.downloadEvent.varUri,
+					m_jsEventCallback.downloadEvent.varId);
 
 				var isVulkan = (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Vulkan);
 
@@ -307,10 +301,10 @@ namespace TLab.Android.WebView
 				}
 
 				m_NativePlugin.Call("initialize",
-					m_webWidth, m_webHeight,
-					m_texWidth, m_texHeight,
+					m_webSize.x, m_webSize.y,
+					m_texSize.x, m_texSize.y,
 					m_screenFullRes.x, m_screenFullRes.y,
-					m_url, isVulkan, (int)m_captureMode, m_useCustomWidget, m_fps);
+					m_url, isVulkan, (int)m_captureMode, m_useCustomWidget);
 			}
 
 			while (!IsInitialized())
@@ -586,6 +580,21 @@ namespace TLab.Android.WebView
 		}
 
 		//
+		// FPS
+		//
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="fps">Fps fo rendering</param>
+		public void SetFps(int fps)
+		{
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("setFps", fps);
+#endif
+		}
+
+		//
 		// Zoom IN/OUT
 		//
 
@@ -764,11 +773,10 @@ namespace TLab.Android.WebView
 		//
 
 		/// <summary>
-		/// Update WebView texture resolution
+		/// Update Texture resolution
 		/// </summary>
-		/// <param name="texWidth">Texture new width</param>
-		/// <param name="texHeight">Texture new height</param>
-		public void ResizeTex(int texWidth, int texHeight)
+		/// <param name="texSize">Tex Size</param>
+		public void ResizeTex(Vector2Int texSize)
 		{
 			if (m_state != State.INITIALIZED)
 			{
@@ -778,20 +786,18 @@ namespace TLab.Android.WebView
 			if (m_rawImage != null)
 				m_rawImage.texture = m_loadingView;
 
-			m_texWidth = texWidth;
-			m_texHeight = texHeight;
+			m_texSize = texSize;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("resizeTex", texWidth, texHeight);
+			m_NativePlugin.Call("resizeTex", texSize.x, texSize.y);
 #endif
 		}
 
 		/// <summary>
-		/// Update WebView resolution.
+		/// Update WebView resolution
 		/// </summary>
-		/// <param name="webWidth">WebView new width</param>
-		/// <param name="webHeight">WebView new height</param>
-		public void ResizeWeb(int webWidth, int webHeight)
+		/// <param name="webSize"></param>
+		public void ResizeWeb(Vector2Int webSize)
 		{
 			if (m_state != State.INITIALIZED)
 			{
@@ -801,22 +807,19 @@ namespace TLab.Android.WebView
 			if (m_rawImage != null)
 				m_rawImage.texture = m_loadingView;
 
-			m_webWidth = webWidth;
-			m_webHeight = webHeight;
+			m_webSize = webSize;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("resizeWeb", webWidth, webHeight);
+			m_NativePlugin.Call("resizeWeb", webSize.x, webSize.y);
 #endif
 		}
 
 		/// <summary>
-		/// Update resolution for both WebView and Texture.
+		/// Update resolution for both WebView and Texture
 		/// </summary>
-		/// <param name="texWidth">Texture new width</param>
-		/// <param name="texHeight">Texture new height</param>
-		/// <param name="webWidth">WebView new width</param>
-		/// <param name="webHeight">WebView new height</param>
-		public void Resize(int texWidth, int texHeight, int webWidth, int webHeight)
+		/// <param name="texSize">Tex Size</param>
+		/// <param name="webSize">Web Size</param>
+		public void Resize(Vector2Int texSize, Vector2Int webSize)
 		{
 			if (m_state != State.INITIALIZED)
 			{
@@ -826,13 +829,11 @@ namespace TLab.Android.WebView
 			if (m_rawImage != null)
 				m_rawImage.texture = m_loadingView;
 
-			m_texWidth = texWidth;
-			m_texHeight = texHeight;
-			m_webWidth = webWidth;
-			m_webHeight = webHeight;
+			m_texSize = texSize;
+			m_webSize = webSize;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("resize", texWidth, texHeight, webWidth, webHeight);
+			m_NativePlugin.Call("resize", texSize.x, texSize.y, webSize.x, webSize.y);
 #endif
 		}
 
@@ -964,12 +965,12 @@ namespace TLab.Android.WebView
 		/// <param name="onFinish">javascript</param>
 		public void SetOnDownloadFinish(string onFinish)
 		{
-			m_jsEventCallback.dlEvent.onFinish = onFinish;
+			m_jsEventCallback.downloadEvent.onFinish = onFinish;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			m_NativePlugin.Call(
 				"setOnDownloadFinish",
-				m_jsEventCallback.dlEvent.onFinish);
+				m_jsEventCallback.downloadEvent.onFinish);
 #endif
 		}
 
@@ -979,34 +980,34 @@ namespace TLab.Android.WebView
 		/// <param name="onStart">javascript</param>
 		public void SetOnDownloadStart(string onStart)
 		{
-			m_jsEventCallback.dlEvent.onStart = onStart;
+			m_jsEventCallback.downloadEvent.onStart = onStart;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			m_NativePlugin.Call(
 				"setOnDownloadStart",
-				m_jsEventCallback.dlEvent.onStart);
+				m_jsEventCallback.downloadEvent.onStart);
 #endif
 		}
 
 		/// <summary>
 		/// Defines the download event parameter's name. it can be accessed from javascript when a download event occurs.
 		/// </summary>
-		/// <param name="varDlUrlName">URL of the file to be downloaded</param>
-		/// <param name="varDlUriName">The destination for the downloaded file</param>
-		/// <param name="varDlIdName">The ID of the download event</param>
+		/// <param name="varUrl">URL of the file to be downloaded</param>
+		/// <param name="varUri">The destination for the downloaded file</param>
+		/// <param name="varId">The ID of the download event</param>
 		public void SetDownloadEventVariableName(
-			string varDlUrlName, string varDlUriName, string varDlIdName)
+			string varUrl, string varUri, string varId)
 		{
-			m_jsEventCallback.dlEvent.varDlUrlName = varDlUrlName;
-			m_jsEventCallback.dlEvent.varDlUriName = varDlUriName;
-			m_jsEventCallback.dlEvent.varDlIdName = varDlIdName;
+			m_jsEventCallback.downloadEvent.varUrl = varUrl;
+			m_jsEventCallback.downloadEvent.varUri = varUri;
+			m_jsEventCallback.downloadEvent.varId = varId;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			m_NativePlugin.Call(
 				"setDownloadEventVariableName",
-				m_jsEventCallback.dlEvent.varDlUrlName,
-				m_jsEventCallback.dlEvent.varDlUriName,
-				m_jsEventCallback.dlEvent.varDlIdName);
+				m_jsEventCallback.downloadEvent.varUrl,
+				m_jsEventCallback.downloadEvent.varUri,
+				m_jsEventCallback.downloadEvent.varId);
 #endif
 		}
 
@@ -1017,14 +1018,14 @@ namespace TLab.Android.WebView
 		/// <param name="func">Target Instance Function Name</param>
 		public void SetOnCatchDownloadUrl(string go, string func)
 		{
-			m_jsEventCallback.catchDlUrlEvent.go = go;
-			m_jsEventCallback.catchDlUrlEvent.func = func;
+			m_jsEventCallback.catchDownloadUrlEvent.go = go;
+			m_jsEventCallback.catchDownloadUrlEvent.func = func;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			m_NativePlugin.Call(
 				"setOnCatchDownloadUrl",
-				m_jsEventCallback.catchDlUrlEvent.go,
-				m_jsEventCallback.catchDlUrlEvent.func);
+				m_jsEventCallback.catchDownloadUrlEvent.go,
+				m_jsEventCallback.catchDownloadUrlEvent.func);
 #endif
 		}
 
@@ -1049,23 +1050,23 @@ namespace TLab.Android.WebView
 		/// <param name="option">Download location for the files</param>
 		public void SetDownloadOption(DownloadOption option)
 		{
-			m_dlOption = option;
+			m_downloadOption = option;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("setDlOption", (int)m_dlOption);
+			m_NativePlugin.Call("setDownloadOption", (int)m_downloadOption);
 #endif
 		}
 
 		/// <summary>
 		/// Specifies the subdirectory from which the files are to be downloaded.
 		/// </summary>
-		/// <param name="dlSubDir">The subdirectory from which the files are downloaded. This directory is created under the directory specified in DownloadOption</param>
-		public void SetDownloadSubDir(string dlSubDir)
+		/// <param name="downloadSubDirectory">The sub directory from which the files are downloaded. This directory is created under the directory specified in DownloadOption</param>
+		public void SetDownloadSubDirectory(string downloadSubDirectory)
 		{
-			m_dlSubDir = dlSubDir;
+			m_downloadSubDirectory = downloadSubDirectory;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			m_NativePlugin.Call("setDownloadSubDir", m_dlSubDir);
+			m_NativePlugin.Call("setDownloadSubDirectory", downloadSubDirectory);
 #endif
 		}
 
@@ -1169,7 +1170,7 @@ namespace TLab.Android.WebView
 
 				var tmp = Texture2D.CreateExternalTexture(1, 1, TextureFormat.ARGB32, false, false, texID);
 
-				Debug.Log(THIS_NAME + $"[CreateExternalTexture] size: {tmp.width}, {tmp.height}, id: {texID}, {tmp.GetNativeTexturePtr()}");
+				//Debug.Log(THIS_NAME + $"[CreateExternalTexture] size: {tmp.width}, {tmp.height}, id: {texID}, {tmp.GetNativeTexturePtr()}");
 
 				NativePlugin.SetHardwareBufferUpdateFlag(rawObject, true);
 
@@ -1206,7 +1207,7 @@ namespace TLab.Android.WebView
 				// Unity texture. Because in Vulkan API, native
 				// plugin directly copied buffer to Unity texture.
 
-				var tmp = new Texture2D(m_texWidth, m_texHeight, TextureFormat.RGBA32, false, true);
+				var tmp = new Texture2D(m_texSize.x, m_texSize.y, TextureFormat.RGBA32, false, true);
 
 				NativePlugin.SetUnityTextureID(rawObject, (long)tmp.GetNativeTexturePtr());
 				NativePlugin.SetHardwareBufferUpdateFlag(rawObject, true);
@@ -1238,7 +1239,7 @@ namespace TLab.Android.WebView
 
 			if (m_contentView == null)
 			{
-				m_contentView = new Texture2D(m_texWidth, m_texHeight, TextureFormat.RGBA32, false, true);
+				m_contentView = new Texture2D(m_texSize.x, m_texSize.y, TextureFormat.RGBA32, false, true);
 			}
 			else
 			{
@@ -1246,7 +1247,7 @@ namespace TLab.Android.WebView
 				{
 					Destroy(m_contentView);
 
-					m_contentView = new Texture2D(m_texWidth, m_texHeight, TextureFormat.RGBA32, false, true);
+					m_contentView = new Texture2D(m_texSize.x, m_texSize.y, TextureFormat.RGBA32, false, true);
 				}
 			}
 
