@@ -30,6 +30,9 @@ namespace TLab.Android.WebView
 		public static extern bool ContentExists(int instance_ptr);
 
 		[DllImport(LIB_JNI_LIB_WEBVIEW)]
+		public static extern void SetSurface(int instance_ptr, int surface_ptr);
+
+		[DllImport(LIB_JNI_LIB_WEBVIEW)]
 		public static extern bool GetSharedBufferUpdateFlag(int instance_ptr);
 
 		[DllImport(LIB_JNI_LIB_WEBVIEW)]

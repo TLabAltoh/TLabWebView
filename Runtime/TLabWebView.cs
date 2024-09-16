@@ -847,9 +847,14 @@ namespace TLab.Android.WebView
 		/// <param name="surfce"></param>
 		public void SetSurface(IntPtr surfce)
 		{
+			if (m_state != State.INITIALIZED)
+			{
+				return;
+			}
+
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			var surfaceObj = new AndroidJavaObject(surfce);
-			m_NativePlugin.Call("setSurface", surfaceObj);
+			var instance = m_NativePlugin.GetRawObject();
+			NativePlugin.SetSurface((int)instance, (int)surfce);
 #endif
 		}
 
