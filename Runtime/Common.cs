@@ -14,4 +14,11 @@ namespace TLab.Android.WebView
 		/// </summary>
 		DOWNLOAD_FOLDER
 	}
+
+	public enum CaptureMode
+	{
+		HARDWARE_BUFFER,
+		BYTE_BUFFER,
+		SURFACE,
+	}
 }

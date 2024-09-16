@@ -40,7 +40,7 @@ namespace TLab.Android.WebView
 		[SerializeField] private string[] m_intentFilters;
 		[SerializeField, Min(0)] private int m_fps = 30;
 		[SerializeField] private bool m_useCustomWidget = false;
-		[SerializeField] private bool m_useHardwareBuffer = true;
+		[SerializeField] private CaptureMode m_captureMode = CaptureMode.HARDWARE_BUFFER;
 
 		#region PROPERTYS
 
@@ -58,7 +58,7 @@ namespace TLab.Android.WebView
 
 		public State state => m_state;
 
-		public bool useHardwareBuffer => m_useHardwareBuffer;
+		public CaptureMode captureMode => m_captureMode;
 
 		public EventCallback jsEventCallback => m_jsEventCallback;
 
@@ -261,10 +261,13 @@ namespace TLab.Android.WebView
 
 			m_NativePlugin = new AndroidJavaObject("com.tlab.libwebview.UnityConnect");
 
-			m_loadingView = Texture2D.linearGrayTexture;
-			m_contentView = null;
+			if ((m_captureMode != CaptureMode.SURFACE) && (m_rawImage != null))
+			{
+				m_loadingView = Texture2D.linearGrayTexture;
+				m_contentView = null;
 
-			m_rawImage.texture = m_loadingView;
+				m_rawImage.texture = m_loadingView;
+			}
 
 			m_rawObject = m_NativePlugin.GetRawObject();
 
@@ -290,20 +293,24 @@ namespace TLab.Android.WebView
 
 				var isVulkan = (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Vulkan);
 
-				if (!m_useHardwareBuffer)
+				switch (m_captureMode)
 				{
-					m_updateFrameFunc = UpdateFrameWithByteBuffer;
-				}
-				else
-				{
-					m_updateFrameFunc = isVulkan ? UpdateVulkanFrame : UpdateGLESFrame;
+					case CaptureMode.HARDWARE_BUFFER:
+						m_updateFrameFunc = isVulkan ? UpdateVulkanFrame : UpdateGLESFrame;
+						break;
+					case CaptureMode.BYTE_BUFFER:
+						m_updateFrameFunc = UpdateFrameWithByteBuffer;
+						break;
+					case CaptureMode.SURFACE:
+						m_updateFrameFunc = UpdateFrameDummy;
+						break;
 				}
 
 				m_NativePlugin.Call("initialize",
 					m_webWidth, m_webHeight,
 					m_texWidth, m_texHeight,
 					m_screenFullRes.x, m_screenFullRes.y,
-					m_url, isVulkan, m_useHardwareBuffer, m_useCustomWidget, m_fps);
+					m_url, isVulkan, (int)m_captureMode, m_useCustomWidget, m_fps);
 			}
 
 			while (!IsInitialized())
@@ -768,7 +775,8 @@ namespace TLab.Android.WebView
 				return;
 			}
 
-			m_rawImage.texture = m_loadingView;
+			if (m_rawImage != null)
+				m_rawImage.texture = m_loadingView;
 
 			m_texWidth = texWidth;
 			m_texHeight = texHeight;
@@ -790,7 +798,8 @@ namespace TLab.Android.WebView
 				return;
 			}
 
-			m_rawImage.texture = m_loadingView;
+			if (m_rawImage != null)
+				m_rawImage.texture = m_loadingView;
 
 			m_webWidth = webWidth;
 			m_webHeight = webHeight;
@@ -814,7 +823,8 @@ namespace TLab.Android.WebView
 				return;
 			}
 
-			m_rawImage.texture = m_loadingView;
+			if (m_rawImage != null)
+				m_rawImage.texture = m_loadingView;
 
 			m_texWidth = texWidth;
 			m_texHeight = texHeight;
@@ -823,6 +833,32 @@ namespace TLab.Android.WebView
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			m_NativePlugin.Call("resize", texWidth, texHeight, webWidth, webHeight);
+#endif
+		}
+
+		//
+		// Surface
+		//
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="surfce"></param>
+		public void SetSurface(IntPtr surfce)
+		{
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			var surfaceObj = new AndroidJavaObject(surfce);
+			m_NativePlugin.Call("setSurface", surfaceObj);
+#endif
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public void RemoveSurface()
+		{
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("removeSurface");
 #endif
 		}
 
@@ -1081,13 +1117,43 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// 
 		/// </summary>
+		private void UpdateSurface()
+		{
+			// External texture update behaviour
+			// OpenGLES: Use the same texture
+			// Vulkan: Create new VkImage and copy buffer to new one,
+			// Texture Buffer is not shared so in order to update
+			// frame, need to call update frame every frame. (Maybe
+			// this processing is too heavy)
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			if (SystemInfo.renderingThreadingMode == UnityEngine.Rendering.RenderingThreadingMode.MultiThreaded)
+			{
+				GL.IssuePluginEvent(NativePlugin.UpdateSurfaceFunc(), (int)m_NativePlugin.GetRawObject());
+			}
+			else
+			{
+				NativePlugin.UpdateSurface((int)m_NativePlugin.GetRawObject());
+			}
+#endif
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
 		private void UpdateGLESFrame()
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			UpdateSurface();
+
+			var flag = NativePlugin.ContentExists((int)m_NativePlugin.GetRawObject());
+			if (!flag)
+				return;
+
 			int rawObject = (int)m_NativePlugin.GetRawObject();
 
-			var frag = NativePlugin.GetSharedBufferUpdateFlag(rawObject);
-			if (!frag)
+			flag = NativePlugin.GetSharedBufferUpdateFlag(rawObject);
+			if (!flag)
 			{
 				var texID = GetPlatformTextureID();
 
@@ -1124,9 +1190,15 @@ namespace TLab.Android.WebView
 		private void UpdateVulkanFrame()
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			UpdateSurface();
+
+			var flag = NativePlugin.ContentExists((int)m_NativePlugin.GetRawObject());
+			if (!flag)
+				return;
+
 			int rawObject = (int)m_NativePlugin.GetRawObject();
 
-			bool flag = NativePlugin.GetSharedBufferUpdateFlag(rawObject);
+			flag = NativePlugin.GetSharedBufferUpdateFlag(rawObject);
 			if (!flag)
 			{
 				// Destroy the shared texture and verify that
@@ -1156,6 +1228,10 @@ namespace TLab.Android.WebView
 		private void UpdateFrameWithByteBuffer()
 		{
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			var flag = NativePlugin.ContentExists((int)m_NativePlugin.GetRawObject());
+			if (!flag)
+				return;
+
 			var buf = (byte[])(Array)m_NativePlugin.Call<sbyte[]>("getByteBuffer");
 			// Because the content is already validated, there is
 			// no need to buffer's null validation here.
@@ -1182,6 +1258,14 @@ namespace TLab.Android.WebView
 		}
 
 		/// <summary>
+		/// 
+		/// </summary>
+		private void UpdateFrameDummy()
+		{
+
+		}
+
+		/// <summary>
 		/// Request Webview to update frame.
 		/// </summary>
 		public void UpdateFrame()
@@ -1191,28 +1275,8 @@ namespace TLab.Android.WebView
 				return;
 			}
 
-			// External texture update behaviour
-			// OpenGLES: Use the same texture
-			// Vulkan: Create new VkImage and copy buffer to new one,
-			// Texture Buffer is not shared so in order to update
-			// frame, need to call update frame every frame. (Maybe
-			// this processing is too heavy)
-
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			if (SystemInfo.renderingThreadingMode == UnityEngine.Rendering.RenderingThreadingMode.MultiThreaded)
-			{
-				GL.IssuePluginEvent(NativePlugin.UpdateSurfaceFunc(), (int)m_NativePlugin.GetRawObject());
-			}
-			else
-			{
-				NativePlugin.UpdateSurface((int)m_NativePlugin.GetRawObject());
-			}
-
-			var frag = NativePlugin.ContentExists((int)m_NativePlugin.GetRawObject());
-			if (frag)
-			{
-				m_updateFrameFunc.Invoke();
-			}
+			m_updateFrameFunc.Invoke();
 #endif
 		}
 
