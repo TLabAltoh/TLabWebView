@@ -133,5 +133,5 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 - Vulkanのユースケースにおいて，GLES APIへの依存を削除する．
 
 ## リンク
-[スニペット](https://gist.github.com/TLabAltoh/e0512b3367c25d3e1ec28ddbe95da497#file-xr-composition-layers_rendering-md)
-[使用したJavaプラグインのソースコード](https://github.com/TLabAltoh/TLabWebViewPlugin)
+- [スニペット](https://gist.github.com/TLabAltoh/e0512b3367c25d3e1ec28ddbe95da497#file-xr-composition-layers_rendering-md)  
+- [使用したJavaプラグインのソースコード](https://github.com/TLabAltoh/TLabWebViewPlugin)
