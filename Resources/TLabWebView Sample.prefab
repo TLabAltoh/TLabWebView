@@ -6950,6 +6950,26 @@ PrefabInstance:
       propertyPath: m_jsEventCallback.catchDlUrlEvent.func
       value: OnCatchDownloadUrl
       objectReference: {fileID: 0}
+    - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
+      propertyPath: m_jsEventCallback.downloadEvent.onStart
+      value: 'window.TLabWebViewActivity.unitySendMessage(''Download Event Test'',
+        ''OnDownloadStart'', ''download start. url: '' + download_url + '', id: ''
+        + download_id);'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
+      propertyPath: m_jsEventCallback.downloadEvent.onFinish
+      value: "window.TLabWebViewActivity.unitySendMessage('Download Event Test',
+        'OnDownloadFinish', 'download finish. uri: ' + download_uri + ', id: ' +
+        download_id);\r"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
+      propertyPath: m_jsEventCallback.catchDownloadUrlEvent.go
+      value: Download Event Test
+      objectReference: {fileID: 0}
+    - target: {fileID: 6905492866619264919, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
+      propertyPath: m_jsEventCallback.catchDownloadUrlEvent.func
+      value: OnCatchDownloadUrl
+      objectReference: {fileID: 0}
     - target: {fileID: 6960073521778781876, guid: cf5767a7a6501d04fb202c6ed3ef427c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
