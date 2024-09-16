@@ -11,10 +11,7 @@ namespace TLab.Android.WebView.Test
         /// </summary>
         public void ResizeTex()
         {
-            var texWidth = m_webview.texWidth;
-            var texHeight = m_webview.texHeight;
-
-            m_webview.ResizeTex(texWidth / 2, texHeight / 2);
+            m_webview.ResizeTex(m_webview.texSize / 2);
         }
 
         /// <summary>
@@ -22,10 +19,7 @@ namespace TLab.Android.WebView.Test
         /// </summary>
         public void ResizeWeb()
         {
-            var webWidth = m_webview.webWidth;
-            var webHeight = m_webview.webHeight;
-
-            m_webview.ResizeWeb(webWidth / 2, webHeight / 2);
+            m_webview.ResizeWeb(m_webview.webSize / 2);
         }
 
         /// <summary>
@@ -33,13 +27,7 @@ namespace TLab.Android.WebView.Test
         /// </summary>
         public void DownSize()
         {
-            var texWidth = m_webview.texWidth;
-            var texHeight = m_webview.texHeight;
-
-            var webWidth = m_webview.webWidth;
-            var webHeight = m_webview.webHeight;
-
-            m_webview.Resize(texWidth / 2, texHeight / 2, webWidth / 2, webHeight / 2);
+            m_webview.Resize(m_webview.texSize / 2, m_webview.webSize / 2);
         }
 
         /// <summary>
@@ -47,13 +35,7 @@ namespace TLab.Android.WebView.Test
         /// </summary>
         public void UpSize()
         {
-            var texWidth = m_webview.texWidth;
-            var texHeight = m_webview.texHeight;
-
-            var webWidth = m_webview.webWidth;
-            var webHeight = m_webview.webHeight;
-
-            m_webview.Resize(texWidth * 2, texHeight * 2, webWidth * 2, webHeight * 2);
+            m_webview.Resize(m_webview.texSize * 2, m_webview.webSize * 2);
         }
     }
 }

@@ -25,33 +25,49 @@ namespace TLab.Android.WebView.Test
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// // Javascript
+        /// // var download_url : string
+        /// // var download_id : long
+        /// function()
+        /// {
+        ///	    window.TLabWebViewActivity.unitySendMessage('Download Event Test', 'OnDownloadStart', 'download start. url: ' + download_url + ', id: ' + download_id);
+        /// }
+        /// ]]>
+        /// </code>
+        /// </example>
         public void OnDownloadStart(string message)
         {
-            /**
-             * argments:
-             * var unity_webview_dl_url : string
-             * var unity_webview_dl_id : long
-             * 
-             * js code:
-             * window.TLabWebViewActivity.unitySendMessage('Download Event Test', 'OnDownloadStart', 'download start. url: ' + unity_webview_dl_url + ', id: ' + unity_webview_dl_id);
-             */
-
             Debug.Log(THIS_NAME + $"message receive: {message}");
 
             StartCoroutine(DownloadProgress());
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// // Javascript
+        /// // var download_uri : string
+        /// // var download_id : long
+        /// function()
+        /// {
+        ///	    window.TLabWebViewActivity.unitySendMessage('Download Event Test', 'OnDownloadFinish', 'download finish. uri: ' + download_uri + ', id: ' + download_id);
+        /// }
+        /// ]]>
+        /// </code>
+        /// </example>
         public void OnDownloadFinish(string message)
         {
-            /**
-             * argments: 
-             * var unity_webview_dl_uri : string
-             * var unity_webview_dl_id : long
-             * 
-             * js code:
-             * window.TLabWebViewActivity.unitySendMessage('Download Event Test', 'OnDownloadFinish', 'download finish. uri: ' + unity_webview_dl_uri + ', id: ' + unity_webview_dl_id);
-             */
-
             m_downloading = false;
 
             Debug.Log(THIS_NAME + $"message receive: {message}");

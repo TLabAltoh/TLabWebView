@@ -49,7 +49,7 @@ namespace TLab.Android.WebView
 
             if (Math.Range(x, 0, 1) && Math.Range(y, 0, 1))
             {
-                m_inputPosition = new Vector2Int((int)(x * m_webview.webWidth), (int)(y * m_webview.webHeight));
+                m_inputPosition = new Vector2Int((int)(x * m_webview.webSize.x), (int)(y * m_webview.webSize.y));
 
                 return true;
             }

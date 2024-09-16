@@ -18,9 +18,9 @@ namespace TLab.Android.WebView
 		[TextArea(minLines: 5, maxLines: 15)]
 		public string onFinish;
 
-		public string varDlUriName = "unity_webview_dl_uri";
-		public string varDlUrlName = "unity_webview_dl_url";
-		public string varDlIdName = "unity_webview_dl_id";
+		public string varUri = "download_uri";
+		public string varUrl = "download_url";
+		public string varId = "download_id";
 	}
 
 	[System.Serializable]
@@ -29,8 +29,8 @@ namespace TLab.Android.WebView
 		[TextArea(minLines: 5, maxLines: 15)]
 		public string onPageFinish;
 
-		public DownloadEventCallback dlEvent = new DownloadEventCallback();
+		public DownloadEventCallback downloadEvent = new DownloadEventCallback();
 
-		public CatchDownloadUrlEventCallback catchDlUrlEvent = new CatchDownloadUrlEventCallback();
+		public CatchDownloadUrlEventCallback catchDownloadUrlEvent = new CatchDownloadUrlEventCallback();
 	}
 }
