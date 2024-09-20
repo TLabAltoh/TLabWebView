@@ -1,5 +1,5 @@
 ﻿#define DEBUG
-#undef DEBUG
+//#undef DEBUG
 
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
@@ -31,8 +31,11 @@ namespace TLab.Android.WebView
 		[SerializeField] private Vector2Int m_webSize = new Vector2Int(1024, 1024);
 		[SerializeField] private Vector2Int m_texSize = new Vector2Int(512, 512);
 
+		[Header("Javascript")]
+		[SerializeField] private JSConfig m_jsConfig = new JSConfig();
+
 		[Header("Event Callback")]
-		[SerializeField] private EventCallback m_jsEventCallback = new EventCallback();
+		[SerializeField] private EventCallback m_eventCallback = new EventCallback();
 
 		[Header("Other Settings")]
 		[SerializeField] private string[] m_intentFilters;
@@ -64,7 +67,9 @@ namespace TLab.Android.WebView
 
 		public CaptureMode captureMode => m_captureMode;
 
-		public EventCallback jsEventCallback => m_jsEventCallback;
+		public JSConfig jsConfig => m_jsConfig;
+
+		public EventCallback eventCallback => m_eventCallback;
 
 		#endregion PROPERTYS
 
@@ -268,22 +273,22 @@ namespace TLab.Android.WebView
 				SetDownloadOption(m_downloadOption);
 				SetDownloadSubDirectory(downloadSubDirectory);
 
-				SetOnPageFinish(m_jsEventCallback.onPageFinish);
-				SetOnDownloadStart(m_jsEventCallback.downloadEvent.onStart);
-				SetOnDownloadFinish(m_jsEventCallback.downloadEvent.onFinish);
+				SetOnPageFinish(m_eventCallback.onPageFinish);
+				SetOnDownloadStart(m_eventCallback.downloadEvent.onStart);
+				SetOnDownloadFinish(m_eventCallback.downloadEvent.onFinish);
 
 				SetIntentFilters(m_intentFilters);
 
 				SetFps(m_fps);
 
 				SetOnCatchDownloadUrl(
-					m_jsEventCallback.catchDownloadUrlEvent.go,
-					m_jsEventCallback.catchDownloadUrlEvent.func);
+					m_eventCallback.catchDownloadUrlEvent.go,
+					m_eventCallback.catchDownloadUrlEvent.func);
 
 				SetDownloadEventVariableName(
-					m_jsEventCallback.downloadEvent.varUrl,
-					m_jsEventCallback.downloadEvent.varUri,
-					m_jsEventCallback.downloadEvent.varId);
+					m_eventCallback.downloadEvent.varUrl,
+					m_eventCallback.downloadEvent.varUri,
+					m_eventCallback.downloadEvent.varId);
 
 				var isVulkan = (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Vulkan);
 
@@ -324,7 +329,7 @@ namespace TLab.Android.WebView
 
 		/// <summary>
 		/// Retrieve buffers that allocated in order to map javascript buffer to java 
-		/// <see href="https://github.com/TLabAltoh/TLabWebView/blob/master/Runtime/Test/DownloadEventTest.cs">example is here</see>
+		/// <see cref="Test.DownloadEventTest.BlobToDataUrlCallback">example is here</see>
 		/// </summary>
 		/// <param name="key">Name of buffers that allocated in order to map javascript buffer to java</param>
 		/// <returns>current buffer value</returns>
@@ -344,24 +349,19 @@ namespace TLab.Android.WebView
 
 		/// <summary>
 		/// Run javascript on the current web page.
-		/// <see href="https://github.com/TLabAltoh/TLabWebView/blob/master/Scripts/Sample/WebViewSample.cs">example is here</see>
-		/// </summary>
 		/// <param name="js">javascript</param>
+		/// </summary>
 		/// <example>
 		/// <code>
 		/// <![CDATA[
-		/// // See sample https://github.com/TLabAltoh/TLabWebView/blob/master/Scripts/Sample/WebViewSample.cs
-		/// // The destination must be a function that takes a character type as an argument.
-		/// function()
-		/// {
-		///	    window.TLabWebViewActivity.unitySendMessage(String go, String method, String message)
-		/// }
+		/// // This is an example that uses javascript to send a message to Unity
+		/// string js = "window.TLabWebViewActivity.unitySendMessage('gameobject name', 'method name', 'message ....');";
+		/// m_webview.EvaluateJS(js);
 		/// ]]>
 		/// </code>
 		/// </example>
 		public void EvaluateJS(string js)
 		{
-			EvaluateJS("");
 			if (m_state != State.INITIALIZED)
 			{
 				return;
@@ -369,6 +369,19 @@ namespace TLab.Android.WebView
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			m_NativePlugin.Call("evaluateJS", js);
+#endif
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="varTmp">Temporary variable name used in javascript</param>
+		public void SetVarTmp(string varTmp)
+		{
+			m_jsConfig.varTmp = varTmp;
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call("setVarTmp", m_jsConfig.varTmp);
 #endif
 		}
 
@@ -430,15 +443,22 @@ namespace TLab.Android.WebView
 		/// <summary>
 		/// Register Javascript to run when the page is finished loading.
 		/// </summary>
-		/// <param name="onPageFinish">javascript</param>
+		/// <example>
+		/// <code>
+		/// <![CDATA[
+		/// 
+		/// ]]>
+		/// </code>
+		/// </example>
+		/// <param name="onPageFinish">Javascript called when page is finished loading</param>
 		public void SetOnPageFinish(string onPageFinish)
 		{
-			m_jsEventCallback.onPageFinish = onPageFinish;
+			m_eventCallback.onPageFinish = onPageFinish;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			m_NativePlugin.Call(
 				"setOnPageFinish",
-				m_jsEventCallback.onPageFinish);
+				m_eventCallback.onPageFinish);
 #endif
 		}
 
@@ -966,71 +986,75 @@ namespace TLab.Android.WebView
 
 		/// <summary>
 		/// Register Javascript to run when download event finishes.
+		/// <see cref="Test.DownloadEventTest.OnDownloadFinish(string)">example is here</see>
 		/// </summary>
-		/// <param name="onFinish">javascript</param>
+		/// <param name="onFinish">Javascript called when download event finished</param>
 		public void SetOnDownloadFinish(string onFinish)
 		{
-			m_jsEventCallback.downloadEvent.onFinish = onFinish;
+			m_eventCallback.downloadEvent.onFinish = onFinish;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			m_NativePlugin.Call(
 				"setOnDownloadFinish",
-				m_jsEventCallback.downloadEvent.onFinish);
+				m_eventCallback.downloadEvent.onFinish);
 #endif
 		}
 
 		/// <summary>
 		/// Register Javascript to run when download event starts.
+		/// <see cref="Test.DownloadEventTest.OnDownloadStart(string)">example is here</see>
 		/// </summary>
-		/// <param name="onStart">javascript</param>
+		/// <param name="onStart">Javascript called when download event started</param>
 		public void SetOnDownloadStart(string onStart)
 		{
-			m_jsEventCallback.downloadEvent.onStart = onStart;
+			m_eventCallback.downloadEvent.onStart = onStart;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			m_NativePlugin.Call(
 				"setOnDownloadStart",
-				m_jsEventCallback.downloadEvent.onStart);
+				m_eventCallback.downloadEvent.onStart);
 #endif
 		}
 
 		/// <summary>
 		/// Defines the download event parameter's name. it can be accessed from javascript when a download event occurs.
 		/// </summary>
-		/// <param name="varUrl">URL of the file to be downloaded</param>
-		/// <param name="varUri">The destination for the downloaded file</param>
-		/// <param name="varId">The ID of the download event</param>
+		/// <param name="varUrl">Variable name for url (URL of the file to be downloaded) to use in javascript's download event callback</param>
+		/// <param name="varUri">Variable name for uri (The destination for the downloaded file) to use in javascript's download event callback</param>
+		/// <param name="varId">Variable name for download id (The ID of the download event) to use in javascript's download event callback</param>
 		public void SetDownloadEventVariableName(
 			string varUrl, string varUri, string varId)
 		{
-			m_jsEventCallback.downloadEvent.varUrl = varUrl;
-			m_jsEventCallback.downloadEvent.varUri = varUri;
-			m_jsEventCallback.downloadEvent.varId = varId;
+			m_eventCallback.downloadEvent.varUrl = varUrl;
+			m_eventCallback.downloadEvent.varUri = varUri;
+			m_eventCallback.downloadEvent.varId = varId;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			m_NativePlugin.Call(
 				"setDownloadEventVariableName",
-				m_jsEventCallback.downloadEvent.varUrl,
-				m_jsEventCallback.downloadEvent.varUri,
-				m_jsEventCallback.downloadEvent.varId);
+				m_eventCallback.downloadEvent.varUrl,
+				m_eventCallback.downloadEvent.varUri,
+				m_eventCallback.downloadEvent.varId);
 #endif
 		}
 
 		/// <summary>
-		/// Set up the callback of the on catch download URL with the given parameters.
+		/// Register the callback that will be called before the download event starts.
+		/// If this parameter is not empty, the download event is not started automatically, you must call the download event manually.
+		/// <see cref="Test.DownloadEventTest.OnCatchDownloadUrl(string)">example is here</see>
 		/// </summary>
-		/// <param name="go">The name of the game object that has the function of the target instance</param>
-		/// <param name="func">Target Instance Function Name</param>
+		/// <param name="go">Name of the gameobject to which the function is attached</param>
+		/// <param name="func">C# function name that is called before the download event starts</param>
 		public void SetOnCatchDownloadUrl(string go, string func)
 		{
-			m_jsEventCallback.catchDownloadUrlEvent.go = go;
-			m_jsEventCallback.catchDownloadUrlEvent.func = func;
+			m_eventCallback.catchDownloadUrlEvent.go = go;
+			m_eventCallback.catchDownloadUrlEvent.func = func;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			m_NativePlugin.Call(
 				"setOnCatchDownloadUrl",
-				m_jsEventCallback.catchDownloadUrlEvent.go,
-				m_jsEventCallback.catchDownloadUrlEvent.func);
+				m_eventCallback.catchDownloadUrlEvent.go,
+				m_eventCallback.catchDownloadUrlEvent.func);
 #endif
 		}
 

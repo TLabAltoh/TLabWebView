@@ -2376,8 +2376,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 732371173}
     - target: {fileID: 8357724044250159002, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
+      propertyPath: m_url
+      value: https://www.htmq.com/html5/input.shtml
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357724044250159002, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
+      propertyPath: m_downloadOption
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357724044250159002, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
       propertyPath: m_useCustomWidget
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8357724044250159002, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
       propertyPath: m_useHardwareBuffer
