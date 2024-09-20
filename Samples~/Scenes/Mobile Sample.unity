@@ -2385,7 +2385,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8357724044250159002, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
       propertyPath: m_useCustomWidget
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8357724044250159002, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
       propertyPath: m_useHardwareBuffer
