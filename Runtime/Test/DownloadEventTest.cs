@@ -25,49 +25,40 @@ namespace TLab.Android.WebView.Test
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
-        /// <example>
-        /// <code>
-        /// <![CDATA[
-        /// // Javascript
-        /// // var download_url : string
-        /// // var download_id : long
-        /// function()
-        /// {
-        ///	    window.TLabWebViewActivity.unitySendMessage('Download Event Test', 'OnDownloadStart', 'download start. url: ' + download_url + ', id: ' + download_id);
-        /// }
-        /// ]]>
-        /// </code>
-        /// </example>
         public void OnDownloadStart(string message)
         {
+#if false
+            // Javascript
+            // var download_url : string
+            // var download_id : long
+            function()
+            {
+                var gameobjectName = 'Download Event Test';
+                var methodName = 'OnDownloadStart';
+                var message = 'download start. url: ' + download_url + ', id: ' + download_id;
+                window.TLabWebViewActivity.unitySendMessage(gameobjectName, methodName, message);
+            }
+#endif
             Debug.Log(THIS_NAME + $"message receive: {message}");
 
             StartCoroutine(DownloadProgress());
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
-        /// <example>
-        /// <code>
-        /// <![CDATA[
-        /// // Javascript
-        /// // var download_uri : string
-        /// // var download_id : long
-        /// function()
-        /// {
-        ///	    window.TLabWebViewActivity.unitySendMessage('Download Event Test', 'OnDownloadFinish', 'download finish. uri: ' + download_uri + ', id: ' + download_id);
-        /// }
-        /// ]]>
-        /// </code>
-        /// </example>
         public void OnDownloadFinish(string message)
         {
+#if false
+            // Javascript
+            // var download_uri : string
+            // var download_id : long
+            function()
+            {
+                var gameobjectName = 'Download Event Test';
+                var methodName = 'OnDownloadFinish';
+                var message = 'download finish. uri: ' + download_uri + ', id: ' + download_id;
+                window.TLabWebViewActivity.unitySendMessage(gameobjectName, methodName, message);
+            }
+#endif
+
             m_downloading = false;
 
             Debug.Log(THIS_NAME + $"message receive: {message}");
