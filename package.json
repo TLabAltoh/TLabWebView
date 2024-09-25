@@ -1,6 +1,6 @@
 {
     "name": "com.tlabaltoh.webview",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "displayName": "TLabWebView",
     "description": "Plug-in for WebView that runs in Unity and can display WebView results as Texture2D",
     "author": {
