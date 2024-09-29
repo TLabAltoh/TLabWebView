@@ -1631,6 +1631,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TLabWebView Sample
       objectReference: {fileID: 0}
+    - target: {fileID: 3182255551955723212, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3182255551955723219, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
       propertyPath: m_RootOrder
       value: 4
