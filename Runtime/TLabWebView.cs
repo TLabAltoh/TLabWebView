@@ -435,6 +435,8 @@ namespace TLab.Android.WebView
 				return;
 			}
 
+			m_url = url;
+
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			m_NativePlugin.Call("loadUrl", url);
 #endif
