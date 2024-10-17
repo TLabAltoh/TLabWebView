@@ -106,7 +106,7 @@ Prefab is here. Just add prefab to the canvas to implement webview
 > [!NOTE]
 > If you want to download the file to external storage (like ```/Download```, ```/Picture```), please add the following permission to the manifest. This is required for Android 11+ (see [here](https://developer.android.com/training/data-storage/manage-all-files?hl=en) for more details).
 > ```.xml
-> <uses-permission android:name="android.permission.> MANAGE_EXTERNAL_STORAGE" />
+> <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 > ```
 
 > [!WARNING]
