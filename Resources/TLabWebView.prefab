@@ -138,6 +138,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_keyborad: {fileID: 5965965217314905497}
   m_activeOnAwake: 1
+  m_onFocus:
+    m_PersistentCalls:
+      m_Calls: []
   m_onEnterPressed:
     m_PersistentCalls:
       m_Calls: []
