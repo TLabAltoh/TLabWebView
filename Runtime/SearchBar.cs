@@ -81,7 +81,7 @@ namespace TLab.Android.WebView
 
         public void Display() => m_searchBar.text = m_text;
 
-        public void AddKey(string key)
+        public override void AddKey(string key)
         {
             m_text += key;
             Display();
