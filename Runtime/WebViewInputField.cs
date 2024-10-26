@@ -24,13 +24,6 @@ namespace TLab.Android.WebView
             base.OnEnterPressed();
         }
 
-        public override void OnSpacePressed()
-        {
-            AddKey(" ");
-
-            base.OnSpacePressed();
-        }
-
         public override void OnTabPressed()
         {
             AddKey("\t");
@@ -38,27 +31,8 @@ namespace TLab.Android.WebView
             base.OnTabPressed();
         }
 
-        public override void OnKeyPressed(string input)
-        {
-            AddKey(input);
-
-            base.OnKeyPressed(input);
-        }
-
         #endregion KEY_EVENT
 
-        public override void OnFocus()
-        {
-            var notActive = !inputFieldIsActive;
-
-            if (m_keyborad.mobile && notActive)
-            {
-                m_keyborad.SwitchInputField(this);
-                m_keyborad.SetVisibility(true);
-                m_onFocus.Invoke(true);
-            }
-        }
-
-        public void AddKey(string key) => m_webview.KeyEvent(key.ToCharArray()[0]);
+        public override void AddKey(string key) => m_webview.KeyEvent(key.ToCharArray()[0]);
     }
 }
