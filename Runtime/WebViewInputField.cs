@@ -10,30 +10,15 @@ namespace TLab.Android.WebView
 
         #region KEY_EVENT
 
-        public override void OnBackSpacePressed()
-        {
-            m_webview.BackSpace();
-        }
+        public override void OnBackSpacePressed() => m_webview.BackSpace();
 
-        public override void OnEnterPressed()
-        {
-            AddKey("\n");
-        }
+        public override void OnEnterPressed() => AddKey("\n");
 
-        public override void OnSpacePressed()
-        {
-            AddKey(" ");
-        }
+        public override void OnSpacePressed() => AddKey(" ");
 
-        public override void OnTabPressed()
-        {
-            AddKey("\t");
-        }
+        public override void OnTabPressed() => AddKey("\t");
 
-        public override void OnKeyPressed(string input)
-        {
-            AddKey(input);
-        }
+        public override void OnKeyPressed(string input) => AddKey(input);
 
         #endregion KEY_EVENT
 
@@ -44,13 +29,10 @@ namespace TLab.Android.WebView
             if (m_keyborad.mobile && notActive)
             {
                 m_keyborad.SwitchInputField(this);
-                m_keyborad.HideKeyborad(false);
+                m_keyborad.SetVisibility(true);
             }
         }
 
-        public void AddKey(string key)
-        {
-            m_webview.KeyEvent(key.ToCharArray()[0]);
-        }
+        public void AddKey(string key) => m_webview.KeyEvent(key.ToCharArray()[0]);
     }
 }
