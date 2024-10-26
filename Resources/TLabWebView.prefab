@@ -138,6 +138,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_keyborad: {fileID: 5965965217314905497}
   m_activeOnAwake: 1
+  m_onEnterPressed:
+    m_PersistentCalls:
+      m_Calls: []
+  m_onTabPressed:
+    m_PersistentCalls:
+      m_Calls: []
+  m_onShiftPressed:
+    m_PersistentCalls:
+      m_Calls: []
+  m_onSpacePressed:
+    m_PersistentCalls:
+      m_Calls: []
+  m_onBackSpacePressed:
+    m_PersistentCalls:
+      m_Calls: []
+  m_onSymbolPressed:
+    m_PersistentCalls:
+      m_Calls: []
+  m_onKeyPressed:
+    m_PersistentCalls:
+      m_Calls: []
   m_webview: {fileID: 6905492866619264919}
 --- !u!1 &6721217010310261587
 GameObject:

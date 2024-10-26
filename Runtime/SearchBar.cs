@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using TMPro;
 using TLab.VKeyborad;
@@ -26,26 +25,36 @@ namespace TLab.Android.WebView
                 m_text = m_text.Remove(m_text.Length - 1);
                 Display();
             }
+
+            base.OnBackSpacePressed();
         }
 
         public override void OnEnterPressed()
         {
             LoadUrl();
+
+            base.OnEnterPressed();
         }
 
         public override void OnSpacePressed()
         {
             AddKey(" ");
+
+            base.OnSpacePressed();
         }
 
         public override void OnTabPressed()
         {
             AddKey("    ");
+
+            base.OnTabPressed();
         }
 
         public override void OnKeyPressed(string input)
         {
             AddKey(input);
+
+            base.OnKeyPressed(input);
         }
 
         #endregion KEY_EVENT
@@ -70,15 +79,11 @@ namespace TLab.Android.WebView
             m_webview.LoadUrl(url);
         }
 
-        public void Display()
-        {
-            m_searchBar.text = m_text;
-        }
+        public void Display() => m_searchBar.text = m_text;
 
         public void AddKey(string key)
         {
             m_text += key;
-
             Display();
         }
     }

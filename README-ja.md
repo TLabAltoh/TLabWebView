@@ -39,7 +39,7 @@ Android13, Adreno 619で実行した画面
 
 ### 依存するライブラリ
 
-- [TLabVKeyborad](https://github.com/TLabAltoh/TLabVKeyborad) ```v0.0.2```
+- [TLabVKeyborad](https://github.com/TLabAltoh/TLabVKeyborad) ```v0.0.3```
 
 ### インストール
 <details><summary>こちらをご覧ください</summary>
