@@ -40,7 +40,7 @@ Screenshot run on Android 13, Adreno 619
 ## Getting Started
 
 ### Requirements
-- [TLabVKeyborad](https://github.com/TLabAltoh/TLabVKeyborad) ```v0.0.1+```
+- [TLabVKeyborad](https://github.com/TLabAltoh/TLabVKeyborad) ```v0.0.2+```
 
 ### Installing
 
