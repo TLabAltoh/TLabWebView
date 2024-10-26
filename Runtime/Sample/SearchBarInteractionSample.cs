@@ -76,10 +76,10 @@ namespace TLab.Android.WebView.Sample
             switch (message)
             {
                 case "Foucusin":
-                    m_keyborad.HideKeyborad(false);
+                    m_keyborad.SetVisibility(true);
                     break;
                 case "Foucusout":
-                    m_keyborad.HideKeyborad(true);
+                    m_keyborad.SetVisibility(false);
                     break;
             }
         }
