@@ -26,35 +26,35 @@ namespace TLab.Android.WebView
                 Display();
             }
 
-            base.OnBackSpacePressed();
+            AfterOnBackSpacePressed();
         }
 
         public override void OnEnterPressed()
         {
             LoadUrl();
 
-            base.OnEnterPressed();
+            AfterOnEnterPressed();
         }
 
         public override void OnSpacePressed()
         {
             AddKey(" ");
 
-            base.OnSpacePressed();
+            AfterOnSpacePressed();
         }
 
         public override void OnTabPressed()
         {
             AddKey("    ");
 
-            base.OnTabPressed();
+            AfterOnTabPressed();
         }
 
         public override void OnKeyPressed(string input)
         {
             AddKey(input);
 
-            base.OnKeyPressed(input);
+            AfterOnKeyPressed(input);
         }
 
         #endregion KEY_EVENT

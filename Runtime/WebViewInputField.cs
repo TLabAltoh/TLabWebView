@@ -14,21 +14,21 @@ namespace TLab.Android.WebView
         {
             m_webview.BackSpace();
 
-            base.OnBackSpacePressed();
+            AfterOnBackSpacePressed();
         }
 
         public override void OnEnterPressed()
         {
             AddKey("\n");
 
-            base.OnEnterPressed();
+            AfterOnEnterPressed();
         }
 
         public override void OnTabPressed()
         {
             AddKey("\t");
 
-            base.OnTabPressed();
+            AfterOnTabPressed();
         }
 
         #endregion KEY_EVENT
