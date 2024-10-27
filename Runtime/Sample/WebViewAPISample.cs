@@ -9,9 +9,6 @@ namespace TLab.Android.WebView.Sample
 
         private string THIS_NAME => "[" + this.GetType() + "] ";
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void LoadHTML()
         {
             string html = "";
@@ -20,29 +17,11 @@ namespace TLab.Android.WebView.Sample
             m_webView.LoadHTML(html, base_url);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public void ClearCache()
-        {
-            m_webView.ClearCache(true);
-        }
+        public void ClearCache() => m_webView.ClearCache(true);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public void ClearCookies()
-        {
-            m_webView.ClearCookie();
-        }
+        public void ClearCookies() => m_webView.ClearCookie();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public void ClearHistory()
-        {
-            m_webView.ClearHistory();
-        }
+        public void ClearHistory() => m_webView.ClearHistory();
 
         /// <summary>
         /// Capture html source
@@ -52,7 +31,7 @@ namespace TLab.Android.WebView.Sample
 #if true
             m_webView.CaptureHTMLSource();
 #else
-        m_webView.CaptureElementById("swell_blocks-css");
+            m_webView.CaptureElementById("swell_blocks-css");
 #endif
         }
 
@@ -67,12 +46,9 @@ namespace TLab.Android.WebView.Sample
 #else
             m_webView.CurrentHTMLCaptured().Length.ToString()
 #endif
-        );
+            );
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public async void GetUserAgent()
         {
             m_webView.CaptureUserAgent();
@@ -81,9 +57,6 @@ namespace TLab.Android.WebView.Sample
             Debug.Log("User Agent: " + m_webView.GetUserAgent());
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void SetUserAgent()
         {
             string ua = "Mozilla/5.0 (X11; Linux i686; rv:10.0) Gecko/20100101 Firefox/10.0";
@@ -111,9 +84,6 @@ namespace TLab.Android.WebView.Sample
             m_webView.EvaluateJS(callback);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="message"></param>
         public void SendMessageFromJavascript(string message)
         {
@@ -124,13 +94,6 @@ namespace TLab.Android.WebView.Sample
             Debug.Log(THIS_NAME + $"message sent: {message}");
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
-        public void OnMessage(string message)
-        {
-            Debug.Log(THIS_NAME + $"form javascript: {message}");
-        }
+        public void OnMessage(string message) => Debug.Log(THIS_NAME + $"form javascript: {message}");
     }
 }
