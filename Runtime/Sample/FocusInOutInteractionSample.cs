@@ -1,12 +1,14 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using TLab.VKeyborad;
 
 namespace TLab.Android.WebView.Sample
 {
-    public class SearchBarInteractionSample : MonoBehaviour
+    public class FocusInOutInteractionSample : MonoBehaviour, IPointerDownHandler
     {
+        [SerializeField] private SearchBar m_searchBar;
         [SerializeField] private TLabWebView m_webview;
-        [SerializeField] private TLabVKeyborad m_keyborad;
+        [SerializeField] private InputFieldBase m_webviewInputField;
 
 #if false
     /// <summary>
@@ -41,14 +43,14 @@ namespace TLab.Android.WebView.Sample
             function focusin (e) {
                 const target = e.target;
                 if (target.tagName == 'INPUT' || target.tagName == 'TEXTAREA') {
-                    window.TLabWebViewActivity.unitySendMessage('SearchBar', 'OnMessage', 'Foucusin');
+                    window.TLabWebViewActivity.unitySendMessage('WebView', 'OnMessage', 'Foucusin');
                 }
             }
 
             function focusout (e) {
                 const target = e.target;
                 if (target.tagName == 'INPUT' || target.tagName == 'TEXTAREA') {
-                    window.TLabWebViewActivity.unitySendMessage('SearchBar', 'OnMessage', 'Foucusout');
+                    window.TLabWebViewActivity.unitySendMessage('WebView', 'OnMessage', 'Foucusout');
                 }
             }
 
@@ -65,10 +67,6 @@ namespace TLab.Android.WebView.Sample
     }
 #endif
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
         public void OnMessage(string message)
         {
             Debug.Log("OnMessage: " + message);
@@ -76,12 +74,14 @@ namespace TLab.Android.WebView.Sample
             switch (message)
             {
                 case "Foucusin":
-                    m_keyborad.SetVisibility(true);
+                    m_webviewInputField.OnFocus(true);
                     break;
                 case "Foucusout":
-                    m_keyborad.SetVisibility(false);
+                    m_webviewInputField.OnFocus(false);
                     break;
             }
         }
+
+        public void OnPointerDown(PointerEventData eventData) => m_searchBar.OnFocus(false);
     }
 }
