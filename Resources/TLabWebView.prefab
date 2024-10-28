@@ -156,9 +156,6 @@ MonoBehaviour:
   m_onBackSpacePressed:
     m_PersistentCalls:
       m_Calls: []
-  m_onSymbolPressed:
-    m_PersistentCalls:
-      m_Calls: []
   m_onKeyPressed:
     m_PersistentCalls:
       m_Calls: []
