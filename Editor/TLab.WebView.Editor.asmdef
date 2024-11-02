@@ -1,5 +1,5 @@
 {
-    "name": "TLabWebView.Editor",
+    "name": "TLab.WebView.Editor",
     "rootNamespace": "",
     "references": [
         "GUID:643142c4527239447a4feb8d9fba651e"
