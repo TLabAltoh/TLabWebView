@@ -87,21 +87,20 @@ namespace TLab.WebView
                 yield break;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
-			var id = m_NativePlugin.Call<int>(nameof(EvaluateJSForResult), varNameOfResultId, js);
-			if (id == -1) yield break;
-			while (true)
-			{
-				var @object = GetAsyncResult(id);
-				if (@object == "")
-				{
-					yield return new AsyncString(false, null);
-					continue;
-				}
-				var result = new JavaAsyncResult(@object);
-				yield return new AsyncString(true, result.stringValue);
-				break;
-			}
-			yield break;
+            var id = m_NativePlugin.Call<int>(nameof(EvaluateJSForResult), varNameOfResultId, js);
+            if (id == -1) yield break;
+            while (true)
+            {
+                var @object = GetAsyncResult(id);
+                if (@object == "")
+                {
+                    yield return null;
+                    continue;
+                }
+                yield return new JavaAsyncResult(@object);
+                break;
+            }
+            yield break;
 #else
             yield break;
 #endif
