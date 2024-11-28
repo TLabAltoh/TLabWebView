@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-namespace TLab.Android.WebView.Sample
+namespace TLab.WebView.Sample
 {
     public class FPSCounter : MonoBehaviour
     {

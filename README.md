@@ -2,7 +2,7 @@
 
 [日本語版READMEはこちら](README-ja.md)
 
-Plug-in to use Android WebView as uGUI (Texture2D)
+Plug-in to use Android's web browser component (```WebView``` / ```GeckoView```) as uGUI (Texture2D)
 
 - [x] Keyboard Input
 - [x] Touch Interaction
@@ -40,7 +40,7 @@ Screenshot run on Android 13, Adreno 619
 ## Getting Started
 
 ### Requirements
-- [TLabVKeyborad](https://github.com/TLabAltoh/TLabVKeyborad) ```v0.0.5+```
+- [TLabVKeyborad](https://github.com/TLabAltoh/TLabVKeyborad) ```v1.0.0+```
 
 ### Installing
 
@@ -94,6 +94,54 @@ UNITYWEBVIEW_ANDROID_ENABLE_CAMERA
 UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 ```
 
+- Scene
+Please add the ```BrowserManager``` to any GameObject (maybe EventSystem is best).
+
+#### If you want to use ```GeckoView``` as a browser engine.
+
+Please create a Plugins folder in your Assets folder and create files in it. And please set the ```BrowserContainer``` to ```GeckoView``` instead of ```WebView```.
+
+1. gradleTemplate.properties
+
+```properties
+org.gradle.jvmargs=-Xmx**JVM_HEAP_SIZE**M
+org.gradle.parallel=true
+# android.enableR8=**MINIFY_WITH_R_EIGHT**
+unityStreamingAssets=**STREAMING_ASSETS**
+**ADDITIONAL_PROPERTIES**
+android.useAndroidX=true
+# android.enableJetifier=true
+```
+
+2. mainTemplate.gradle
+
+```gradle
+    ...
+
+    dependencies {
+        implementation "androidx.annotation:annotation-jvm:1.9.1"
+
+        def collection_version = "1.4.3"
+        implementation "androidx.collection:collection:$collection_version"
+
+        def lifecycle_version = "2.6.1"
+        implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-service:$lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-process:$lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
+    }
+
+    ...
+```
+
+3. GeckoView plugin (```.aar```) (please install the [125.0.20240425211020 version](https://mvnrepository.com/artifact/org.mozilla.geckoview/geckoview/125.0.20240425211020), as this package is only developed and tested with it)
+
 </details>
 
 ### Prefab
@@ -113,7 +161,7 @@ Prefab is here. Just add prefab to the canvas to implement webview
 > Android WebView doesn't support the [WebXR API](https://developer.mozilla.org/en-US/docs/Web/API/WebXR_Device_API/Fundamentals).
 
 > [!WARNING]
-> OculusQuest doesn't support some HTML5 input tags (see below). If you want to use them, please enable the ```useCustomWidget``` property of the ```TLabWebView``` class. It will display a widget implemented by this plugin on the WebView instead of the standard Android widget. Below is the status of html5 input tag support by this plugin's custom widget.
+> OculusQuest doesn't support some HTML5 input tags (see below). If you want to use them, please use ```GeckoView``` as ```Browser``` instead of ```WebView```. It will display a widget implemented by uGUI. Below is the status of HTML5 input tag support by this plugin's custom widget.
 > 
 > - [x] [datetime-local](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local)
 > - [x] [date](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date)
@@ -123,8 +171,6 @@ Prefab is here. Just add prefab to the canvas to implement webview
 > - [ ] [month](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/month)
 > - [ ] [image](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/image)
 > - [ ] [file](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file)
-> 
-> Also, currently custom input widget implemented by this plugin uses javascript and disable pointer event ([```onmousedown```](https://developer.mozilla.org/en-US/docs/Web/API/Element/mousedown_event), [```onclick```](https://developer.mozilla.org/en-US/docs/Web/API/Element/click_event)). Please note that this implementation has possibility to cause problem on some website.
 
 > [!WARNING]
 > This plugin supports both ```Vulkan``` and ```OpenGLES```, but if you are building an application that uses a ```Vulkan``` graphics API, the Android device must support ```OpenGLES (3.1+)``` as well as ```Vulkan```.

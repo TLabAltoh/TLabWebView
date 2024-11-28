@@ -1,0 +1,42 @@
+function searchShadowRoot(node, roots) {
+    if (node == null) {
+        return;
+    }
+    if (node.shadowRoot != undefined && node.shadowRoot != null) {
+		roots.push(node.shadowRoot);
+        searchShadowRoot(node.shadowRoot, roots);
+    }
+    for (var i = 0; i < node.childNodes.length; i++) {
+        searchShadowRoot(node.childNodes[i], roots);
+    }
+}
+
+function getAllRoot() {
+	var roots = [document];
+	searchShadowRoot(document, roots);
+	return roots;
+}
+
+var roots = getAllRoot();
+
+function focusin (e) {
+    const target = e.target;
+    if (target.tagName == 'INPUT' || target.tagName == 'TEXTAREA') {
+        window.tlab.unitySendMessage(go, method, 'Focusin');
+    }
+}
+
+function focusout (e) {
+    const target = e.target;
+    if (target.tagName == 'INPUT' || target.tagName == 'TEXTAREA') {
+        window.tlab.unitySendMessage(go, method, 'Focusout');
+    }
+}
+
+for (var i = 0; i < roots.length; i++) {
+    roots[i].removeEventListener('focusin', focusin);
+    roots[i].removeEventListener('focusout', focusout);
+
+    roots[i].addEventListener('focusin', focusin);
+    roots[i].addEventListener('focusout', focusout);
+}

@@ -2,12 +2,11 @@ using UnityEngine;
 using TMPro;
 using TLab.VKeyborad;
 
-namespace TLab.Android.WebView
+namespace TLab.WebView
 {
-    public class SearchBar : InputFieldBase
+    public class SearchBar : BaseInputField
     {
-        [Header("WebView")]
-        [SerializeField] private TLabWebView m_webview;
+        [SerializeField] private BrowserContainer m_container;
 
         [Header("TextMeshPro")]
         [SerializeField] private TextMeshProUGUI m_searchBar;
@@ -18,7 +17,7 @@ namespace TLab.Android.WebView
 
         #region KEY_EVENT
 
-        public override void OnBackSpacePressed()
+        public override void OnBackSpaceKey()
         {
             if (m_text != "")
             {
@@ -26,14 +25,14 @@ namespace TLab.Android.WebView
                 Display();
             }
 
-            AfterOnBackSpacePressed();
+            AfterOnBackSpaceKey();
         }
 
-        public override void OnEnterPressed()
+        public override void OnEnterKey()
         {
             LoadUrl();
 
-            AfterOnEnterPressed();
+            AfterOnEnterKey();
         }
 
         #endregion KEY_EVENT
@@ -46,16 +45,11 @@ namespace TLab.Android.WebView
             string url;
 
             if (m_searchBar.text.StartsWith(HTTPS_PREFIX) || m_searchBar.text.StartsWith(HTTP_PREFIX))
-            {
                 url = m_searchBar.text;
-            }
             else
-            {
-
                 url = $"https://www.google.com/search?q={m_searchBar.text}";
-            }
 
-            m_webview.LoadUrl(url);
+            m_container.browser.LoadUrl(url);
         }
 
         public void Display() => m_searchBar.text = m_text;

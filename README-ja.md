@@ -1,6 +1,6 @@
 # TLabWebView  
 
-Android WebView を uGUI (Texture2D) として利用するためのプラグイン
+Android で使用可能なブラウザコンポーネント (```WebView``` / ```GeckoView```) を uGUI (Texture2D) として利用するためのプラグイン
 
 - [x] キーボード入力
 - [x] タッチ操作
@@ -39,7 +39,7 @@ Android13, Adreno 619で実行した画面
 
 ### 依存するライブラリ
 
-- [TLabVKeyborad](https://github.com/TLabAltoh/TLabVKeyborad) ```v0.0.5```
+- [TLabVKeyborad](https://github.com/TLabAltoh/TLabVKeyborad) ```v1.0.0```
 
 ### インストール
 <details><summary>こちらをご覧ください</summary>
@@ -81,7 +81,7 @@ https://github.com/TLabAltoh/TLabWebView.git#upm
 | Target API Level  | 30 (Unity 2021), 31 ~ 32 (Unity 2022) |
 
 
--  Project Settings --> Player --> Other Settings に以下のシンボルを追加(ビルド時に使用)
+- Project Settings --> Player --> Other Settings に以下のシンボルを追加(ビルド時に使用)
 
 ```
 UNITYWEBVIEW_ANDROID_USES_CLEARTEXT_TRAFFIC
@@ -92,6 +92,55 @@ UNITYWEBVIEW_ANDROID_ENABLE_CAMERA
 ```
 UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 ```
+
+- Scene
+
+```BrowserManager```をシーン内のいずれかのGameObjectにアタッチしてください．(EventSystemにアタッチするのが一番望ましいかも ...)．
+
+#### ```GeckoView``` をブラウザエンジンとして使用したい場合
+
+PluginsフォルダーをAssets以下に作成し，以下のファイルを置いてください．また，```BrowserContainer```に```WebView```の代わりに```GeckoView```をアタッチしてください．
+
+1. gradleTemplate.properties
+
+```properties
+org.gradle.jvmargs=-Xmx**JVM_HEAP_SIZE**M
+org.gradle.parallel=true
+# android.enableR8=**MINIFY_WITH_R_EIGHT**
+unityStreamingAssets=**STREAMING_ASSETS**
+**ADDITIONAL_PROPERTIES**
+android.useAndroidX=true
+# android.enableJetifier=true
+```
+
+2. mainTemplate.gradle
+
+```gradle
+    ...
+
+    dependencies {
+        implementation "androidx.annotation:annotation-jvm:1.9.1"
+
+        def collection_version = "1.4.3"
+        implementation "androidx.collection:collection:$collection_version"
+
+        def lifecycle_version = "2.6.1"
+        implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-service:$lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-process:$lifecycle_version"
+        implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
+    }
+
+    ...
+```
+
+3. GeckoView plugin (```.aar```) (現在 [125.0.20240425211020 version](https://mvnrepository.com/artifact/org.mozilla.geckoview/geckoview/125.0.20240425211020) のみで開発・テストを行っているので，同じバージョンのものをダウンロードしてください．)
 
 </details>
 
@@ -112,7 +161,7 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 > Android WebViewは [WebXR API](https://developer.mozilla.org/ja/docs/Web/API/WebXR_Device_API/Fundamentals) をサポートしません．
 
 > [!WARNING]
-> OculusQuestはいくつかのHTML5 input タグをサポートしていません(下記参照)．もしそれらを使いたい場合は，```TLabWebView```クラスの```useCustomWidget```を有効にしてください．Androidで標準に使用されているウィジェットの代わりに，このプラグインが実装したウィジェットをWebView上に表示します．以下は，このプラグインによる，HTML5 inpu タグの対応状況です．
+> OculusQuestはいくつかのHTML5 input タグをサポートしていません(下記参照)．それらを使用したい場合，```GeckoView```を```WebView```の代わりに```Browser```として使用してください．uGUIで実装したウィジェットを表示します．以下は，このプラグインによる，HTML5 inpu タグの対応状況です．
 > 
 > - [x] [datetime-local](https://developer.mozilla.org/ja/docs/Web/HTML/Element/input/datetime-local)
 > - [x] [date](https://developer.mozilla.org/ja/docs/Web/HTML/Element/input/date)
@@ -122,8 +171,6 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 > - [ ] [month](https://developer.mozilla.org/ja/docs/Web/HTML/Element/input/month)
 > - [ ] [image](https://developer.mozilla.org/ja/docs/Web/HTML/Element/input/image)
 > - [ ] [file](https://developer.mozilla.org/ja/docs/Web/HTML/Element/input/file)
-> 
-> また，このプラグインで実装されたカスタムウィジェットは，JavascriptからHTML5 input タグのポインターイベント([```onmousedown```](https://developer.mozilla.org/ja/docs/Web/API/Element/mousedown_event), [```onclick```](https://developer.mozilla.org/ja/docs/Web/API/Element/click_event))を無効にしています．この実装は，いくつかのウェブサイトでは問題を引き起こす可能性があることを留意してください．
 
 > [!WARNING]
 > このプラグインは，```OpenGLES```と```Vulkan```の両方をサポートしていますが，```Vulkan API``` を使用する場合は，デバイスが```OpenGLES 3.1```以上をサポートしている必要があることに留意してください．
