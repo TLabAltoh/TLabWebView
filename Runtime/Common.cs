@@ -10,57 +10,68 @@ namespace TLab.WebView
 		public JavaAsyncResult() : base() { }
 		public JavaAsyncResult(string json) : base(json) { }
 
-		public int intValue;
-		public double doubleValue;
-		public bool boolValue;
-		public string stringValue;
+		public static class Status
+		{
+			public const int WAITING = 0;
+			public const int FAILED = 1;
+			public const int CANCEL = 2;
+			public const int COMPLETE = 3;
+		}
+
+		public int id;
+		public int status;
+
+		public int i;
+		public double d;
+		public bool b;
+		public string s;
 	}
 
 	public struct AsyncInteger
 	{
-		public bool isCompleted;
 		public int value;
+		public int status;
 
-		public AsyncInteger(bool isCompleted, int value)
+		public AsyncInteger(int value, int status)
 		{
-			this.isCompleted = isCompleted;
 			this.value = value;
+			this.status = status;
 		}
 	}
 
 	public struct AsyncDouble
 	{
-		public bool isCompleted;
+		public int status;
 		public double value;
 
-		public AsyncDouble(bool isCompleted, double value)
+		public AsyncDouble(double value, int status)
 		{
-			this.isCompleted = isCompleted;
 			this.value = value;
+			this.status = status;
 		}
 	}
 
 	public struct AsyncBool
 	{
-		public bool isCompleted;
+		public int status;
 		public bool value;
 
-		public AsyncBool(bool isCompleted, bool value)
+		public AsyncBool(bool value, int status)
 		{
-			this.isCompleted = isCompleted;
 			this.value = value;
+			this.status = status;
 		}
 	}
 
 	public struct AsyncString
 	{
-		public bool isCompleted;
+		public int status;
 		public string value;
 
-		public AsyncString(bool isCompleted, string value)
+		public AsyncString(string value, int status)
 		{
-			this.isCompleted = isCompleted;
 			this.value = value;
+			this.status = status;
 		}
 	}
 

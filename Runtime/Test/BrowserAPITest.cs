@@ -38,7 +38,7 @@ namespace TLab.WebView.Test
             var task = m_container.browser.GetUserAgent();
             yield return task;
             var result = task.Current;
-            if (result.isCompleted)
+            if (result.status == JavaAsyncResult.Status.COMPLETE)
                 Debug.Log($"UserAgent: {result.value}");
         }
 

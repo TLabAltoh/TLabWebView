@@ -47,6 +47,8 @@ namespace TLab.WebView
 
         string GetAsyncResult(int id);
 
+        void CancelAsyncResult(int id);
+
         /// <summary>
         /// Get current url that the WebView instance is loading
         /// </summary>

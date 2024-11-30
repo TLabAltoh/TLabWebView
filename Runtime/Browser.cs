@@ -125,6 +125,15 @@ namespace TLab.WebView
 #endif
 		}
 
+		public void CancelAsyncResult(int id)
+		{
+			if (m_state != State.INITIALIZED) return;
+
+#if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
+			m_NativePlugin.Call(nameof(CancelAsyncResult), id);
+#endif
+		}
+
 		public IEnumerator<AsyncString> GetUserAgent()
 		{
 			if (m_state != State.INITIALIZED)
@@ -138,11 +147,11 @@ namespace TLab.WebView
 				var @object = GetAsyncResult(id);
 				if (@object == "")
 				{
-					yield return new AsyncString(false, null);
+					yield return new AsyncString(null, JavaAsyncResult.Status.WAITING);
 					continue;
 				}
 				var result = new JavaAsyncResult(@object);
-				yield return new AsyncString(true, result.stringValue);
+				yield return new AsyncString(result.s, JavaAsyncResult.Status.COMPLETE);
 				break;
 			}
 			yield break;
