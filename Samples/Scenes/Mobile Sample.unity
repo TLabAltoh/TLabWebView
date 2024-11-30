@@ -1825,10 +1825,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1971730870626252683, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
-      propertyPath: m_browser
-      value: 
-      objectReference: {fileID: 156809017}
-    - target: {fileID: 1971730870626252683, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
       propertyPath: m_browsers.Array.data[0]
       value: 
       objectReference: {fileID: 156809017}
@@ -2454,7 +2450,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5559566812560335652, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
       propertyPath: m_Spacing
-      value: -183.33333
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 5656986144171264545, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
       propertyPath: m_AnchorMax.y
