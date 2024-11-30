@@ -2,17 +2,14 @@ using System.IO;
 using System.IO.Compression;
 using UnityEngine;
 
-namespace TLab.Android.WebView.Sample
+namespace TLab.WebView.Sample
 {
     public class LoadLocalFileSample : MonoBehaviour
     {
-        [SerializeField] private TLabWebView m_webview;
+        [SerializeField] private BrowserContainer m_container;
 
         private string THIS_NAME => "[" + this.GetType() + "] ";
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void RequestPermission()
         {
             // If you want to load a file from an external location
@@ -27,18 +24,13 @@ namespace TLab.Android.WebView.Sample
             // good implementation.
 
             if (!UnityEngine.Android.Permission.HasUserAuthorizedPermission("android.permission.MANAGE_EXTERNAL_STORAGE"))
-            {
                 UnityEngine.Android.Permission.RequestUserPermission("android.permission.MANAGE_EXTERNAL_STORAGE");
-            }
 
             // I recommended to use streaming asset to load HTML
             // content archived file (like zip) and extract to
             // it in application folder.
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void OpenLocalHTML(string filePath)
         {
             // jar:file:///xxxxxxxxxx
@@ -48,7 +40,7 @@ namespace TLab.Android.WebView.Sample
 
             Debug.Log(THIS_NAME + $"url: {url}");
 
-            m_webview.LoadUrl(url);
+            m_container.browser.LoadUrl(url);
         }
 
         private void Start()
@@ -66,9 +58,7 @@ namespace TLab.Android.WebView.Sample
 
             var outputDir = dstPath + "/" + subPath;
             if (Directory.Exists(outputDir))
-            {
                 Directory.Delete(outputDir, true);
-            }
 
             Directory.CreateDirectory(outputDir);
 
@@ -76,9 +66,7 @@ namespace TLab.Android.WebView.Sample
             while (!request.isDone) { }
 
             if (!File.Exists(dstZip))
-            {
                 File.WriteAllBytes(dstZip, request.bytes);
-            }
             else
             {
                 File.Delete(dstZip);
