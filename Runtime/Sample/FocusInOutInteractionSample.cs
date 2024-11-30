@@ -23,10 +23,10 @@ namespace TLab.WebView.Sample
             Debug.Log("OnMessage: " + message);
             switch (message)
             {
-                case "Foucusin":
+                case "Focusin":
                     m_inputField.OnFocus(true);
                     break;
-                case "Foucusout":
+                case "Focusout":
                     m_inputField.OnFocus(false);
                     break;
             }
