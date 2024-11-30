@@ -2,7 +2,7 @@
 
 [日本語版READMEはこちら](README-ja.md)
 
-Plug-in to use Android's web browser component (```WebView``` / ```GeckoView```) as uGUI (Texture2D)
+Plug-in to use Android's web browser component ([```WebView```](https://developer.android.com/reference/android/webkit/WebView) / [```GeckoView```](https://mozilla.github.io/geckoview/)) as uGUI (Texture2D)
 
 - [x] Keyboard Input
 - [x] Touch Interaction
@@ -99,7 +99,7 @@ Please add the ```BrowserManager``` to any GameObject (maybe EventSystem is best
 
 #### If you want to use ```GeckoView``` as a browser engine.
 
-Please create a Plugins folder in your Assets folder and create files in it. And please set the ```BrowserContainer``` to ```GeckoView``` instead of ```WebView```.
+Please create a Plugins folder in your Assets folder and create files in it. And please set the ```BrowserContainer.browser``` to ```GeckoView``` instead of ```WebView```. Also ```GeckoView``` needs Android ```13``` ~ (API level ```33``` ~). Please set tartget level to API level ```33``` in the ```Project Settings```.
 
 1. gradleTemplate.properties
 

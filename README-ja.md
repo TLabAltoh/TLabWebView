@@ -1,6 +1,6 @@
 # TLabWebView  
 
-Android で使用可能なブラウザコンポーネント (```WebView``` / ```GeckoView```) を uGUI (Texture2D) として利用するためのプラグイン
+Android で使用可能なブラウザコンポーネント ([```WebView```](https://developer.android.com/reference/android/webkit/WebView) / [```GeckoView```](https://mozilla.github.io/geckoview/)) を uGUI (Texture2D) として利用するためのプラグイン
 
 - [x] キーボード入力
 - [x] タッチ操作
@@ -99,7 +99,7 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 
 #### ```GeckoView``` をブラウザエンジンとして使用したい場合
 
-PluginsフォルダーをAssets以下に作成し，以下のファイルを置いてください．また，```BrowserContainer```に```WebView```の代わりに```GeckoView```をアタッチしてください．
+PluginsフォルダーをAssets以下に作成し，以下のファイルを置いてください．また，```BrowserContainer.browser```に```WebView```の代わりに```GeckoView```をアタッチしてください．また，```GeckoView```の使用には API level ```33``` ~ が求められます．```Project Settings```からターゲットAPIレベルを33以上に設定してください．
 
 1. gradleTemplate.properties
 
