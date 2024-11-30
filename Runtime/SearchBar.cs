@@ -17,23 +17,16 @@ namespace TLab.WebView
 
         #region KEY_EVENT
 
-        public override void OnBackSpaceKey()
+        protected override void HandlingOnBackSpaceKey()
         {
             if (m_text != "")
             {
                 m_text = m_text.Remove(m_text.Length - 1);
                 Display();
             }
-
-            AfterOnBackSpaceKey();
         }
 
-        public override void OnEnterKey()
-        {
-            LoadUrl();
-
-            AfterOnEnterKey();
-        }
+        protected override void HandlingOnEnterKey() => LoadUrl();
 
         #endregion KEY_EVENT
 
