@@ -100,7 +100,7 @@ namespace TLab.WebView.Sample
         {
             Debug.Log(THIS_NAME + $"OnDownload ... url:{request.url}, userAgent:{request.userAgent}, contentDisposition:{request.contentDisposition}, mimeType:{request.mimeType}");
 
-#if false
+#if true
             m_container.browser.DownloadFromUrl(request);
 #else
             if (request.url.StartsWith("blob:"))
