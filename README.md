@@ -95,6 +95,7 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 ```
 
 - Scene
+
 Please add the ```BrowserManager``` to any GameObject (maybe EventSystem is best).
 
 #### If you want to use ```GeckoView``` as a browser engine.
