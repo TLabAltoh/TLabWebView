@@ -16,10 +16,10 @@ namespace TLab.WebView
 	{
 		public enum State
 		{
-			INITIALISING,
-			INITIALIZED,
-			DESTROYED,
-			NONE
+			None,
+			Initialising,
+			Initialized,
+			Destroyed,
 		}
 
 		[Header("Capture Settings")]
@@ -27,7 +27,7 @@ namespace TLab.WebView
 		[SerializeField] protected Vector2Int m_viewSize = new Vector2Int(1024, 1024);
 		[SerializeField] protected Vector2Int m_texSize = new Vector2Int(512, 512);
 		[SerializeField, Min(1)] protected int m_fps = 30;
-		[SerializeField] protected CaptureMode m_captureMode = CaptureMode.HARDWARE_BUFFER;
+		[SerializeField] protected CaptureMode m_captureMode = CaptureMode.HardwareBuffer;
 
 		protected bool m_isVulkan;
 
@@ -43,7 +43,7 @@ namespace TLab.WebView
 
 		public CaptureMode captureMode => m_captureMode;
 
-		protected State m_state = State.NONE;
+		protected State m_state = State.None;
 
 		public State state => m_state;
 
@@ -107,7 +107,7 @@ namespace TLab.WebView
 		/// </summary>
 		public virtual void Init()
 		{
-			if (m_state == State.NONE)
+			if (m_state == State.None)
 				StartCoroutine(InitTask());
 		}
 
@@ -148,13 +148,13 @@ namespace TLab.WebView
 			}
 #endif
 
-			m_state = State.INITIALISING;
+			m_state = State.Initialising;
 
 			yield return new WaitForEndOfFrame();
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 
-			if ((m_captureMode != CaptureMode.SURFACE) && (m_rawImage != null))
+			if ((m_captureMode != CaptureMode.Surface) && (m_rawImage != null))
 			{
 				m_loadingView = Texture2D.linearGrayTexture;
 				m_contentView = null;
@@ -167,13 +167,13 @@ namespace TLab.WebView
 
 			switch (m_captureMode)
 			{
-				case CaptureMode.HARDWARE_BUFFER:
+				case CaptureMode.HardwareBuffer:
 					m_updateFrameFunc = m_isVulkan ? UpdateVulkanFrame : UpdateGLESFrame;
 					break;
-				case CaptureMode.BYTE_BUFFER:
+				case CaptureMode.ByteBuffer:
 					m_updateFrameFunc = UpdateFrameWithByteBuffer;
 					break;
-				case CaptureMode.SURFACE:
+				case CaptureMode.Surface:
 					m_updateFrameFunc = UpdateFrameDummy;
 					break;
 			}
@@ -183,7 +183,7 @@ namespace TLab.WebView
 			while (!IsInitialized())
 				yield return new WaitForEndOfFrame();
 
-			m_state = State.INITIALIZED;
+			m_state = State.Initialized;
 #endif
 		}
 
@@ -213,7 +213,7 @@ namespace TLab.WebView
 		/// <returns>texture pointer of the view frame (Vulkan: VkImage, OpenGLES: TexID)</returns>
 		public IntPtr GetPlatformTextureID()
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return IntPtr.Zero;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -241,7 +241,7 @@ namespace TLab.WebView
 		/// <param name="texSize">Tex Size</param>
 		public void ResizeTex(Vector2Int texSize)
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return;
 
 			if (m_rawImage != null)
@@ -260,7 +260,7 @@ namespace TLab.WebView
 		/// <param name="viewSize"></param>
 		public void ResizeView(Vector2Int viewSize)
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return;
 
 			if (m_rawImage != null)
@@ -280,7 +280,7 @@ namespace TLab.WebView
 		/// <param name="viewSize">Web Size</param>
 		public void Resize(Vector2Int texSize, Vector2Int viewSize)
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return;
 
 			if (m_rawImage != null)
@@ -296,7 +296,7 @@ namespace TLab.WebView
 
 		public void SetSurface(IntPtr surfce, int width, int height)
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -307,7 +307,7 @@ namespace TLab.WebView
 
 		public void RemoveSurface()
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -447,7 +447,7 @@ namespace TLab.WebView
 		/// </summary>
 		public void UpdateFrame()
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -457,7 +457,7 @@ namespace TLab.WebView
 
 		protected virtual void Destroy()
 		{
-			if (m_state == State.DESTROYED || m_state == State.NONE)
+			if (m_state == State.Destroyed || m_state == State.None)
 				return;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -480,7 +480,7 @@ namespace TLab.WebView
 			else
 				NativePlugin.Dispose((int)m_NativePlugin.GetRawObject());
 
-			m_state = State.DESTROYED;
+			m_state = State.Destroyed;
 #endif
 		}
 
@@ -490,7 +490,7 @@ namespace TLab.WebView
 		/// </summary>
 		public void RenderContent2TmpSurface()
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG

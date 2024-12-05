@@ -13,9 +13,9 @@ namespace TLab.WebView
 
         public enum TouchEvent
         {
-            DOWN,
-            UP,
-            DRAG
+            Down,
+            Up,
+            Drag,
         };
 
         protected override void OnPointerUp(PointerEventData pointerEventData, InputEventData inputEventData)
@@ -23,7 +23,7 @@ namespace TLab.WebView
             var position = inputEventData.position;
             position.x *= m_container.browser.viewSize.x;
             position.y *= m_container.browser.viewSize.y;
-            m_container.browser.TouchEvent((int)position.x, (int)position.y, (int)TouchEvent.UP, m_downTime);
+            m_container.browser.TouchEvent((int)position.x, (int)position.y, (int)TouchEvent.Up, m_downTime);
         }
 
         protected override void OnPointerExit(PointerEventData pointerEventData, InputEventData inputEventData)
@@ -31,7 +31,7 @@ namespace TLab.WebView
             var position = inputEventData.position;
             position.x *= m_container.browser.viewSize.x;
             position.y *= m_container.browser.viewSize.y;
-            m_container.browser.TouchEvent((int)position.x, (int)position.y, (int)TouchEvent.UP, m_downTime);
+            m_container.browser.TouchEvent((int)position.x, (int)position.y, (int)TouchEvent.Up, m_downTime);
         }
 
         protected override void OnPointerDown(PointerEventData pointerEventData, InputEventData inputEventData)
@@ -39,7 +39,7 @@ namespace TLab.WebView
             var position = inputEventData.position;
             position.x *= m_container.browser.viewSize.x;
             position.y *= m_container.browser.viewSize.y;
-            m_downTime = m_container.browser.TouchEvent((int)position.x, (int)position.y, (int)TouchEvent.DOWN, m_downTime);
+            m_downTime = m_container.browser.TouchEvent((int)position.x, (int)position.y, (int)TouchEvent.Down, m_downTime);
         }
 
         protected override void OnDrag(PointerEventData pointerEventData, InputEventData inputEventData)
@@ -47,7 +47,7 @@ namespace TLab.WebView
             var position = inputEventData.position;
             position.x *= m_container.browser.viewSize.x;
             position.y *= m_container.browser.viewSize.y;
-            m_container.browser.TouchEvent((int)position.x, (int)position.y, (int)TouchEvent.DRAG, m_downTime);
+            m_container.browser.TouchEvent((int)position.x, (int)position.y, (int)TouchEvent.Drag, m_downTime);
         }
     }
 }

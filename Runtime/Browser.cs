@@ -72,7 +72,7 @@ namespace TLab.WebView
 
 		public void EvaluateJS(string js)
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -95,7 +95,7 @@ namespace TLab.WebView
 		/// <param name="url">The URL of the resource to load</param>
 		public void LoadUrl(string url)
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return;
 
 			m_url = url;
@@ -116,7 +116,7 @@ namespace TLab.WebView
 
 		public string GetAsyncResult(int id)
 		{
-			if (m_state != State.INITIALIZED) return "";
+			if (m_state != State.Initialized) return "";
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			return m_NativePlugin.Call<string>(nameof(GetAsyncResult), id);
@@ -127,7 +127,7 @@ namespace TLab.WebView
 
 		public void CancelAsyncResult(int id)
 		{
-			if (m_state != State.INITIALIZED) return;
+			if (m_state != State.Initialized) return;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
 			m_NativePlugin.Call(nameof(CancelAsyncResult), id);
@@ -136,7 +136,7 @@ namespace TLab.WebView
 
 		public IEnumerator<AsyncString> GetUserAgent()
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				yield break;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -162,7 +162,7 @@ namespace TLab.WebView
 
 		public void SetUserAgent(string ua, bool reload)
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -172,7 +172,7 @@ namespace TLab.WebView
 
 		public int GetScrollX()
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return 0;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -184,7 +184,7 @@ namespace TLab.WebView
 
 		public int GetScrollY()
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return 0;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -196,7 +196,7 @@ namespace TLab.WebView
 
 		public void ScrollTo(int x, int y)
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -206,7 +206,7 @@ namespace TLab.WebView
 
 		public void ScrollBy(int x, int y)
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -216,7 +216,7 @@ namespace TLab.WebView
 
 		public void DispatchMessageQueue()
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -261,7 +261,7 @@ namespace TLab.WebView
 
 		public void GoForward()
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -271,7 +271,7 @@ namespace TLab.WebView
 
 		public void GoBack()
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -281,7 +281,7 @@ namespace TLab.WebView
 
 		public long TouchEvent(int x, int y, int action, long downTime)
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return 0;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -293,7 +293,7 @@ namespace TLab.WebView
 
 		public void KeyEvent(char key)
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -303,7 +303,7 @@ namespace TLab.WebView
 
 		public void KeyEvent(int keyCode)
 		{
-			if (m_state != State.INITIALIZED)
+			if (m_state != State.Initialized)
 				return;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
