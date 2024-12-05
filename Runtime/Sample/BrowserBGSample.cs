@@ -10,7 +10,7 @@ namespace TLab.WebView
 
 		public void StartWebView()
 		{
-			if (m_container.browser.state == FragmentCapture.State.NONE)
+			if (m_container.browser.state == FragmentCapture.State.None)
 				StartCoroutine(m_container.browser.InitTask());
 		}
 

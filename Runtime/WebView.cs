@@ -14,7 +14,7 @@ namespace TLab.WebView
         /// </summary>
         public void ZoomIn()
         {
-            if (m_state != State.INITIALIZED)
+            if (m_state != State.Initialized)
                 return;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -27,7 +27,7 @@ namespace TLab.WebView
         /// </summary>
         public void ZoomOut()
         {
-            if (m_state != State.INITIALIZED)
+            if (m_state != State.Initialized)
                 return;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -41,7 +41,7 @@ namespace TLab.WebView
         /// <param name="top">True to jump to the top of the page</param>
         public void PageUp(bool top)
         {
-            if (m_state != State.INITIALIZED)
+            if (m_state != State.Initialized)
                 return;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -55,7 +55,7 @@ namespace TLab.WebView
         /// <param name="bottom">True to jump to bottom of page</param>
         public void PageDown(bool bottom)
         {
-            if (m_state != State.INITIALIZED)
+            if (m_state != State.Initialized)
                 return;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -71,7 +71,7 @@ namespace TLab.WebView
         /// <returns>current buffer value</returns>
         public byte[] GetJSBuffer(string id)
         {
-            if (m_state != State.INITIALIZED)
+            if (m_state != State.Initialized)
                 return new byte[0];
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -83,7 +83,7 @@ namespace TLab.WebView
 
         public IEnumerable<JavaAsyncResult> EvaluateJSForResult(string varNameOfResultId, string js)
         {
-            if (m_state != State.INITIALIZED)
+            if (m_state != State.Initialized)
                 yield break;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
@@ -144,7 +144,7 @@ namespace TLab.WebView
         /// <param name="baseURL">baseURL</param>
         public void LoadHTML(string html, string baseURL)
         {
-            if (m_state != State.INITIALIZED)
+            if (m_state != State.Initialized)
             {
                 return;
             }

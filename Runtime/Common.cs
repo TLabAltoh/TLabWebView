@@ -77,9 +77,9 @@ namespace TLab.WebView
 
 	public enum CaptureMode
 	{
-		HARDWARE_BUFFER,
-		BYTE_BUFFER,
-		SURFACE,
+		HardwareBuffer,
+		ByteBuffer,
+		Surface,
 	}
 
 	[System.Serializable]
@@ -87,14 +87,14 @@ namespace TLab.WebView
 	{
 		public enum Directory
 		{
-			APPLICAITON,
-			DOWNLOAD,
+			Applicaiton,
+			Download,
 		}
 
 		[System.Serializable]
 		public class Option
 		{
-			[SerializeField] private Directory m_directory = Directory.DOWNLOAD;
+			[SerializeField] private Directory m_directory = Directory.Download;
 			[SerializeField] private string m_subDirectory = "downloads";
 
 			public Directory directory => m_directory;

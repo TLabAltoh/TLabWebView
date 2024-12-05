@@ -13,7 +13,7 @@ namespace TLab.WebView
         /// <param name="html">The HTML of the resource to load</param>
         public void LoadHTML(string html)
         {
-            if (m_state != State.INITIALIZED)
+            if (m_state != State.Initialized)
                 return;
 
 #if UNITY_ANDROID && !UNITY_EDITOR || DEBUG
