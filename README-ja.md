@@ -147,7 +147,7 @@ android.useAndroidX=true
 ### Prefab
 以下に置いてあるプレハブをCanvasに追加することでWebViewを実装できます
 ```
-/Resources/TLabWebView.prefab
+/Resources/TLab/WebView/Browser.prefab
 ```
 
 ## 
