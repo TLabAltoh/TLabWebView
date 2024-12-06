@@ -148,7 +148,7 @@ android.useAndroidX=true
 ### Prefab
 Prefab is here. Just add prefab to the canvas to implement webview
 ```
-/Resources/TLabWebView.prefab
+/Resources/TLab/WebView/Browser.prefab
 ```
 
 ## 
