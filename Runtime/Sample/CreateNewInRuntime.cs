@@ -6,12 +6,13 @@ namespace TLab.WebView.Sample
     public class CreateNewInRuntime : MonoBehaviour
     {
         [SerializeField] private GameObject m_prefab;
+        [SerializeField] private Transform m_anchor;
 
         private Queue<GameObject> m_instances = new Queue<GameObject>();
 
         public void CreateNew()
         {
-            var instance = Instantiate(m_prefab);
+            var instance = (m_anchor == null) ? Instantiate(m_prefab) : Instantiate(m_prefab, m_anchor.position, m_anchor.rotation);
 
             instance.transform.parent = null;
 
