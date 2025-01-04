@@ -2625,10 +2625,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6387182006385117136, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: https://music.youtube.com/watch?v=DiTd771WumE&list=RDAMVMDiTd771WumE
-      objectReference: {fileID: 0}
     - target: {fileID: 6469647243808811906, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
