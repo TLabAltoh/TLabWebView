@@ -2,7 +2,7 @@
     "name": "com.tlabaltoh.webview",
     "version": "1.0.4",
     "displayName": "TLabWebView",
-    "description": "Plug-in for WebView that runs in Unity and can display WebView results as Texture2D",
+    "description": "Plug-in to use Android's web browser component (WebView / GeckoView) as uGUI (Texture2D)",
     "author": {
         "name": "tlabaltoh",
         "url": "https://tlab-games.com"
