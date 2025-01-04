@@ -12,6 +12,8 @@ namespace TLab.WebView.Test
 
         [SerializeField] private GameObject m_prefab;
 
+        public void LoadUrl(string url) => m_container.browser.LoadUrl(url);
+
         public void ScrollTo() => m_container.browser.ScrollTo(0, 50);
 
         public void ScrollBy() => m_container.browser.ScrollBy(0, 50);
