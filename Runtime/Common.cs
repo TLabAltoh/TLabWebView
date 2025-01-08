@@ -141,6 +141,7 @@ namespace TLab.WebView
 		public enum Type
 		{
 			Raw,
+			OnPageStart,
 			OnPageFinish,
 			OnDownload,
 			OnDownloadStart,
@@ -159,6 +160,7 @@ namespace TLab.WebView
 			public string payload;
 		}
 
+		public UnityEvent<string> onPageStart;
 		public UnityEvent<string> onPageFinish;
 		public UnityEvent<Download.Request> onDownload;
 		public UnityEvent<Download.EventInfo> onDownloadError;

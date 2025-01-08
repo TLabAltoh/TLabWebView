@@ -1,0 +1,8 @@
+const originalAddEventListener = window.addEventListener;
+window.addEventListener = function (type, listener, options) {
+    if (type === 'beforeunload') {
+        console.warn("Blocked a 'beforeunload' listener from being added.");
+        return;
+    }
+    originalAddEventListener.call(this, type, listener, options);
+};

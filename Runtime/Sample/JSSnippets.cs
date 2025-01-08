@@ -6,9 +6,9 @@ namespace TLab.WebView.Sample
     {
         [SerializeField] private BrowserContainer m_container;
 
-        public void RemoveEventFromBeforeUnload()
+        public void DisableBeforeUnload()
         {
-            var js = Resources.Load<TextAsset>("TLab/WebView/Samples/Scripts/JS/remove-event-from-beforunload")?.ToString();
+            var js = Resources.Load<TextAsset>("TLab/WebView/Samples/Scripts/JS/disable-beforunload")?.ToString();
             m_container.browser.EvaluateJS(js);
         }
     }
