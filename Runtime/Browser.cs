@@ -226,6 +226,9 @@ namespace TLab.WebView
 				var message = new EventCallback.Message(@object);
 				switch ((EventCallback.Type)message.type)
 				{
+					case EventCallback.Type.OnPageStart:
+						m_eventCallback.onPageStart.Invoke(message.payload);
+						break;
 					case EventCallback.Type.OnPageFinish:
 						m_eventCallback.onPageFinish.Invoke(message.payload);
 						break;
