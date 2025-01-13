@@ -29,7 +29,10 @@ Plug-in to use Android's web browser component ([```WebView```](https://develope
 ## Screenshot  
 Screenshot run on Android 13, Adreno 619  
 
-<img src="Media/tlab-webview.png" width="256">
+<img src="Media/tlab-webview.png" width="256"></img>  
+
+VR sample  
+<a href="https://github.com/TLabAltoh/TLabWebViewVR"><img src="Media/tlab-webview-vr.gif" width="256"></img></a>
 
 ## Operating Environment
 

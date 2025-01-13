@@ -27,7 +27,10 @@ Android で使用可能なブラウザコンポーネント ([```WebView```](htt
 ## スクリーンショット  
 Android13, Adreno 619で実行した画面  
 
-<img src="Media/tlab-webview.png" width="256">
+<img src="Media/tlab-webview.png" width="256"></img>  
+
+VR サンプル  
+<a href="https://github.com/TLabAltoh/TLabWebViewVR"><img src="Media/tlab-webview-vr.gif" width="256"></img></a>
 
 ## 動作環境
 
