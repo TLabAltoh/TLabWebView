@@ -67,6 +67,30 @@ git submodule add https://github.com/TLabAltoh/TLabWebView.git
 https://github.com/TLabAltoh/TLabWebView.git#upm
 ```
 
+#### For App-Store compatibility
+When you publishing your app that using this plugin. Sometimes you get bellow warning.
+
+> ### Unsafe SSL override in WebViews
+> Your application may contain an unsafe implementation of the WebView's [onReceivedSslError() method](https://www.oculus.com/lynx/?u=https%3A%2F%2Fdeveloper.android.com%2Freference%2Fandroid%2Fwebkit%2FWebViewClient.html%23onReceivedSslError(android.webkit.WebView%2C%2520android.webkit.SslErrorHandler%2C%2520android.net.http.SslError)&e=AT0HN6RWgLynCRtwcCSOzSVvlpMDUhi7C5saZwaY5p4unt4S4-GxIACJX_OPzTQp1Fn4oADk7Q_rwvZvRiF5XstftUzyuAWAolfkkk_WAtDpvOgW0Llcn_BXIEpgYobFNELMZ31ntKzTQXflaLkeRA) with a call to `handler.proceed() with insufficient validations. This may cause the WebView to ignore SSL certificate validation errors, making the application vulnerable to man-in-the-middle attacks.  
+> 
+> https://www.meta.com/experiences/
+
+
+> ### Security and trust
+> #### onReceivedSslError
+> your app is using an unsafe implementation of [```WebviewClient.onReceivedSslError```](https://developer.android.com/reference/android/webkit/WebViewClient#onReceivedSslError(android.webkit.WebView,%20android.webkit.SslErrorHandler,%20android.net.http.SslError)) handler
+> 
+> https://developer.android.com/distribute/console
+
+Than, please switch repository's branch to app store compatible version.
+
+```add package from git URL ...```
+```
+https://github.com/TLabAltoh/TLabWebView.git#appstore-compatible-upm
+```
+
+Please note that this version will not be able to load insecure websites (URL starting with ```http://```).
+
 </details>
 
 ### Set Up
