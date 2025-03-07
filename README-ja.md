@@ -2,7 +2,7 @@
 
 # TLabWebView  
 
-Android で使用可能なブラウザコンポーネント ([```WebView```](https://developer.android.com/reference/android/webkit/WebView) / [```GeckoView```](https://mozilla.github.io/geckoview/)) を uGUI (Texture2D) として利用するためのプラグイン．3Dウェブブラウザ (3D WebView)の実装が可能になります．
+Android で使用可能なブラウザコンポーネント ([```WebView```](https://developer.android.com/reference/android/webkit/WebView) / [```GeckoView```](https://mozilla.github.io/geckoview/)) を uGUI (Texture2D) として利用するためのプラグイン．3Dウェブブラウザ (3D WebView) の実装が可能になります．
 
 - [x] キーボード入力
 - [x] タッチ操作
