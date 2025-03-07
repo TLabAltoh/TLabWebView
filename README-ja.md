@@ -186,6 +186,9 @@ android.useAndroidX=true
 /Resources/TLab/WebView/Browser.prefab
 ```
 
+### Keyborad
+このパッケージでは，デフォルトでuGUIをベースに実装されたバーチャルキーボードが利用できます．しかし，uGUIをベースにしたバーチャルキーボードはデザインなどの拡張性の点で利点がありますが，場合によってはOS標準のシステムキーボードを利用したい場面もあるかもしれません．その場合は，各プラットフォームの設定に従って，アプリ側でパーミッション等を使用してシステムキーボードを有効にしてください (例: Meta Quest での設定は[こちら](https://developers.meta.com/horizon/documentation/unity/unity-keyboard-overlay/))．アプリ側での設定が完了すると，WebViewでのシステムキーボードの利用が可能になります．
+
 ## 
 > [!NOTE]
 > 外部ストレージ(```/Download```や```/Picture```など)にファイルをダウンロードしたい場合，以下のパーミッションを```AndroidManifest.xml```に追加してください．これは，Android 11以降のデバイスで必要になります (詳細は[こちら](https://developer.android.com/training/data-storage/manage-all-files?hl=ja))．
