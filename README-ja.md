@@ -9,10 +9,10 @@ Android で使用可能なブラウザコンポーネント ([```WebView```](htt
 - [x] ファイルダウンロード (blob, data urlを含む)
 - [x] リサイズ
 - [x] Javascriptの実行
-- [x] 複数種類のブラウザエンジンをサポート
+- [x] 複数のブラウザエンジンをサポート
   - [x] [```WebView```](https://developer.android.com/reference/android/webkit/WebView)
   - [x] [```GeckoView```](https://mozilla.github.io/geckoview/)
-- [x] 複数種類のレンダリング方法をサポート
+- [x] 複数のレンダリング方法をサポート
   - [x] ```HardwareBudder```: Androidの低レイヤー機能を使用した実装．パフォーマンス⭕️
   - [x] ```ByteBuffer```: C＃側でbyte配列として結果を取得するためフレームへのアクセスが容易．安定性⭕️
   - [x] ```Surface```: Androidの ```Surface``` クラスに直接レンダリングを行う．[```CompositionLayers```](https://docs.unity3d.com/Packages/com.unity.xr.compositionlayers@0.5/manual/usage-guide.html)などを活用する際に利用することを想定
