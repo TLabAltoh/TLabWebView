@@ -14,6 +14,9 @@ A Unity plugin that enables the use of Android’s web browser component ([```We
 - [x] Support for multiple browser engines
   - [x] [```WebView```](https://developer.android.com/reference/android/webkit/WebView)
   - [x] [```GeckoView```](https://mozilla.github.io/geckoview/)
+- [x] Support for multiple rendering method
+  - [x] ```HardwareBudder```: implemented using a low-level feature of Android. Best performance
+  - [x] ```ByteBuffer```: Easy access to frames, since the results are obtained as byte arrays on the C# side. High stability.
 
 [Document is here](https://tlabgames.gitbook.io/tlabwebview)  
 [Snippets is here](https://gist.github.com/TLabAltoh/e0512b3367c25d3e1ec28ddbe95da497#file-tlabwebview-snippets-md)  
