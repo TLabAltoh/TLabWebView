@@ -4,7 +4,7 @@
 
 [日本語版READMEはこちら](README-ja.md)
 
-Plug-in to use Android's web browser component ([```WebView```](https://developer.android.com/reference/android/webkit/WebView) / [```GeckoView```](https://mozilla.github.io/geckoview/)) as uGUI (Texture2D)
+Unity plug-in to use Android's web browser component ([```WebView```](https://developer.android.com/reference/android/webkit/WebView) / [```GeckoView```](https://mozilla.github.io/geckoview/)) as uGUI (Texture2D)
 
 - [x] Keyboard Input
 - [x] Touch Interaction
