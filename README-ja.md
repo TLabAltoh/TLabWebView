@@ -10,8 +10,8 @@ Android で使用可能なブラウザコンポーネント ([```WebView```](htt
 - [x] リサイズ
 - [x] Javascriptの実行
 - [x] 複数のブラウザエンジンをサポート
-  - [x] [```WebView```](https://developer.android.com/reference/android/webkit/WebView)
-  - [x] [```GeckoView```](https://mozilla.github.io/geckoview/)
+  - [x] [```WebView```](https://developer.android.com/reference/android/webkit/WebView): 安定していて，javascriptインターフェースが充実
+  - [x] [```GeckoView```](https://mozilla.github.io/geckoview/): WebViewと比べて，拡張性が高い（ポップアップ等）
 - [x] 複数のレンダリング方法をサポート
   - [x] ```HardwareBudder```: Androidの低レイヤー機能を使用した実装．パフォーマンス⭕️
   - [x] ```ByteBuffer```: C＃側でbyte配列として結果を取得するためフレームへのアクセスが容易．安定性⭕️
