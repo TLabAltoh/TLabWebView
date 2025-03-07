@@ -12,8 +12,8 @@ A Unity plugin that enables the use of Android’s web browser component ([```We
 - [x] Resize
 - [x] Run Javascript
 - [x] Support for multiple browser engines
-  - [x] [```WebView```](https://developer.android.com/reference/android/webkit/WebView)
-  - [x] [```GeckoView```](https://mozilla.github.io/geckoview/)
+  - [x] [```WebView```](https://developer.android.com/reference/android/webkit/WebView): Stable and powerful javascript interface
+  - [x] [```GeckoView```](https://mozilla.github.io/geckoview/): It is highly extensible to pop-ups and other areas that cannot be controlled by WebView
 - [x] Support for multiple rendering method
   - [x] ```HardwareBudder```: implemented using a low-level feature of Android. Best performance
   - [x] ```ByteBuffer```: Easy access to frames, since the results are obtained as byte arrays on the C# side. High stability
