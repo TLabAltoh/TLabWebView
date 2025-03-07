@@ -187,6 +187,9 @@ Prefab is here. Just add prefab to the canvas to implement webview
 /Resources/TLab/WebView/Browser.prefab
 ```
 
+### Keyborad
+By default, a virtual keyboard based on uGUI is available in this package. However, while the uGUI-based virtual keyboard has advantages in terms of extensibility of design, etc., there may be situations where you prefer to use the OS standard system keyboard. In such a case, please enable the system keyboard using permissions, etc. on the app side according to the settings of each platform (e.g., see [here](https://developers.meta.com/horizon/documentation/unity/unity-keyboard-overlay/) for settings on Meta Quest). Once the app has been configured, the system keyboard can be used in WebView.
+
 ## 
 > [!NOTE]
 > If you want to download the file to external storage (like ```/Download```, ```/Picture```), please add the following permission to the manifest. This is required for Android 11+ (see [here](https://developer.android.com/training/data-storage/manage-all-files?hl=en) for more details).
