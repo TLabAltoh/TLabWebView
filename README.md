@@ -11,6 +11,9 @@ A Unity plugin that enables the use of Android’s web browser component ([```We
 - [x] File download (include blob, data url)
 - [x] Resize
 - [x] Run Javascript
+- [x] Support for multiple browser engines
+  - [x] [```WebView```](https://developer.android.com/reference/android/webkit/WebView)
+  - [x] [```GeckoView```](https://mozilla.github.io/geckoview/)
 
 [Document is here](https://tlabgames.gitbook.io/tlabwebview)  
 [Snippets is here](https://gist.github.com/TLabAltoh/e0512b3367c25d3e1ec28ddbe95da497#file-tlabwebview-snippets-md)  
