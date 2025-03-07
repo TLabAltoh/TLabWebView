@@ -17,6 +17,7 @@ A Unity plugin that enables the use of Android’s web browser component ([```We
 - [x] Support for multiple rendering method
   - [x] ```HardwareBudder```: implemented using a low-level feature of Android. Best performance
   - [x] ```ByteBuffer```: Easy access to frames, since the results are obtained as byte arrays on the C# side. High stability.
+  - [x] ```Surface```: Direct rendering to Android's ```Surface``` class, used for active use of features such as [```CompositionLayers```](https://docs.unity3d.com/Packages/com.unity.xr.compositionlayers@0.5/manual/usage-guide.html).
 
 [Document is here](https://tlabgames.gitbook.io/tlabwebview)  
 [Snippets is here](https://gist.github.com/TLabAltoh/e0512b3367c25d3e1ec28ddbe95da497#file-tlabwebview-snippets-md)  
