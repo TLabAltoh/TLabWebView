@@ -9,6 +9,7 @@ Android で使用可能なブラウザコンポーネント ([```WebView```](htt
 - [x] ファイルダウンロード (blob, data urlを含む)
 - [x] リサイズ
 - [x] Javascriptの実行
+- [x] 複数インスタンスの同時実行をサポート
 - [x] 複数のブラウザエンジンをサポート
   - [x] [```WebView```](https://developer.android.com/reference/android/webkit/WebView): 安定していて，javascriptインターフェースが充実
   - [x] [```GeckoView```](https://mozilla.github.io/geckoview/): WebViewと比べて，拡張性が高い（ポップアップ等）
