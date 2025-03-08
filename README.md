@@ -11,6 +11,7 @@ A Unity plugin that enables the use of Android’s web browser component ([```We
 - [x] File download (include blob, data url)
 - [x] Resize
 - [x] Run Javascript
+- [x] Support for multiple instances running concurrently
 - [x] Support for multiple browser engines
   - [x] [```WebView```](https://developer.android.com/reference/android/webkit/WebView): Stable and powerful javascript interface
   - [x] [```GeckoView```](https://mozilla.github.io/geckoview/): Highly extensible to pop-ups and other areas that cannot be controlled by WebView
