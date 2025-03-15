@@ -4,13 +4,21 @@
 
 [日本語版READMEはこちら](README-ja.md)
 
-Plug-in to use Android's web browser component ([```WebView```](https://developer.android.com/reference/android/webkit/WebView) / [```GeckoView```](https://mozilla.github.io/geckoview/)) as uGUI (Texture2D)
+A Unity plugin that enables the use of Android’s web browser component ([```WebView```](https://developer.android.com/reference/android/webkit/WebView) / [```GeckoView```](https://mozilla.github.io/geckoview/)) as a uGUI (Texture2D). This plugin makes it possible to implement a 3D web browser (3D WebView) within Unity.
 
 - [x] Keyboard Input
 - [x] Touch Interaction
 - [x] File download (include blob, data url)
 - [x] Resize
 - [x] Run Javascript
+- [x] Support for multiple instances running concurrently
+- [x] Support for multiple browser engines
+  - [x] [```WebView```](https://developer.android.com/reference/android/webkit/WebView): Stable and powerful javascript interface
+  - [x] [```GeckoView```](https://mozilla.github.io/geckoview/): Highly extensible to pop-ups and other areas that cannot be controlled by WebView
+- [x] Support for multiple rendering method
+  - [x] ```HardwareBudder```: implemented using a low-level feature of Android. Best performance
+  - [x] ```ByteBuffer```: Easy access to frames, since the results are obtained as byte arrays on the C# side. High stability
+  - [x] ```Surface```: Direct rendering to Android's ```Surface``` class, used for active use of features such as [```CompositionLayers```](https://docs.unity3d.com/Packages/com.unity.xr.compositionlayers@0.5/manual/usage-guide.html)
 
 [Document is here](https://tlabgames.gitbook.io/tlabwebview)  
 [Snippets is here](https://gist.github.com/TLabAltoh/e0512b3367c25d3e1ec28ddbe95da497#file-tlabwebview-snippets-md)  
@@ -179,6 +187,9 @@ Prefab is here. Just add prefab to the canvas to implement webview
 ```
 /Resources/TLab/WebView/Browser.prefab
 ```
+
+### Keyborad
+By default, a virtual keyboard based on uGUI is available in this package. However, while the uGUI-based virtual keyboard has advantages in terms of extensibility of design, etc., there may be situations where you prefer to use the OS standard system keyboard. In such a case, please enable the system keyboard using permissions, etc. on the app side according to the settings of each platform (e.g., see [here](https://developers.meta.com/horizon/documentation/unity/unity-keyboard-overlay/) for settings on Meta Quest). Once the app has been configured, the system keyboard can be used in WebView.
 
 ## 
 > [!NOTE]

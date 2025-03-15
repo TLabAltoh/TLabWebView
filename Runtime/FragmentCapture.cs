@@ -72,6 +72,8 @@ namespace TLab.WebView
 			{
 				if (disposable.plugin != null)
 				{
+					// Wait until Dispose() is completed on the plug-in side.
+					// Then remove it from Unity management.
 					if (NativePlugin.GetIsFragmentDisposed((int)disposable.plugin.GetRawObject()))
 					{
 						disposable.plugin.Dispose();
