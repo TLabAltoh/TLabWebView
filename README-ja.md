@@ -2,13 +2,21 @@
 
 # TLabWebView  
 
-Android で使用可能なブラウザコンポーネント ([```WebView```](https://developer.android.com/reference/android/webkit/WebView) / [```GeckoView```](https://mozilla.github.io/geckoview/)) を uGUI (Texture2D) として利用するためのプラグイン
+Android で使用可能なブラウザコンポーネント ([```WebView```](https://developer.android.com/reference/android/webkit/WebView) / [```GeckoView```](https://mozilla.github.io/geckoview/)) を uGUI (Texture2D) として利用するためのプラグイン．3Dウェブブラウザ (3D WebView) の実装が可能になります．
 
 - [x] キーボード入力
 - [x] タッチ操作
 - [x] ファイルダウンロード (blob, data urlを含む)
 - [x] リサイズ
 - [x] Javascriptの実行
+- [x] 複数インスタンスの同時実行をサポート
+- [x] 複数のブラウザエンジンをサポート
+  - [x] [```WebView```](https://developer.android.com/reference/android/webkit/WebView): 安定していて，javascriptインターフェースが充実
+  - [x] [```GeckoView```](https://mozilla.github.io/geckoview/): WebViewと比べて，拡張性が高い（ポップアップ等）
+- [x] 複数のレンダリング方法をサポート
+  - [x] ```HardwareBudder```: Androidの低レイヤー機能を使用した実装．パフォーマンス⭕️
+  - [x] ```ByteBuffer```: C＃側でbyte配列として結果を取得するためフレームへのアクセスが容易．安定性⭕️
+  - [x] ```Surface```: Androidの ```Surface``` クラスに直接レンダリングを行う．[```CompositionLayers```](https://docs.unity3d.com/Packages/com.unity.xr.compositionlayers@0.5/manual/usage-guide.html)などを活用する際に利用することを想定
 
 [ドキュメントはこちら](https://tlabgames.gitbook.io/tlabwebview)  
 [スニペットはこちら](https://gist.github.com/TLabAltoh/e0512b3367c25d3e1ec28ddbe95da497#file-tlabwebview-snippets-md)  
@@ -178,6 +186,9 @@ android.useAndroidX=true
 ```
 /Resources/TLab/WebView/Browser.prefab
 ```
+
+### Keyborad
+このパッケージでは，デフォルトでuGUIをベースに実装されたバーチャルキーボードが利用できます．しかし，uGUIをベースにしたバーチャルキーボードはデザインなどの拡張性の点で利点がありますが，場合によってはOS標準のシステムキーボードを利用したい場面もあるかもしれません．その場合は，各プラットフォームの設定に従って，アプリ側でパーミッション等を使用してシステムキーボードを有効にしてください (例: Meta Quest での設定は[こちら](https://developers.meta.com/horizon/documentation/unity/unity-keyboard-overlay/))．アプリ側での設定が完了すると，WebViewでのシステムキーボードの利用が可能になります．
 
 ## 
 > [!NOTE]
