@@ -29,6 +29,8 @@ A Unity plugin that enables the use of Android’s web browser component ([```We
 ## Unity version this plugin supports
 - [x] Unity 2021
 - [x] Unity 2022
+- [x] Unity 6000 (Only `WebView` tested, Not yet tested in `GeckoView`.)
+
 
 ## Graphics api this plugin supports
 - [x] OpenGLES

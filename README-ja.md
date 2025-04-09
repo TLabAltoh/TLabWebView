@@ -27,6 +27,7 @@ Android で使用可能なブラウザコンポーネント ([```WebView```](htt
 ## 対応しているUnityのバージョン
 - [x] Unity 2021
 - [x] Unity 2022
+- [x] Unity 6000 (`WebView`のみテスト済みです．`GeckoView`はまだテストしていません．)
 
 ## 対応するグラフィックスAPI
 - [x] OpenGLES
