@@ -199,6 +199,9 @@ android.useAndroidX=true
 > ```
 
 > [!WARNING]
+> このプラグインはAndroidデバイス上でのみ動作します．Unity Editor上で実行してもWebページは表示されないことに注意してください．
+
+> [!WARNING]
 > Android WebViewは [WebXR API](https://developer.mozilla.org/ja/docs/Web/API/WebXR_Device_API/Fundamentals) をサポートしません．
 
 > [!WARNING]

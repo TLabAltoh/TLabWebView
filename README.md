@@ -26,6 +26,8 @@ A Unity plugin that enables the use of Android’s web browser component ([```We
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/tlabaltoh)
 
+
+
 ## Unity version this plugin supports
 - [x] Unity 2021
 - [x] Unity 2022
@@ -199,6 +201,9 @@ By default, a virtual keyboard based on uGUI is available in this package. Howev
 > ```.xml
 > <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 > ```
+
+> [!WARNING]
+> Note that this plugin only works on Android devices; it will not display web pages when run on the Unity Editor.
 
 > [!WARNING]
 > Android WebView doesn't support the [WebXR API](https://developer.mozilla.org/en-US/docs/Web/API/WebXR_Device_API/Fundamentals).
