@@ -156,7 +156,7 @@ namespace TLab.WebView.Editor
                 changed = true;
             }
 
-            Debug.Log("succeed in set attribute: " + attribute);
+            Debug.Log($"Succeed in {nameof(ApplicationElement.SetAttribute)}: " + attribute);
             return changed;
         }
 
@@ -178,56 +178,34 @@ namespace TLab.WebView.Editor
             return changed;
         }
 
-        // for api level 33
-        internal bool SetExported(bool enabled)
+        internal bool SetAttributeInLaunchIntent(bool enabled, string key)
         {
             bool changed = false;
             var value = enabled ? "true" : "false";
 
             var activity = GetActivityWithLaunchIntent() as XmlElement;
-            var attributeResult = activity.GetAttribute("exported", AndroidXmlNamespace);
-            if (attributeResult != value)
+            if (activity != null)
             {
-                activity.SetAttribute("exported", AndroidXmlNamespace, value);
-                changed = true;
-            }
-            return changed;
-        }
-
-        internal bool SetHardwareAccelerated(bool enabled)
-        {
-            var changed = false;
-            var value = enabled ? "true" : "false";
-
-            var activity = GetActivityWithLaunchIntent() as XmlElement;
-            var attributeResult = activity.GetAttribute("hardwareAccelerated", AndroidXmlNamespace);
-            if (attributeResult != value)
-            {
-                activity.SetAttribute("hardwareAccelerated", AndroidXmlNamespace, value);
-                changed = true;
-            }
-
-            return changed;
-        }
-
-        internal bool SetActivityName(string name)
-        {
-            bool changed = false;
-
-            var activity = GetActivityWithLaunchIntent() as XmlElement;
-            if (activity.GetAttribute("name", AndroidXmlNamespace) != name)
-            {
-                activity.SetAttribute("name", AndroidXmlNamespace, name);
-                changed = true;
-                Debug.Log("succeed in SetActivityName");
+                var attributeResult = activity.HasAttribute(key) ? activity.GetAttribute(key, AndroidXmlNamespace) : null;
+                if (attributeResult != value)
+                {
+                    activity.SetAttribute(key, AndroidXmlNamespace, value);
+                    changed = true;
+                }
             }
             else
             {
-                Debug.Log("failed in SetActivityName");
+                Debug.LogWarning("Activity not found");
             }
-
             return changed;
         }
+
+        // For API level 33
+        internal bool SetExported(bool enabled) => 
+            SetAttributeInLaunchIntent(enabled, "exported");
+
+        internal bool SetHardwareAccelerated(bool enabled) =>
+            SetAttributeInLaunchIntent(enabled, "hardwareAccelerated");
 
         internal bool AddCamera()
         {
