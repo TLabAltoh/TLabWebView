@@ -180,6 +180,12 @@ android.useAndroidX=true
 
 3. GeckoView plugin (```.aar```) (現在 [125.0.20240425211020 version](https://mvnrepository.com/artifact/org.mozilla.geckoview/geckoview/125.0.20240425211020) のみで開発・テストを行っているので，同じバージョンのものをダウンロードしてください．)
 
+#### `HardwareBuffer` が正常に動作しないときは ...
+
+`HardwareBuffer` は，実施するデバイスによっては正常に動作しない場合があるかもしれません. その場合は， `HardwareBuffer` から `ByteBuffer` へ `CaptureMode` を切り替えてください.
+
+<img src="Media/image.0.png" width="256"></img>
+
 </details>
 
 ### Prefab
