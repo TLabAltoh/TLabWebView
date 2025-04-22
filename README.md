@@ -184,7 +184,7 @@ android.useAndroidX=true
 
 3. GeckoView plugin (```.aar```) (please install the [125.0.20240425211020 version](https://mvnrepository.com/artifact/org.mozilla.geckoview/geckoview/125.0.20240425211020), as this package is only developed and tested with it)
 
-#### aaa
+#### When the `HardwareBuffer` mode does not work properly ...
 
 <img src="Media/image.0.png" width="256"></img>
 
