@@ -186,7 +186,7 @@ android.useAndroidX=true
 
 #### When the `HardwareBuffer` mode does not work properly ...
 
-`HardwareBuffer` mode may not work properly for some devices. In such cases, switch from `HardwareBuffer` mode to `ByteBuffer` mode.
+`HardwareBuffer` mode may not work properly for some devices. In such cases, switch `CaptureMode` from `HardwareBuffer` to `ByteBuffer`.
 
 <img src="Media/image.0.png" width="256"></img>
 
