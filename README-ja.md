@@ -182,7 +182,7 @@ android.useAndroidX=true
 
 #### `HardwareBuffer` が正常に動作しないときは ...
 
-`HardwareBuffer` は，実施するデバイスによっては正常に動作しない場合があるかもしれません. その場合は， `HardwareBuffer` から `ByteBuffer` へ `CaptureMode` を切り替えてください.
+`HardwareBuffer` は，プラグインを実行するデバイスによっては正常に動作しない場合があるかもしれません. その場合は， `HardwareBuffer` から `ByteBuffer` へ `CaptureMode` を切り替えてください.
 
 <img src="Media/image.0.png" width="256"></img>
 
