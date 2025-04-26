@@ -15,7 +15,7 @@ Android で使用可能なブラウザコンポーネント ([```WebView```](htt
   - [x] [```GeckoView```](https://mozilla.github.io/geckoview/): WebViewと比べて，拡張性が高い（ポップアップ等）
 - [x] 複数のレンダリング方法をサポート
   - [x] ```HardwareBudder```: Androidの低レイヤー機能を使用した実装．パフォーマンス⭕️
-  - [x] ```ByteBuffer```: C＃側でbyte配列として結果を取得するためフレームへのアクセスが容易．安定性⭕️
+  - [x] ```ByteBuffer```: C＃側でbyte配列として結果を取得するためフレームへのアクセスが容易．安定性⭕️．**デフォルトではこのオプションが使用されています．**
   - [x] ```Surface```: Androidの ```Surface``` クラスに直接レンダリングを行う．[```CompositionLayers```](https://docs.unity3d.com/Packages/com.unity.xr.compositionlayers@0.5/manual/usage-guide.html)などを活用する際に利用することを想定
 
 [ドキュメントはこちら](https://tlabgames.gitbook.io/tlabwebview)  
@@ -180,12 +180,6 @@ android.useAndroidX=true
 
 3. GeckoView plugin (```.aar```) (現在 [125.0.20240425211020 version](https://mvnrepository.com/artifact/org.mozilla.geckoview/geckoview/125.0.20240425211020) のみで開発・テストを行っているので，同じバージョンのものをダウンロードしてください．)
 
-#### `HardwareBuffer` が正常に動作しないときは ...
-
-`HardwareBuffer` は，プラグインを実行するデバイスによっては正常に動作しない場合があるかもしれません. その場合は， `HardwareBuffer` から `ByteBuffer` へ `CaptureMode` を切り替えてください.
-
-<img src="Media/image.0.png" width="256"></img>
-
 </details>
 
 ### Prefab
@@ -206,6 +200,11 @@ android.useAndroidX=true
 
 > [!WARNING]
 > このプラグインはAndroidデバイス上でのみ動作します．Unity Editor上で実行してもWebページは表示されないことに注意してください．
+
+> [!WARNING]
+> `HardwareBuffer` は，プラグインを実行するデバイスによっては正常に動作しない場合があるかもしれません. その場合は， `HardwareBuffer` から `ByteBuffer` へ `CaptureMode` を切り替えてください.
+> 
+> <img src="Media/image.0.png" width="256"></img>
 
 > [!WARNING]
 > Android WebViewは [WebXR API](https://developer.mozilla.org/ja/docs/Web/API/WebXR_Device_API/Fundamentals) をサポートしません．
