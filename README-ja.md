@@ -202,7 +202,7 @@ android.useAndroidX=true
 > このプラグインはAndroidデバイス上でのみ動作します．Unity Editor上で実行してもWebページは表示されないことに注意してください．
 
 > [!WARNING]
-> `HardwareBuffer` は，プラグインを実行するデバイスによっては正常に動作しない場合があるかもしれません. その場合は， `HardwareBuffer` から `ByteBuffer` へ `CaptureMode` を切り替えてください.
+> `HardwareBuffer` モードは，プラグインを実行するデバイスによっては正常に動作しない場合があるかもしれません. その場合は，プロジェクトの`Graphics API`を`Vulkan`から`OpenGLES`に変更する．もしくは，`HardwareBuffer` から `ByteBuffer` へ `CaptureMode` を切り替えてください.
 > 
 > <img src="Media/image.0.png" width="256"></img>
 

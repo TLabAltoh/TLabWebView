@@ -206,7 +206,7 @@ By default, a virtual keyboard based on uGUI is available in this package. Howev
 > Note that this plugin only works on Android devices; it will not display web pages when run on the Unity Editor.
 
 > [!WARNING]
-> `HardwareBuffer` mode may not work properly for some devices. In such cases, switch `CaptureMode` from `HardwareBuffer` to `ByteBuffer`.
+> `HardwareBuffer` mode may not work properly for some devices. In such cases, Please change the project's `Graphics API` from `Vulkan` to `OpenGLES`. Or switch `CaptureMode` from `HardwareBuffer` to `ByteBuffer`.
 > 
 > <img src="Media/image.0.png" width="256"></img>
 
