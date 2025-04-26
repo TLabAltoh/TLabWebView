@@ -17,7 +17,7 @@ A Unity plugin that enables the use of Android’s web browser component ([```We
   - [x] [```GeckoView```](https://mozilla.github.io/geckoview/): Highly extensible to pop-ups and other areas that cannot be controlled by WebView
 - [x] Support for multiple rendering method
   - [x] ```HardwareBudder```: implemented using a low-level feature of Android. Best performance
-  - [x] ```ByteBuffer```: Easy access to frames, since the results are obtained as byte arrays on the C# side. High stability
+  - [x] ```ByteBuffer```: Easy access to frames, since the results are obtained as byte arrays on the C# side. High stability. **This option is used by default**.
   - [x] ```Surface```: Direct rendering to Android's ```Surface``` class, used for active use of features such as [```CompositionLayers```](https://docs.unity3d.com/Packages/com.unity.xr.compositionlayers@0.5/manual/usage-guide.html)
 
 [Document is here](https://tlabgames.gitbook.io/tlabwebview)  
@@ -204,6 +204,11 @@ By default, a virtual keyboard based on uGUI is available in this package. Howev
 
 > [!WARNING]
 > Note that this plugin only works on Android devices; it will not display web pages when run on the Unity Editor.
+
+> [!WARNING]
+> `HardwareBuffer` mode may not work properly for some devices. In such cases, switch `CaptureMode` from `HardwareBuffer` to `ByteBuffer`.
+> 
+> <img src="Media/image.0.png" width="256"></img>
 
 > [!WARNING]
 > Android WebView doesn't support the [WebXR API](https://developer.mozilla.org/en-US/docs/Web/API/WebXR_Device_API/Fundamentals).
