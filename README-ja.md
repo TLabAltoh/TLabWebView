@@ -139,6 +139,14 @@ UNITYWEBVIEW_ANDROID_ENABLE_MICROPHONE
 
 PluginsフォルダーをAssets以下に作成し，以下のファイルを置いてください．また，```BrowserContainer.browser```に```WebView```の代わりに```GeckoView```をアタッチしてください．また，```GeckoView```の使用には API level ```33``` ~ が求められます．```Project Settings```からターゲットAPIレベルを33以上に設定してください．
 
+> [!NOTE]
+> WebViewで実装されているjavascriptインターフェース`window.tlab`は現在GeckoViewではサポートされていません．これはGeckoViewとネイティブプラグイン間の連携の複雑さに起因します．現状は`window.postMessage`の呼び出しでC#コンポーネントにメッセージを送信する機能のみ実装されていますが，将来的には`window.tlab`との互換性を保証した実装を完成させる予定です．
+> ページスクリプトからC#コンポーネントにメッセージを送信する際は，以下のようにjavascriptを記述してください．
+> ```.js
+> let payload = { go: "Test", method: "OnMessage", message: "this is test > message." };
+> window.postMessage({ type: "TLABWEBVIWE_GECKO_NATIVE_MESSAGE", payload: { > method: "unitySendMessage", payload: payload } }, "*");
+> ```
+
 1. gradleTemplate.properties
 
 ```properties
