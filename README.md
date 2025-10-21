@@ -203,8 +203,8 @@ By default, a virtual keyboard based on uGUI is available in this package. Howev
 > ```
 
 > [!NOTE]
-> The JavaScript interface `window.tlab` currently defined in WebView is not supported by GeckoView. As a temporary implementation, only the process of sending messages to the C# component using `window.postMessage` has been implemented. This is due to the complexity of the cooperation between JavaScript and native plugins in GeckoView. However, compatibility with window.tlab is planned to be guaranteed in the future.
-> At present, when sending a message from a page script to a C# component in GeckoView, please write it as follows.
+> The JavaScript interface `window.tlab`, which is implemented in WebView, is currently not supported in GeckoView. This is due to the complexity of implementing the communication process between GeckoView and the Java native plugin (`.aar`). Currently, only the functionality to send messages to C# components by calling `window.postMessage` as an alternative to `window.tlab.unitySendMessage` is implemented. However, there are plans to fully support the features of `window.tlab` in GeckoView in the future.
+> When sending a message from a GeckoView page script to a C# component, use the following JavaScript:
 > ```.js
 > let payload = { go: "Test", method: "OnMessage", message: "this is test message." };
 > window.postMessage({ type: "TLABWEBVIWE_GECKO_NATIVE_MESSAGE", payload: { method: "unitySendMessage", payload: payload } }, "*");
