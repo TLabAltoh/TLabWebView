@@ -1,6 +1,6 @@
 {
     "name": "com.tlabaltoh.webview",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "displayName": "TLabWebView",
     "description": "Plug-in to use Android's web browser component (WebView / GeckoView) as uGUI (Texture2D)",
     "author": {

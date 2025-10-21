@@ -143,6 +143,14 @@ Please add the ```BrowserManager``` to any GameObject (maybe EventSystem is best
 
 Please create a Plugins folder in your Assets folder and create files in it. And please set the ```BrowserContainer.browser``` to ```GeckoView``` instead of ```WebView```. Also ```GeckoView``` needs Android ```13``` ~ (API level ```33``` ~). Please set tartget level to API level ```33``` in the ```Project Settings```.
 
+> [!NOTE]
+> The JavaScript interface `window.tlab` currently defined in WebView is not supported by GeckoView. As a temporary implementation, only the process of sending messages to the C# component using `window.postMessage` has been implemented. This is due to the complexity of the cooperation between JavaScript and native plugins in GeckoView. However, compatibility with window.tlab is planned to be guaranteed in the future.
+> At present, when sending a message from a page script to a C# component in GeckoView, please write it as follows.
+> ```js
+> let payload = { go: "Test", method: "OnMessage", message: "this is test > message." };
+> window.postMessage({ type: "TLABWEBVIWE_GECKO_NATIVE_MESSAGE", payload: { > method: "unitySendMessage", payload: payload } }, "*");
+> ```
+
 1. gradleTemplate.properties
 
 ```properties
