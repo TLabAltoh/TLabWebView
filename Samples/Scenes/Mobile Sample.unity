@@ -3035,10 +3035,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7282562980479558941, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
-      propertyPath: m_url
-      value: http://192.168.3.10:5600/index.html
-      objectReference: {fileID: 0}
     - target: {fileID: 7329511125389694484, guid: 4272bd6725bd64846b07be9b4d76ad90, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
